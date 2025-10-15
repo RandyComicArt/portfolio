@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Randy Comic Art</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7;
+    }
+    header {
+      background-color: #1e1e1e;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+    }
+    .gallery img {
+      max-width: 300px;
+      margin: 10px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      transition: transform 0.2s;
+    }
+    .gallery img:hover {
+      transform: scale(1.05);
+      border-color: #1e90ff;
+    }
+    footer {
+      background-color: #1e1e1e;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Randy Comic Art</h1>
+    <nav>
+      <a href="#about">About Me</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section id="about" style="text-align:center; padding:40px;">
+    <h2>About Me</h2>
+    <p>Hello! I’m Randy, a comic artist passionate about storytelling through visuals. Welcome to my portfolio!</p>
+  </section>
+
+  <section id="portfolio">
+    <h2 style="text-align:center;">My Work</h2>
+    <div class="gallery">
+      <img src="images/art1.jpg" alt="Art 1">
+      <img src="images/art2.jpg" alt="Art 2">
+      <img src="images/art3.jpg" alt="Art 3">
+    </div>
+  </section>
+
+  <section id="contact" style="text-align:center; padding:40px;">
+    <h2>Contact</h2>
+    <p>Email: <a href="mailto:randy@example.com">randy@example.com</a></p>
+  </section>
+
+  <footer>
+    &copy; 2025 Randy Comic Art
+  </footer>
+
+</body>
+</html>
