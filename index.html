@@ -22,7 +22,7 @@ body {
   box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
 
-/* --- Header & Navigation Styles (NO CHANGE) --- */
+/* --- Header & Navigation Styles --- */
 header { text-align: center; padding: 40px 20px 0; }
 .header-content {
   max-width: 1200px;
@@ -44,7 +44,7 @@ nav a:hover, nav a.active {
   background:rgba(255,255,255,0.1); text-shadow:0 0 10px rgba(255,255,255,0.5);
 }
 
-/* --- Section Content & Carousel Styles (NO CHANGE) --- */
+/* --- Section Content & Carousel Styles --- */
 section { padding:40px 20px; max-width:1200px; margin:40px auto; }
 h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 .carousel-wrapper { position: relative; display: flex; align-items: center; justify-content: center; }
@@ -131,8 +131,6 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 /* 💥 1. MODAL NAVIGATION ARROWS 💥 */
 .modal-arrow-shell {
     position: absolute; 
-    top: 50%; 
-    transform: translateY(-50%); 
     width: 72px; 
     height: 72px; 
     display: flex; 
@@ -141,41 +139,45 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     z-index: 1010; 
     pointer-events: none;
 }
-/* Left Arrow position: to the left of the modal content */
+/* Left Arrow position: further out */
 .modal-arrow-shell.left {
+    top: 50%;
+    transform: translateY(-50%);
     left: 50%;
-    /* (Modal max-width / 2) + Modal padding + offset */
-    transform: translate(calc(-470px - 20px - 10px), -50%); 
+    /* Pushed further out: (Modal max-width / 2) + Modal padding + increased offset (40px -> 80px) */
+    transform: translate(calc(-470px - 20px - 80px), -50%); 
 }
-/* Right Arrow position: to the right of the modal content */
+/* Right Arrow position: aligned vertically with the X button, further out */
 .modal-arrow-shell.right {
-    right: 50%;
-    /* (Modal max-width / 2) + Modal padding + offset */
-    transform: translate(calc(470px + 20px + 10px), -50%); 
+    top: 5%; /* Aligned with the top: 5% of the viewport height */
+    right: 5%;
+    transform: none; /* No vertical transform needed */
+    z-index: 1021; /* Slightly higher than X button */
+    /* Pushed further out: (Modal max-width / 2) + Modal padding + increased offset (40px -> 80px) */
+    /* NOTE: We now use top/right absolute positioning, so we don't need complex calc() here. */
 }
 
 
 /* 💥 2. CLOSE BUTTON REPOSITIONED (Top-Right) 💥 */
 .close-button-shell {
   position: absolute; 
-  /* New position: Top Right */
   top: 5%; 
   right: 5%; 
-  transform: none; /* No complex transforms needed */
+  transform: none; 
   width: 72px; 
   height: 72px; 
   display: flex; 
   align-items: center; 
   justify-content: center; 
-  z-index: 1020; /* Higher Z-index to ensure it's on top */
+  z-index: 1020; 
   pointer-events: none;
 }
 #modal-close-btn { 
-    font-size: 2.2rem; /* Larger X for visibility */
+    font-size: 2.2rem; 
 }
 
-
-/* --- 🔎 Magnifier Styles (NO CHANGE) --- */
+/* 💥 3. SLIDING TRANSITION EFFECT 💥 */
+/* Container for the image, ensures content is clipped during slide */
 #magnifier-container {
     position: relative; 
     width: 100%;
@@ -183,6 +185,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     margin: 0 auto;
     cursor: crosshair;
     display: inline-block;
+    overflow: hidden; /* Important: keeps the sliding image clipped */
 }
 #magnifier-container .mag-image {
     display: block;
@@ -192,7 +195,14 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     max-height: 80vh; 
     object-fit: contain;
     margin-bottom: 0;
+    
+    /* New: Initial setup for the sliding effect */
+    position: relative;
+    left: 0;
+    opacity: 1;
+    transition: left 300ms ease-out, opacity 100ms;
 }
+
 .mag-lens {
     position: absolute;
     border: 3px solid rgba(255, 255, 255, 0.8);
@@ -224,8 +234,8 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
   .modal-content { margin: 20% auto; padding: 10px; }
   
   /* Modal Arrows (on mobile, move arrows close to the content area) */
-  .modal-arrow-shell.left { left: 10px; transform: translateY(-50%); }
-  .modal-arrow-shell.right { right: 10px; transform: translateY(-50%); }
+  .modal-arrow-shell.left { left: 10px; top: 50%; transform: translateY(-50%); }
+  .modal-arrow-shell.right { right: 10px; top: 50%; transform: translateY(-50%); }
   .modal-nav-button { width: 56px; height: 56px; font-size: 1.6rem; }
 
   /* Close Button on Mobile */
@@ -235,6 +245,14 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     width: 56px; 
     height: 56px; 
   }
+}
+@media (min-width: 980px) {
+    /* Desktop Arrow positioning for Left (further out) */
+    .modal-arrow-shell.left {
+      left: 50%;
+      top: 50%;
+      transform: translate(calc(-470px - 20px - 100px), -50%); /* Increased offset */
+    }
 }
 </style>
 </head>
@@ -354,14 +372,13 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     </div>
 </div>
 <script>
-/* --- Carousel Script (Minor Data Attribute Updates) --- */
+/* --- Carousel Script (NO CHANGE) --- */
 document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
   const track = wrapper.querySelector('.carousel-track');
   const leftBtn = wrapper.querySelector('.arrow.left');
   const rightBtn = wrapper.querySelector('.arrow.right');
   const imgs = Array.from(track.querySelectorAll('img'));
   
-  // Assign data-index if not already present (needed for modal navigation)
   imgs.forEach((img, i) => {
       img.setAttribute('data-index', i);
   });
@@ -391,14 +408,12 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
   if (leftBtn) leftBtn.addEventListener('click', ()=>{ if (index>0) { index--; update(); }});
   if (rightBtn) rightBtn.addEventListener('click', ()=>{ if (index < imgs.length - 1) { index++; update(); }});
   
-  // keyboard support when wrapper is focused
   wrapper.setAttribute('tabindex', '0');
   wrapper.addEventListener('keydown', (e)=>{
     if (e.key === 'ArrowLeft' && index > 0) { index--; update(); }
     if (e.key === 'ArrowRight' && index < imgs.length - 1) { index++; update(); }
   });
 
-  // touch swipe
   let startX = null;
   wrapper.addEventListener('touchstart', e => startX = e.touches[0].clientX);
   wrapper.addEventListener('touchend', e => {
@@ -413,7 +428,6 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
   });
 
   window.addEventListener('resize', ()=>setTimeout(update, 90));
-  // initial positioning after images layout
   setTimeout(update, 60);
 });
 
@@ -424,19 +438,15 @@ const modalImg = document.getElementById('modal-image');
 const modalCaption = document.getElementById('modal-caption');
 const closeModal = document.getElementById('modal-close-btn');
 
-// Magnifier DOM elements
 const magContainer = document.getElementById('magnifier-container');
 const magLens = document.getElementById('magnifier-lens');
 
-// Modal Navigation Elements
 const modalPrevBtn = document.getElementById('modal-prev-btn');
 const modalNextBtn = document.getElementById('modal-next-btn');
 
-// State variables to track which images we are navigating
 let currentSectionImages = [];
 let currentImageIndex = 0;
 
-// Define constants
 const zoomFactor = 2.5; 
 const lensRadius = 90; 
 
@@ -448,62 +458,96 @@ function hideLens() {
     magLens.style.opacity = 0;
 }
 
-function updateModalContent(imgElement) {
-    modalImg.src = imgElement.src;
-    modalImg.alt = imgElement.alt;
-    modalCaption.textContent = imgElement.alt;
-    magLens.style.backgroundImage = `url('${imgElement.src}')`;
+// Function to handle the actual image change with a slide effect
+function performImageTransition(newImageElement, direction) {
+    const slideDistance = (direction === 'next') ? '100%' : '-100%';
+    const resetDistance = (direction === 'next') ? '-100%' : '100%';
 
-    // Update button states
+    // 1. Start the slide out animation
+    modalImg.style.left = slideDistance;
+    modalImg.style.opacity = 0;
+
+    // 2. After the animation completes, change the source and slide back in
+    setTimeout(() => {
+        // Reset the image position off-screen on the opposite side
+        modalImg.style.transition = 'none'; // Temporarily disable transition
+        modalImg.style.left = resetDistance;
+        modalImg.src = newImageElement.src;
+        modalImg.alt = newImageElement.alt;
+        modalCaption.textContent = newImageElement.alt;
+        magLens.style.backgroundImage = `url('${newImageElement.src}')`;
+
+        // Wait for the next frame, then start the slide in
+        requestAnimationFrame(() => {
+            modalImg.style.transition = 'left 300ms ease-out, opacity 100ms';
+            modalImg.style.left = '0';
+            modalImg.style.opacity = 1;
+            
+            // Re-run magnifier size calculation
+            if (modalImg.complete) {
+                setTimeout(updateMagnifierSize, 50); 
+            }
+        });
+    }, 300); // 300ms matches the CSS transition time
+}
+
+
+function updateModalContent(imgElement, direction) {
+    // Perform the slide transition
+    performImageTransition(imgElement, direction);
+    
+    // Update button states immediately
     modalPrevBtn.disabled = (currentImageIndex === 0);
     modalNextBtn.disabled = (currentImageIndex === currentSectionImages.length - 1);
-    
-    // Recalculate size after changing image source
-    modalImg.onload = () => {
-        setTimeout(updateMagnifierSize, 50); 
-    };
-    if (modalImg.complete) {
-        setTimeout(updateMagnifierSize, 50); 
-    }
 }
 
 function openModal(imgElement) {
-    // 1. Determine the relevant image list (the section it came from)
     const sectionWrapper = imgElement.closest('.carousel-wrapper');
     const track = sectionWrapper ? sectionWrapper.querySelector('.carousel-track') : null;
     currentSectionImages = track ? Array.from(track.querySelectorAll('img')) : [imgElement];
     
-    // 2. Set the starting index
     currentImageIndex = parseInt(imgElement.getAttribute('data-index')) || 0;
 
-    // 3. Display modal and set content
     modal.style.display = "flex"; 
     document.body.style.overflow = "hidden";
-    updateModalContent(imgElement);
+    
+    // Initial content setup (without transition)
+    modalImg.src = imgElement.src;
+    modalImg.alt = imgElement.alt;
+    modalCaption.textContent = imgElement.alt;
+    magLens.style.backgroundImage = `url('${imgElement.src}')`;
+    modalImg.style.left = '0'; // Ensure it starts centered
+    modalImg.style.opacity = 1;
 
-    // 4. Attach Magnifier Listeners
+    modalPrevBtn.disabled = (currentImageIndex === 0);
+    modalNextBtn.disabled = (currentImageIndex === currentSectionImages.length - 1);
+
     magContainer.addEventListener('mouseenter', showLens);
     magContainer.addEventListener('mouseleave', hideLens);
     magContainer.addEventListener('mousemove', handleMagnify);
     window.addEventListener('resize', updateMagnifierSize);
     
-    // 5. Attach Navigation Listeners (only once)
+    // Attach Navigation Listeners (only once)
     modalPrevBtn.addEventListener('click', showPrev);
     modalNextBtn.addEventListener('click', showNext);
     document.addEventListener('keydown', handleKeyNavigation);
+    
+    if (modalImg.complete) {
+        setTimeout(updateMagnifierSize, 50); 
+    }
 }
 
 function showPrev() {
     if (currentImageIndex > 0) {
         currentImageIndex--;
-        updateModalContent(currentSectionImages[currentImageIndex]);
+        updateModalContent(currentSectionImages[currentImageIndex], 'prev');
     }
 }
 
 function showNext() {
     if (currentImageIndex < currentSectionImages.length - 1) {
         currentImageIndex++;
-        updateModalContent(currentSectionImages[currentImageIndex]);
+        updateModalContent(currentSectionImages[currentImageIndex], 'next');
     }
 }
 
@@ -576,8 +620,6 @@ modal.addEventListener('click', (e) => {
         closeLightbox();
     }
 });
-
-// Keyboard navigation is now handled by handleKeyNavigation
 </script>
 
 </body>
