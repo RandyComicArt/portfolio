@@ -135,13 +135,13 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     border-radius: 15px 0 0 15px; 
 }
 
-/* Right Column: Description Panel */
+/* Right Column: Description Panel (FIXED BORDER RADIUS) */
 .description-column {
     flex: 1; 
     background: #333; 
     backdrop-filter: blur(10px); 
-    /* FIXED: The left side is sharp (0) and the right side is rounded (15px) */
-    border-radius: 0 15px 15px 0; 
+    /* 💥 FIXED: Use full 15px rounding on all four corners of the inner panel */
+    border-radius: 15px 15px 15px 15px; 
     
     padding: 25px; 
     padding-bottom: 75px; 
@@ -180,8 +180,8 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     
     justify-content: center; 
     
-    /* FIXED: The bottom-left corner is sharp (0) */
-    border-radius: 0 0 15px 0; 
+    /* 💥 FIXED: Ensure the bottom-left corner is rounded (15px) */
+    border-radius: 0 0 15px 15px; 
     border-top: 1px solid rgba(255, 255, 255, 0.15);
     
     align-items: center;
@@ -672,7 +672,6 @@ function closeLightbox() {
 }
 
 // 1. Attach click handler to every carousel image to open the modal 
-//    💥 FIXED: Placed inside DOMContentLoaded to ensure images are loaded
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.carousel-track img').forEach(img => {
         img.addEventListener('click', (e) => {
