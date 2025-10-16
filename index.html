@@ -105,29 +105,6 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
   align-items: center; justify-content: center;
 }
 
-/* Consolidated Navigation Panel (Top Left) */
-.modal-nav-panel {
-    position: absolute;
-    top: 5%;
-    left: 5%;
-    z-index: 1020;
-    display: flex;
-    gap: 10px; 
-    background: rgba(255,255,255,0.1);
-    backdrop-filter: blur(5px);
-    border-radius: 10px;
-    padding: 5px;
-}
-.modal-nav-panel .modal-nav-button {
-    width: 50px; 
-    height: 50px; 
-    font-size: 1.4rem;
-}
-#modal-close-btn { 
-    font-size: 2.0rem; 
-}
-
-
 /* Modal Content (The two columns container) */
 .modal-content {
   position: relative; 
@@ -139,7 +116,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
   background: transparent;
   border: none; 
   box-shadow: none; 
-  border-radius: 20px; 
+  border-radius: 20px; /* Outer wrapper gets the main rounded corners */
   
   display: flex; 
   align-items: stretch; 
@@ -153,22 +130,24 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* 💥 REMOVED: Dark background to blend with modal background 💥 */
     background: transparent; 
-    border-radius: 15px 0 0 15px;
+    border-radius: 15px 0 0 15px; /* Only top-left and bottom-left are rounded here */
 }
 
-/* Right Column: Description Panel (UPDATED BACKGROUND) */
+/* Right Column: Description Panel (UPDATED BORDER-RADIUS) */
 .description-column {
     flex: 1; 
-    /* 💥 UPDATED: Solid dark gray background 💥 */
     background: #333; 
-    backdrop-filter: blur(10px); /* Kept blur for aesthetic detail */
-    border-radius: 0 15px 15px 0;
+    backdrop-filter: blur(10px); 
+    /* 💥 UPDATED: Rounded all corners but removed the border-left 
+       The modal-nav-panel will create a visual separation. 
+       Re-added border-left back to maintain separation from glass overlay. */
+    border-radius: 0 15px 15px 15px; /* Top-right, bottom-right, bottom-left are rounded */
     padding: 25px;
     overflow-y: auto; 
     border-left: 1px solid rgba(255, 255, 255, 0.15);
     color: #eee;
+    position: relative; /* Needed to position the nav panel inside */
 }
 .description-column h3 {
     font-size: 1.5rem;
@@ -180,6 +159,39 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 .description-column p {
     margin-bottom: 15px;
 }
+
+/* 💥 UPDATED: Navigation Panel Position (Inside Description Column, Bottom-Left) 💥 */
+.modal-nav-panel {
+    position: sticky; /* Sticky ensures it stays visible when content scrolls */
+    bottom: -25px; /* Negative margin to pull it into the corner area */
+    left: -25px; 
+    
+    z-index: 1020;
+    display: flex;
+    gap: 10px; 
+    background: #333; /* Match panel background */
+    backdrop-filter: blur(5px);
+    border-radius: 0 10px 0 10px; /* Subtle rounding */
+    padding: 10px 25px; /* More padding to match main column padding */
+    width: calc(100% + 50px); /* Stretch across the bottom edge */
+    
+    /* Ensure content is positioned correctly for sticky to work */
+    align-items: center;
+    justify-content: flex-start;
+    
+    /* Ensure corner rounding correction */
+    border-bottom-left-radius: 15px;
+    border-top-right-radius: 0;
+}
+.modal-nav-panel .modal-nav-button {
+    width: 50px; 
+    height: 50px; 
+    font-size: 1.4rem;
+}
+#modal-close-btn { 
+    font-size: 2.0rem; 
+}
+
 
 #modal-caption { display: none; }
 
@@ -242,7 +254,8 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
       min-height: 60vh;
   }
   .description-column {
-      border-radius: 0 0 15px 15px;
+      /* Revert the bottom corners to the main radius */
+      border-radius: 0 0 15px 15px; 
       border-left: none;
       border-top: 1px solid rgba(255, 255, 255, 0.15);
       max-height: 30vh;
@@ -250,10 +263,17 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
   .description-column h3 { margin-top: 0; }
   #magnifier-container .mag-image { max-height: 55vh; }
 
-  /* Navigation panel stays top left */
+  /* Navigation panel on mobile (now at the bottom of the stacked description panel) */
   .modal-nav-panel {
-      top: 10px;
-      left: 10px;
+      position: static; /* Remove sticky on mobile */
+      margin-top: 20px; /* Space above nav */
+      bottom: auto;
+      left: auto;
+      width: 100%;
+      padding: 10px 0;
+      justify-content: center;
+      background: transparent;
+      border-radius: 0;
   }
 }
 
@@ -357,12 +377,6 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 
 <div id="image-modal" class="modal-overlay" style="display: none;">
     
-    <div class="modal-nav-panel">
-        <button id="modal-close-btn" class="modal-nav-button" aria-label="Close Image">&times;</button>
-        <button id="modal-prev-btn" class="modal-nav-button" aria-label="Previous Image">&#10094;</button>
-        <button id="modal-next-btn" class="modal-nav-button" aria-label="Next Image">&#10095;</button>
-    </div>
-
     <div id="modal-content-area" class="modal-content">
         
         <div class="image-column">
@@ -382,6 +396,12 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
                 Series: Completed Artwork<br>
                 Date: 2024
             </p>
+            
+            <div class="modal-nav-panel">
+                <button id="modal-close-btn" class="modal-nav-button" aria-label="Close Image">&times;</button>
+                <button id="modal-prev-btn" class="modal-nav-button" aria-label="Previous Image">&#10094;</button>
+                <button id="modal-next-btn" class="modal-nav-button" aria-label="Next Image">&#10095;</button>
+            </div>
         </div>
         
     </div>
