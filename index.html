@@ -168,7 +168,6 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
         
     /* Visibility control */
     opacity: 0;
-    /* Use 'top' and 'left' for positioning and 'translate' for centering */
     top: 0; 
     left: 0; 
     pointer-events: none; /* Allows mouse events to pass through to the image below */
@@ -357,7 +356,7 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
 });
 
 
-/* --- 🔎 Lightbox Modal and Magnifier Functionality (WITH FIXES) --- */
+/* --- 🔎 Lightbox Modal and Magnifier Functionality (FINAL CODE) --- */
 const modal = document.getElementById('image-modal');
 const modalImg = document.getElementById('modal-image');
 const modalCaption = document.getElementById('modal-caption');
@@ -369,7 +368,7 @@ const magLens = document.getElementById('magnifier-lens');
 
 // Define constants
 const zoomFactor = 2.5; 
-// FIX: Hardcode lensRadius to 90 (180px width / 2) for reliable calculation
+// Hardcode lensRadius to 90 (180px width / 2) for reliable calculation
 const lensRadius = 90; 
 
 function openModal(imgElement) {
@@ -387,7 +386,7 @@ function openModal(imgElement) {
     // Attach listener for the zoom effect
     magContainer.addEventListener('mousemove', handleMagnify);
     
-    // FIX: Use setTimeout after image load/complete to ensure correct clientWidth/Height
+    // Use setTimeout after image load/complete to ensure correct clientWidth/Height
     modalImg.onload = () => {
         setTimeout(updateMagnifierSize, 50); 
     };
@@ -406,6 +405,9 @@ function updateMagnifierSize() {
     const largeSizeX = modalImg.clientWidth * zoomFactor;
     const largeSizeY = modalImg.clientHeight * zoomFactor;
     magLens.style.backgroundSize = `${largeSizeX}px ${largeSizeY}px`;
+    
+    // FIX: Reset opacity to 0 so the CSS :hover can correctly trigger the magnifying effect 
+    magLens.style.opacity = 0; 
 }
 
 function handleMagnify(e) {
@@ -421,7 +423,7 @@ function handleMagnify(e) {
     // 1. Position the lens: Place the lens's top-left corner at (x, y) 
     magLens.style.left = `${x}px`;
     magLens.style.top = `${y}px`;
-    // FIX: Center the lens perfectly under the cursor using translate
+    // Center the lens perfectly under the cursor using translate
     magLens.style.transform = `translate(-${lensRadius}px, -${lensRadius}px)`; 
 
 
