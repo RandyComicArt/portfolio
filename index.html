@@ -102,7 +102,7 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
   padding: 20px;
 }
 
-/* --- 🖼️ NEW: Modal/Lightbox Styles --- */
+/* --- 🖼️ Modal/Lightbox Styles --- */
 .modal-overlay {
   display: none; /* Controlled by JS: none or flex */
   position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
@@ -119,7 +119,6 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  /* Added for centering the image/caption */
   display: flex; flex-direction: column; align-items: center;
 }
 #modal-caption { color: #ccc; font-size: 1.1rem; padding: 10px 0 0; }
@@ -131,7 +130,7 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
 .modal-close:hover, .modal-close:focus { opacity: 1; color: #ddd; }
 
 
-/* --- 🔎 NEW: Magnifier Styles --- */
+/* --- 🔎 Magnifier Styles --- */
 #magnifier-container {
     position: relative; 
     width: 100%;
@@ -169,6 +168,9 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
         
     /* Visibility control */
     opacity: 0;
+    /* Use 'top' and 'left' for positioning and 'translate' for centering */
+    top: 0; 
+    left: 0; 
     pointer-events: none; /* Allows mouse events to pass through to the image below */
     transition: opacity 0.2s;
     z-index: 10;
@@ -297,7 +299,7 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
     </div>
 </div>
 <script>
-/* --- Carousel Script --- */
+/* --- Carousel Script (NO CHANGES) --- */
 document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
   const track = wrapper.querySelector('.carousel-track');
   const leftBtn = wrapper.querySelector('.arrow.left');
@@ -355,7 +357,7 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
 });
 
 
-/* --- 🔎 NEW: Lightbox Modal and Magnifier Functionality --- */
+/* --- 🔎 Lightbox Modal and Magnifier Functionality (WITH FIXES) --- */
 const modal = document.getElementById('image-modal');
 const modalImg = document.getElementById('modal-image');
 const modalCaption = document.getElementById('modal-caption');
@@ -367,8 +369,8 @@ const magLens = document.getElementById('magnifier-lens');
 
 // Define constants
 const zoomFactor = 2.5; 
-// Get current lens width/2. We read the style to be dynamic.
-const lensRadius = parseFloat(getComputedStyle(magLens).width) / 2; 
+// FIX: Hardcode lensRadius to 90 (180px width / 2) for reliable calculation
+const lensRadius = 90; 
 
 function openModal(imgElement) {
     modal.style.display = "flex"; 
@@ -380,20 +382,22 @@ function openModal(imgElement) {
     document.body.style.overflow = "hidden";
 
     // 2. Setup Magnifier Lens properties
-    // Set the large image as the background of the lens
     magLens.style.backgroundImage = `url('${imgElement.src}')`;
     
     // Attach listener for the zoom effect
     magContainer.addEventListener('mousemove', handleMagnify);
     
-    // Attach a load listener to set the correct size once the image is loaded
-    modalImg.onload = updateMagnifierSize;
+    // FIX: Use setTimeout after image load/complete to ensure correct clientWidth/Height
+    modalImg.onload = () => {
+        setTimeout(updateMagnifierSize, 50); 
+    };
+    
     // Also attach a resize listener for responsiveness
     window.addEventListener('resize', updateMagnifierSize);
     
     // Handle case where image is already cached/loaded
     if (modalImg.complete) {
-        updateMagnifierSize();
+        setTimeout(updateMagnifierSize, 50); 
     }
 }
 
@@ -410,20 +414,21 @@ function handleMagnify(e) {
     let x = e.clientX - rect.left;
     let y = e.clientY - rect.top;
 
-    // Boundary check (optional, but ensures the lens doesn't jump wildly)
+    // Boundary check 
     if (x < 0) x = 0; if (x > rect.width) x = rect.width;
     if (y < 0) y = 0; if (y > rect.height) y = rect.height;
 
-    // 1. Position the lens: Center it over the cursor
-    let lensX = x - lensRadius;
-    let lensY = y - lensRadius;
+    // 1. Position the lens: Place the lens's top-left corner at (x, y) 
+    magLens.style.left = `${x}px`;
+    magLens.style.top = `${y}px`;
+    // FIX: Center the lens perfectly under the cursor using translate
+    magLens.style.transform = `translate(-${lensRadius}px, -${lensRadius}px)`; 
 
-    // 2. Position the background: Scale the coordinate and subtract lens radius
-    // This moves the magnified image in the *opposite* direction of the cursor movement.
-    let backgroundX = (x * zoomFactor) - lensRadius; 
-    let backgroundY = (y * zoomFactor) - lensRadius;
 
-    magLens.style.transform = `translate(${lensX}px, ${lensY}px)`;
+    // 2. Position the background: Core magnification logic
+    let backgroundX = x * zoomFactor - lensRadius; 
+    let backgroundY = y * zoomFactor - lensRadius;
+
     magLens.style.backgroundPosition = `-${backgroundX}px -${backgroundY}px`;
 }
 
