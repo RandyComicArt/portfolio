@@ -44,7 +44,7 @@ nav a:hover, nav a.active {
   background:rgba(255,255,255,0.1); text-shadow:0 0 10px rgba(255,255,255,0.5);
 }
 
-/* --- Section Content & Carousel Styles --- */
+/* --- Section Content & Carousel Styles (Non-Modal) --- */
 section { padding:40px 20px; max-width:1200px; margin:40px auto; }
 h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 .carousel-wrapper { position: relative; display: flex; align-items: center; justify-content: center; }
@@ -65,7 +65,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 .carousel-track img.center { transform: scale(1.08); z-index: 2; }
 .carousel-track img.side { transform: scale(0.9); opacity: 0.85; z-index: 1; }
 
-/* Carousel Arrows & Close/Modal Button Style */
+/* Carousel Arrows & Modal Button Style */
 .arrow-shell {
   position: absolute; top: 50%; transform: translateY(-50%);
   width: 72px; height: 72px; display: flex; align-items: center;
@@ -73,7 +73,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 }
 .arrow-shell.left { left: -112px; }
 .arrow-shell.right { right: -112px; }
-.arrow, .modal-nav-button { /* Now includes modal-nav-button */
+.arrow, .modal-nav-button { 
   pointer-events: auto; width: 64px; height: 64px; border-radius: 50%;
   border: 1px solid rgba(255,255,255,0.45);
   background: linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0.22));
@@ -93,12 +93,11 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 .arrow:disabled, .modal-nav-button:disabled { opacity: 0.28; cursor: default; transform: none; }
 
 
-/* --- 🖼️ Modal/Lightbox Styles --- */
+/* --- 🖼️ Modal/Lightbox Styles (MAJOR UPDATE) --- */
 .modal-overlay {
   display: none; 
   position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
   overflow: auto;
-  /* Glass background for the entire overlay */
   background: rgba(255,255,255,0.05); 
   backdrop-filter: blur(15px); 
   border: 1px solid rgba(255,255,255,0.15); 
@@ -106,78 +105,92 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
   align-items: center; justify-content: center;
 }
 
-/* Modal Content (Container for the image and caption) */
+/* 💥 New: Consolidated Navigation Panel (Top Left) 💥 */
+.modal-nav-panel {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    z-index: 1020;
+    display: flex;
+    gap: 10px; /* Space between buttons */
+    /* Add a slight background/glass effect for visibility */
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+    padding: 5px;
+}
+.modal-nav-panel .modal-nav-button {
+    /* Reduce size slightly for the header placement */
+    width: 50px; 
+    height: 50px; 
+    font-size: 1.4rem;
+}
+#modal-close-btn { 
+    font-size: 2.0rem; /* Tweak X size */
+}
+
+
+/* Modal Content (The two columns container) */
 .modal-content {
   position: relative; 
   margin: 5% auto; 
-  padding: 20px;
+  padding: 0; /* Remove padding as columns will handle it */
   width: 90%; 
-  max-width: 940px; 
-  text-align: center; 
+  max-width: 1200px; /* Increased max-width for the two-column view */
+  height: 85vh; /* Set a height limit */
   background: transparent;
-  backdrop-filter: none;
   border: none; 
   box-shadow: none; 
   border-radius: 20px; 
   
-  display: flex; 
-  flex-direction: column; 
-  align-items: center;
+  display: flex; /* Enable column layout */
+  align-items: stretch; /* Stretch children vertically */
 }
 
-#modal-caption { color: #ccc; font-size: 1.1rem; padding: 10px 0 0; }
-
-
-/* 💥 1. MODAL NAVIGATION ARROWS 💥 */
-.modal-arrow-shell {
-    position: absolute; 
-    width: 72px; 
-    height: 72px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    z-index: 1010; 
-    pointer-events: none;
-}
-/* Left Arrow position: further out */
-.modal-arrow-shell.left {
-    top: 50%;
-    transform: translateY(-50%);
-    left: 50%;
-    /* Pushed further out: (Modal max-width / 2) + Modal padding + increased offset (100px) */
-    transform: translate(calc(-470px - 20px - 100px), -50%); 
-}
-/* Right Arrow position: aligned vertically with the X button, next to it */
-.modal-arrow-shell.right {
-    top: 5%; /* Aligned with the top: 5% of the viewport height (same as X button) */
-    right: calc(5% + 72px + 10px); /* 5% + width of X button shell + gap */
-    transform: none; 
+/* 💥 New: Image and Magnifier Column (Left Side) 💥 */
+.image-column {
+    flex: 2; /* Takes up 2/3 of the space */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.1); /* Slight separation background */
+    border-radius: 15px 0 0 15px;
 }
 
-
-/* 💥 2. CLOSE BUTTON REPOSITIONED (Top-Right) 💥 */
-.close-button-shell {
-  position: absolute; 
-  top: 5%; 
-  right: 5%; 
-  transform: none; 
-  width: 72px; 
-  height: 72px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  z-index: 1020; 
-  pointer-events: none;
+/* 💥 New: Description Panel (Right Side) 💥 */
+.description-column {
+    flex: 1; /* Takes up 1/3 of the space */
+    background: rgba(255, 255, 255, 0.1); /* Light glass effect */
+    backdrop-filter: blur(10px);
+    border-radius: 0 15px 15px 0;
+    padding: 25px;
+    overflow-y: auto; /* Scroll if content is too long */
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    color: #eee;
 }
-#modal-close-btn { 
-    font-size: 2.2rem; 
+.description-column h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 5px;
+}
+.description-column p {
+    margin-bottom: 15px;
 }
 
-/* 💥 3. SLIDING TRANSITION EFFECT 💥 */
+/* Hide the old, separated caption */
+#modal-caption { display: none; }
+
+
+/* 💥 Magnifier/Image Styles (Adjusted Max-Height) 💥 */
 #magnifier-container {
     position: relative; 
     width: 100%;
-    max-width: 860px; 
+    /* Max width is relative to the column size now */
+    max-width: 100%; 
     margin: 0 auto;
     cursor: crosshair;
     display: inline-block;
@@ -188,7 +201,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     width: 100%;
     height: auto;
     border-radius: 15px;
-    max-height: 80vh; 
+    max-height: 78vh; /* Reduced max height to fit the column height */
     object-fit: contain;
     margin-bottom: 0;
     
@@ -217,39 +230,38 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     z-index: 10;
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-  /* Carousel */
-  .carousel-track { gap: 18px; }
-  .carousel-track img { width: 200px; }
-  .arrow-shell { top: auto; bottom: -70px; transform: none; width: auto; height: auto; }
-  .arrow-shell.left { left: 25%; }
-  .arrow-shell.right { right: 25%; }
-  .arrow { width: 56px; height: 56px; font-size: 1.6rem; }
-  .modal-content { margin: 20% auto; padding: 10px; }
-  
-  /* Modal Arrows (on mobile, move arrows close to the content area) */
-  .modal-arrow-shell.left { left: 10px; top: 50%; transform: translateY(-50%); }
-  /* Fixed right arrow mobile position */
-  .modal-arrow-shell.right { right: calc(10px + 56px + 10px); top: 10px; transform: none; }
-  .modal-nav-button { width: 56px; height: 56px; font-size: 1.6rem; }
 
-  /* Close Button on Mobile */
-  .close-button-shell {
-    top: 10px; 
-    right: 10px; 
-    width: 56px; 
-    height: 56px; 
+/* --- Responsive adjustments --- */
+@media (max-width: 900px) {
+  /* Stack columns vertically on smaller screens */
+  .modal-content {
+      flex-direction: column;
+      height: 90vh;
+      max-width: 90%;
+  }
+  .image-column {
+      border-radius: 15px 15px 0 0;
+      min-height: 60vh;
+  }
+  .description-column {
+      border-radius: 0 0 15px 15px;
+      border-left: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      max-height: 30vh;
+  }
+  .description-column h3 { margin-top: 0; }
+  #magnifier-container .mag-image { max-height: 55vh; }
+
+  /* Navigation panel stays top left */
+  .modal-nav-panel {
+      top: 10px;
+      left: 10px;
   }
 }
-@media (min-width: 980px) {
-    /* Desktop Arrow positioning for Left (further out) */
-    .modal-arrow-shell.left {
-      left: 50%;
-      top: 50%;
-      transform: translate(calc(-470px - 20px - 100px), -50%); /* Increased offset */
-    }
-}
+
+/* Clean up unused modal arrow positioning from previous versions */
+.modal-arrow-shell, .close-button-shell { display: none !important; }
+
 </style>
 </head>
 <body>
@@ -272,21 +284,21 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
     <div class="carousel-container">
       <div class="carousel-track">
-        <img src="images/fanart1.png" alt="Artwork 1" loading="lazy" data-index="0">
-        <img src="images/fanart2.png" alt="Artwork 2" loading="lazy" data-index="1">
-        <img src="images/fanart3.png" alt="Artwork 3" loading="lazy" data-index="2">
-        <img src="images/fanart4.png" alt="Artwork 4" loading="lazy" data-index="3">
-        <img src="images/fanart5.png" alt="Artwork 5" loading="lazy" data-index="4">
-        <img src="images/fanart6.png" alt="Artwork 6" loading="lazy" data-index="5">
-        <img src="images/fanart7.png" alt="Artwork 7" loading="lazy" data-index="6">
-        <img src="images/fanart8.png" alt="Artwork 8" loading="lazy" data-index="7">
-        <img src="images/fanart9.png" alt="Artwork 9" loading="lazy" data-index="8">
-        <img src="images/fanart10.png" alt="Artwork 10" loading="lazy" data-index="9">
-        <img src="images/fanart11.png" alt="Artwork 11" loading="lazy" data-index="10">
-        <img src="images/fanart12.png" alt="Artwork 12" loading="lazy" data-index="11">
-        <img src="images/fanart13.png" alt="Artwork 13" loading="lazy" data-index="12">
-        <img src="images/fanart14.png" alt="Artwork 14" loading="lazy" data-index="13">
-        <img src="images/fanart15.png" alt="Artwork 15" loading="lazy" data-index="14">
+        <img src="images/fanart1.png" alt="Artwork 1" loading="lazy" data-index="0" data-desc="This is a detailed fan art piece, rendered in digital paint with emphasis on mood lighting and subtle texture work. The process involved several lighting passes to achieve this dramatic effect.">
+        <img src="images/fanart2.png" alt="Artwork 2" loading="lazy" data-index="1" data-desc="A study in monochrome focusing on character expression. Created entirely in Procreate, this sketch explores line weight and shadow placement over color saturation.">
+        <img src="images/fanart3.png" alt="Artwork 3" loading="lazy" data-index="2" data-desc="High-contrast environment art featuring a cyberpunk city street. The primary challenge was balancing the neon glow with the surrounding dark, rainy atmosphere.">
+        <img src="images/fanart4.png" alt="Artwork 4" loading="lazy" data-index="3" data-desc="Traditional oil painting digitized and enhanced with subtle post-production effects. This piece captures a quiet moment of reflection in nature.">
+        <img src="images/fanart5.png" alt="Artwork 5" loading="lazy" data-index="4" data-desc="A vibrant character design using a limited color palette (red, blue, yellow) to create maximum impact. The style is inspired by classic comic book ink work.">
+        <img src="images/fanart6.png" alt="Artwork 6" loading="lazy" data-index="5" data-desc="Conceptual piece for a video game boss. Focus was placed on heavy armor plating and intimidating silhouette. Drawn primarily in Adobe Photoshop.">
+        <img src="images/fanart7.png" alt="Artwork 7" loading="lazy" data-index="6" data-desc="A detailed portrait exploring different skin tones and hair textures. This was an exercise in subtle value shifts to achieve a hyper-realistic feel.">
+        <img src="images/fanart8.png" alt="Artwork 8" loading="lazy" data-index="7" data-desc="Abstract watercolor done digitally. The goal was to simulate the unpredictable flow and bleed of physical watercolor paint.">
+        <img src="images/fanart9.png" alt="Artwork 9" loading="lazy" data-index="8" data-desc="Stylized illustration of a mythical creature in flight. Attention was paid to dynamic composition and movement blur on the wings.">
+        <img src="images/fanart10.png" alt="Artwork 10" loading="lazy" data-index="9" data-desc="A serene landscape featuring a distant mountain range and dramatic clouds. Used textured brushes to give the digital painting a canvas feel.">
+        <img src="images/fanart11.png" alt="Artwork 11" loading="lazy" data-index="10" data-desc="Pop art inspired piece with bold lines and flat colors. This design emphasizes simplicity and immediate visual appeal.">
+        <img src="images/fanart12.png" alt="Artwork 12" loading="lazy" data-index="11" data-desc="Horror-themed piece utilizing negative space and strong directional light to build tension. The color palette is minimal and unsettling.">
+        <img src="images/fanart13.png" alt="Artwork 13" loading="lazy" data-index="12" data-desc="Fantasy armor concept focusing on metallic texture and surface reflectivity. Several layers were used to build up the highlights and shadows.">
+        <img src="images/fanart14.png" alt="Artwork 14" loading="lazy" data-index="13" data-desc="Sci-fi vehicle design, emphasizing complex mechanical details and wear/tear. The piece was aged using grit and dirt texture overlays.">
+        <img src="images/fanart15.png" alt="Artwork 15" loading="lazy" data-index="14" data-desc="Nature study of a forest canopy, experimenting with depth of field and atmospheric perspective to create a sense of vastness.">
       </div>
     </div>
     <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
@@ -299,10 +311,10 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
     <div class="carousel-container">
       <div class="carousel-track">
-        <img src="images/nightwatch1.png" alt="Nightwatch 1" data-index="0">
-        <img src="images/nightwatch2.png" alt="Nightwatch 2" data-index="1">
-        <img src="images/nightwatch3.png" alt="Nightwatch 3" data-index="2">
-        <img src="images/nightwatch4.png" alt="Nightwatch 4" data-index="3">
+        <img src="images/nightwatch1.png" alt="Nightwatch 1" data-index="0" data-desc="The first entry in the Nightwatch series. This piece defines the central theme: a lone figure observing a desolate, futuristic landscape.">
+        <img src="images/nightwatch2.png" alt="Nightwatch 2" data-index="1" data-desc="Nightwatch 2 introduces color contrast, using warm streetlights against the cold blue night sky, highlighting the figure's isolation.">
+        <img src="images/nightwatch3.png" alt="Nightwatch 3" data-index="2" data-desc="Nightwatch 3 focuses on atmospheric effects, particularly mist and haze, giving the urban environment a mysterious, almost dreamlike quality.">
+        <img src="images/nightwatch4.png" alt="Nightwatch 4" data-index="3" data-desc="The final piece in this set, Nightwatch 4, brings the character closer, allowing for a deeper look at their gear and the reflective surfaces of the city.">
       </div>
     </div>
     <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
@@ -315,17 +327,17 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
     <div class="carousel-container">
       <div class="carousel-track">
-        <img src="images/process1.png" alt="Process 1" data-index="0">
-        <img src="images/process2.png" alt="Process 2" data-index="1">
-        <img src="images/process3.png" alt="Process 3" data-index="2">
-        <img src="images/process4.png" alt="Process 4" data-index="3">
-        <img src="images/process5.png" alt="Process 5" data-index="4">
-        <img src="images/process6.png" alt="Process 6" data-index="5">
-        <img src="images/process7.png" alt="Process 7" data-index="6">
-        <img src="images/process8.png" alt="Process 8" data-index="7">
-        <img src="images/process9.png" alt="Process 9" data-index="8">
-        <img src="images/process10.png" alt="Process 10" data-index="9">
-        <img src="images/process11.png" alt="Process 11" data-index="10">
+        <img src="images/process1.png" alt="Process 1" data-index="0" data-desc="Initial gesture sketch, done quickly to capture the flow and movement of the pose before any detailed rendering began.">
+        <img src="images/process2.png" alt="Process 2" data-index="1" data-desc="Early stage character blocking, establishing the basic shapes and proportion. This is crucial before committing to line work.">
+        <img src="images/process3.png" alt="Process 3" data-index="2" data-desc="Anatomy study focusing on the human arm and hand, exploring musculature and bone structure from multiple angles.">
+        <img src="images/process4.png" alt="Process 4" data-index="3" data-desc="Line art refinement for a complex mechanical prop. The focus here is on clean, consistent lines and surface detail.">
+        <img src="images/process5.png" alt="Process 5" data-index="4" data-desc="Value study using only three levels of gray to define light and shadow areas, aiding in depth perception for the final piece.">
+        <img src="images/process6.png" alt="Process 6" data-index="5" data-desc="Color key exploration. Testing different color schemes to find the optimal mood and temperature for the finished illustration.">
+        <img src="images/process7.png" alt="Process 7" data-index="6" data-desc="Quick environmental thumbnails to find a strong, dynamic composition for a landscape piece.">
+        <img src="images/process8.png" alt="Process 8" data-index="7" data-desc="Digital ink practice, focusing on feathering and cross-hatching to build form and texture in a traditional comic style.">
+        <img src="images/process9.png" alt="Process 9" data-index="8" data-desc="Portrait sketch focusing on facial plane analysis, determining how light falls on the head.">
+        <img src="images/process10.png" alt="Process 10" data-index="9" data-desc="Detailed sketch of clothing and fabric folds, studying how different materials drape and wrinkle.">
+        <img src="images/process11.png" alt="Process 11" data-index="10" data-desc="A compilation of doodles and warm-up exercises, showing experimentation with various brush types and styles.">
       </div>
     </div>
     <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
@@ -347,27 +359,35 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 
 <div id="image-modal" class="modal-overlay" style="display: none;">
     
-    <div class="close-button-shell" role="button" tabindex="0" aria-label="Close Image">
-        <button id="modal-close-btn" class="modal-nav-button">&times;</button>
-    </div>
-
-    <div class="modal-arrow-shell right">
+    <div class="modal-nav-panel">
+        <button id="modal-close-btn" class="modal-nav-button" aria-label="Close Image">&times;</button>
+        <button id="modal-prev-btn" class="modal-nav-button" aria-label="Previous Image">&#10094;</button>
         <button id="modal-next-btn" class="modal-nav-button" aria-label="Next Image">&#10095;</button>
     </div>
-    <div class="modal-arrow-shell left">
-        <button id="modal-prev-btn" class="modal-nav-button" aria-label="Previous Image">&#10094;</button>
-    </div>
-    
 
     <div id="modal-content-area" class="modal-content">
-        <div id="magnifier-container">
-            <img id="modal-image" class="mag-image" src="" alt="">
-            <div id="magnifier-lens" class="mag-lens"></div>
+        
+        <div class="image-column">
+            <div id="magnifier-container">
+                <img id="modal-image" class="mag-image" src="" alt="">
+                <div id="magnifier-lens" class="mag-lens"></div>
+            </div>
+        </div>
+
+        <div class="description-column">
+            <h3 id="description-title">Title Placeholder</h3>
+            <p id="description-text">
+                Sample description text will go here. This area is perfect for noting the materials used (e.g., Digital Painting in Procreate, Oil on Canvas, Pen & Ink), the time taken, or the conceptual inspiration behind the artwork. This panel will scroll if the description is very long.
+            </p>
+            <p id="description-meta">
+                Medium: Digital Art<br>
+                Series: Completed Artwork<br>
+                Date: 2024
+            </p>
         </div>
         
-        <p id="modal-caption"></p>
     </div>
-</div>
+    <p id="modal-caption"></p> </div>
 <script>
 /* --- Carousel Script (NO CHANGE) --- */
 document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
@@ -432,7 +452,9 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
 /* --- 🔎 Lightbox Modal and Magnifier Functionality (UPDATED) --- */
 const modal = document.getElementById('image-modal');
 const modalImg = document.getElementById('modal-image');
-const modalCaption = document.getElementById('modal-caption');
+const descriptionTitle = document.getElementById('description-title');
+const descriptionText = document.getElementById('description-text');
+const descriptionMeta = document.getElementById('description-meta');
 const closeModal = document.getElementById('modal-close-btn');
 
 const magContainer = document.getElementById('magnifier-container');
@@ -459,11 +481,11 @@ function hideLens() {
 function performImageTransition(newImageElement, direction) {
     let slideDistance, resetDistance;
 
-    // 💥 SWAPPED LOGIC: Current image goes the direction of motion 💥
-    if (direction === 'next') { // Right arrow pressed: current image flies LEFT
+    // Next button (right arrow): slide current image LEFT
+    if (direction === 'next') { 
         slideDistance = '-100%';
         resetDistance = '100%';
-    } else { // Left arrow pressed: current image flies RIGHT
+    } else { // Previous button (left arrow): slide current image RIGHT
         slideDistance = '100%';
         resetDistance = '-100%';
     }
@@ -477,10 +499,21 @@ function performImageTransition(newImageElement, direction) {
         // Reset the image position off-screen on the opposite side
         modalImg.style.transition = 'none'; // Temporarily disable transition
         modalImg.style.left = resetDistance;
+        
+        // UPDATE CONTENT
         modalImg.src = newImageElement.src;
         modalImg.alt = newImageElement.alt;
-        modalCaption.textContent = newImageElement.alt;
         magLens.style.backgroundImage = `url('${newImageElement.src}')`;
+        descriptionTitle.textContent = newImageElement.alt; // Use alt tag for title
+        
+        // Use data-desc attribute for description
+        const descText = newImageElement.getAttribute('data-desc') || "No detailed description available for this piece.";
+        descriptionText.textContent = descText;
+        
+        // Update meta info
+        const sectionId = newImageElement.closest('.carousel-wrapper').getAttribute('data-section');
+        descriptionMeta.innerHTML = `Medium: Digital Art<br>Series: ${sectionId.charAt(0).toUpperCase() + sectionId.slice(1)}<br>Date: 2024`;
+
 
         // Wait for the next frame, then start the slide in
         requestAnimationFrame(() => {
@@ -519,10 +552,17 @@ function openModal(imgElement) {
     // Initial content setup (without transition)
     modalImg.src = imgElement.src;
     modalImg.alt = imgElement.alt;
-    modalCaption.textContent = imgElement.alt;
     magLens.style.backgroundImage = `url('${imgElement.src}')`;
-    modalImg.style.left = '0'; // Ensure it starts centered
+    modalImg.style.left = '0'; 
     modalImg.style.opacity = 1;
+    
+    // Initial Description Panel Content
+    descriptionTitle.textContent = imgElement.alt;
+    const descText = imgElement.getAttribute('data-desc') || "No detailed description available for this piece.";
+    descriptionText.textContent = descText;
+    const sectionId = imgElement.closest('.carousel-wrapper').getAttribute('data-section');
+    descriptionMeta.innerHTML = `Medium: Digital Art<br>Series: ${sectionId.charAt(0).toUpperCase() + sectionId.slice(1)}<br>Date: 2024`;
+
 
     modalPrevBtn.disabled = (currentImageIndex === 0);
     modalNextBtn.disabled = (currentImageIndex === currentSectionImages.length - 1);
@@ -616,8 +656,7 @@ document.querySelectorAll('.carousel-track img').forEach(img => {
 
 // 2. Attach close handlers 
 closeModal.addEventListener('click', closeLightbox);
-document.querySelector('.close-button-shell').addEventListener('click', closeLightbox);
-
+// No need to listen to the shell anymore, as buttons are direct children of the nav panel
 
 // Close when clicking outside the image content (on the dark overlay)
 modal.addEventListener('click', (e) => {
