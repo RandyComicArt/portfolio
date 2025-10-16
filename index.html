@@ -4,89 +4,150 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Randy Comic Art</title>
-  <link rel="stylesheet" href="style.css">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f7f7f7;
-    }
+    /* Reset & base styles */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; line-height: 1.6; background-color: #f7f7f7; color: #333; }
+
     header {
-      background-color: #1e1e1e;
-      color: white;
-      padding: 20px;
-      text-align: center;
+      background-color: #1e1e1e; color: #fff; text-align: center; padding: 30px 20px;
     }
-    h1 {
-      margin: 0;
-      font-size: 2.5rem;
-    }
+    header h1 { font-size: 2.5rem; margin-bottom: 10px; }
     nav a {
-      color: white;
-      text-decoration: none;
-      margin: 0 15px;
-      font-weight: bold;
+      color: #fff; text-decoration: none; margin: 0 15px; font-weight: bold;
     }
-    nav a:hover {
-      text-decoration: underline;
-    }
+    nav a:hover { text-decoration: underline; }
+
+    section { padding: 40px 20px; max-width: 1200px; margin: auto; }
+
+    h2 { text-align: center; margin-bottom: 20px; font-size: 2rem; }
+
+    /* Gallery styles */
     .gallery {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      justify-items: center;
     }
     .gallery img {
+      width: 100%;
       max-width: 300px;
-      margin: 10px;
-      border: 2px solid #ddd;
       border-radius: 8px;
-      transition: transform 0.2s;
+      border: 2px solid #ddd;
+      transition: transform 0.2s, border-color 0.2s;
     }
     .gallery img:hover {
       transform: scale(1.05);
       border-color: #1e90ff;
     }
+
+    /* Section headings */
+    .section-title { margin-bottom: 30px; }
+
     footer {
-      background-color: #1e1e1e;
-      color: white;
-      text-align: center;
-      padding: 15px;
-      margin-top: 20px;
+      background-color: #1e1e1e; color: #fff;
+      text-align: center; padding: 20px; margin-top: 40px;
+    }
+
+    /* Responsive text */
+    @media(max-width:600px){
+      header h1 { font-size: 2rem; }
+      h2 { font-size: 1.5rem; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Header -->
   <header>
     <h1>Randy Comic Art</h1>
     <nav>
       <a href="#about">About Me</a>
-      <a href="#portfolio">Portfolio</a>
+      <a href="#fanart">Fan Art</a>
+      <a href="#nightwatch">Nightwatch</a>
+      <a href="#original">Original</a>
+      <a href="#process">Process</a>
       <a href="#contact">Contact</a>
     </nav>
   </header>
 
-  <section id="about" style="text-align:center; padding:40px;">
+  <!-- About Section -->
+  <section id="about">
     <h2>About Me</h2>
-    <p>Hello! I’m Randy, a comic artist passionate about storytelling through visuals. Welcome to my portfolio!</p>
+    <p style="text-align:center; max-width:700px; margin:auto;">
+      Hi! I'm Randy, a comic artist passionate about storytelling and visual art.  
+      This portfolio showcases my fan art, original characters, and creative process.  
+      Thanks for visiting!
+    </p>
   </section>
 
-  <section id="portfolio">
-    <h2 style="text-align:center;">My Work</h2>
+  <!-- Fan Art Gallery -->
+  <section id="fanart">
+    <h2 class="section-title">Fan Art</h2>
     <div class="gallery">
-      <img src="images/art1.jpg" alt="Art 1">
-      <img src="images/art2.jpg" alt="Art 2">
-      <img src="images/art3.jpg" alt="Art 3">
+      <img src="images/fanart1.png" alt="Fan Art 1">
+      <img src="images/fanart2.png" alt="Fan Art 2">
+      <img src="images/fanart3.png" alt="Fan Art 3">
+      <img src="images/fanart4.png" alt="Fan Art 4">
+      <img src="images/fanart5.png" alt="Fan Art 5">
+      <img src="images/fanart6.png" alt="Fan Art 6">
+      <img src="images/fanart7.png" alt="Fan Art 7">
+      <img src="images/fanart8.png" alt="Fan Art 8">
+      <img src="images/fanart9.png" alt="Fan Art 9">
+      <img src="images/fanart10.png" alt="Fan Art 10">
+      <img src="images/fanart11.png" alt="Fan Art 11">
+      <img src="images/fanart12.png" alt="Fan Art 12">
+      <img src="images/fanart13.png" alt="Fan Art 13">
+      <img src="images/fanart14.png" alt="Fan Art 14">
     </div>
   </section>
 
-  <section id="contact" style="text-align:center; padding:40px;">
-    <h2>Contact</h2>
-    <p>Email: <a href="mailto:randy@example.com">randy@example.com</a></p>
+  <!-- Nightwatch Gallery -->
+  <section id="nightwatch">
+    <h2 class="section-title">Nightwatch</h2>
+    <div class="gallery">
+      <img src="images/nightwatch.png" alt="Nightwatch 1">
+      <img src="images/nightwatch2.png" alt="Nightwatch 2">
+      <img src="images/nightwatch3.png" alt="Nightwatch 3">
+      <img src="images/nightwatch4.png" alt="Nightwatch 4">
+    </div>
   </section>
 
+  <!-- Original Art -->
+  <section id="original">
+    <h2 class="section-title">Original Art</h2>
+    <div class="gallery">
+      <img src="images/original1.png" alt="Original Art 1">
+    </div>
+  </section>
+
+  <!-- Process / Sketches -->
+  <section id="process">
+    <h2 class="section-title">Process / Sketches</h2>
+    <div class="gallery">
+      <img src="images/process1.png" alt="Process 1">
+      <img src="images/process2.png" alt="Process 2">
+      <img src="images/process3.png" alt="Process 3">
+      <img src="images/process4.png" alt="Process 4">
+      <img src="images/process5.png" alt="Process 5">
+      <img src="images/process6.png" alt="Process 6">
+      <img src="images/process7.png" alt="Process 7">
+      <img src="images/process8.png" alt="Process 8">
+      <img src="images/process9.png" alt="Process 9">
+      <img src="images/process10.png" alt="Process 10">
+      <img src="images/process11.png" alt="Process 11">
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2>Contact</h2>
+    <p style="text-align:center;">
+      Email: <a href="mailto:randy@example.com">randy@example.com</a>
+    </p>
+  </section>
+
+  <!-- Footer -->
   <footer>
     &copy; 2025 Randy Comic Art
   </footer>
