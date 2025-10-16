@@ -79,82 +79,78 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 .carousel-track img.center { transform: scale(1.08); z-index: 2; }
 .carousel-track img.side { transform: scale(0.9); opacity: 0.85; z-index: 1; }
 
-/* --- General Arrow Style (glass buttons) --- */
-.arrow {
+/* NEW: Arrow shell (outer panel) */
+.arrow-shell {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 2.8rem;
-  color: rgba(255,255,255,0.98);
-  cursor: pointer;
-  user-select: none;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+  pointer-events: none; /* container doesn't intercept - button does */
+}
 
-  background: linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0.16));
-  border: 1px solid rgba(255,255,255,0.45);
-  padding: 12px 18px;
+/* left/right shell positions (outside the carousel) */
+.arrow-shell.left { left: -112px; }
+.arrow-shell.right { right: -112px; }
+
+/* the actual button inside shell */
+.arrow {
+  pointer-events: auto;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  
-  backdrop-filter: blur(6px) saturate(1.05);
-  -webkit-backdrop-filter: blur(6px) saturate(1.05);
-
+  border: 1px solid rgba(255,255,255,0.45);
+  background: linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0.22));
+  color: rgba(12,12,12,0.95); /* dark icon color for contrast */
+  font-size: 1.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
   box-shadow:
-    inset 0 1.5px 2px rgba(255,255,255,0.35),
-    0 6px 18px rgba(0,0,0,0.45),
-    0 0 18px rgba(255,255,255,0.06);
+    inset 0 2px 4px rgba(255,255,255,0.55),
+    0 10px 24px rgba(0,0,0,0.45);
+  outline: none;
+}
 
-  transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
-  z-index: 50;
-}
-.arrow:hover:not(:disabled) {
-  background: linear-gradient(180deg, rgba(255,255,255,0.38), rgba(255,255,255,0.22));
-  transform: translateY(-50%) scale(1.12);
+/* visible hover + focus */
+.arrow:hover:not(:disabled), .arrow:focus:not(:disabled) {
+  transform: scale(1.08);
+  background: linear-gradient(180deg, rgba(255,255,255,0.46), rgba(255,255,255,0.28));
   box-shadow:
-    inset 0 2px 4px rgba(255,255,255,0.45),
-    0 8px 26px rgba(0,0,0,0.5),
-    0 0 28px rgba(255,255,255,0.10);
+    inset 0 3px 6px rgba(255,255,255,0.6),
+    0 12px 30px rgba(0,0,0,0.5);
 }
+
+/* disabled look */
 .arrow:disabled {
   opacity: 0.28;
   cursor: default;
-  transform: translateY(-50%) scale(1);
-}
-.arrow.left { left: -100px; }
-.arrow.right { right: -100px; }
-
-/* --- Fix for Completed Artwork arrows (prevent half-black look) --- */
-#completed .arrow {
-  background: rgba(255,255,255,0.35);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  box-shadow:
-    inset 0 1px 3px rgba(255,255,255,0.4),
-    0 4px 10px rgba(0,0,0,0.4),
-    0 0 10px rgba(255,255,255,0.08);
-}
-#completed .arrow:hover:not(:disabled) {
-  background: rgba(255,255,255,0.45);
-  box-shadow:
-    inset 0 2px 5px rgba(255,255,255,0.5),
-    0 6px 14px rgba(0,0,0,0.5),
-    0 0 16px rgba(255,255,255,0.15);
+  transform: none;
 }
 
-/* Responsive */
+/* Responsive adjustments for shells */
 @media (max-width: 1200px) {
-  .arrow.left { left: -80px; }
-  .arrow.right { right: -80px; }
+  .arrow-shell.left { left: -90px; }
+  .arrow-shell.right { right: -90px; }
 }
 @media (max-width: 900px) {
   .carousel-track img { width: 220px; }
-  .arrow.left { left: -60px; }
-  .arrow.right { right: -60px; }
+  .arrow-shell.left { left: -70px; }
+  .arrow-shell.right { right: -70px; }
 }
 @media (max-width: 600px) {
   .carousel-track { gap: 18px; }
   .carousel-track img { width: 200px; }
-  .arrow { font-size: 2.2rem; top: auto; bottom: -60px; transform: none; }
-  .arrow.left { left: 25%; }
-  .arrow.right { right: 25%; }
+  .arrow-shell { top: auto; bottom: -70px; transform: none; width: auto; height: auto; }
+  .arrow-shell.left { left: 25%; }
+  .arrow-shell.right { right: 25%; }
+  .arrow { width: 56px; height: 56px; font-size: 1.6rem; }
 }
 
 /* Footer */
@@ -184,7 +180,7 @@ footer {
 <section id="completed" class="glass">
   <h2>Completed Artwork</h2>
   <div class="carousel-wrapper">
-    <button class="arrow left">&#10094;</button>
+    <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
     <div class="carousel-container">
       <div class="carousel-track">
         <!-- 15 artworks -->
@@ -205,7 +201,7 @@ footer {
         <img src="images/fanart15.png" alt="Artwork 15" loading="lazy">
       </div>
     </div>
-    <button class="arrow right">&#10095;</button>
+    <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
   </div>
 </section>
 
@@ -213,7 +209,7 @@ footer {
 <section id="nightwatch" class="glass">
   <h2>Nightwatch</h2>
   <div class="carousel-wrapper">
-    <button class="arrow left">&#10094;</button>
+    <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
     <div class="carousel-container">
       <div class="carousel-track">
         <img src="images/nightwatch1.png" alt="Nightwatch 1">
@@ -222,7 +218,7 @@ footer {
         <img src="images/nightwatch4.png" alt="Nightwatch 4">
       </div>
     </div>
-    <button class="arrow right">&#10095;</button>
+    <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
   </div>
 </section>
 
@@ -230,7 +226,7 @@ footer {
 <section id="process" class="glass">
   <h2>Process / Sketches</h2>
   <div class="carousel-wrapper">
-    <button class="arrow left">&#10094;</button>
+    <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
     <div class="carousel-container">
       <div class="carousel-track">
         <img src="images/process1.png" alt="Process 1">
@@ -246,7 +242,7 @@ footer {
         <img src="images/process11.png" alt="Process 11">
       </div>
     </div>
-    <button class="arrow right">&#10095;</button>
+    <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
   </div>
 </section>
 
@@ -261,54 +257,63 @@ footer {
 <footer class="glass">&copy; 2025 Randy Comic Art</footer>
 
 <script>
+/* Carousel init (non-looping, click, keyboard, swipe) */
+/* Buttons have .arrow class and left/right classes */
 document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
-  const track=wrapper.querySelector('.carousel-track');
-  const left=wrapper.querySelector('.arrow.left');
-  const right=wrapper.querySelector('.arrow.right');
-  const imgs=Array.from(track.querySelectorAll('img'));
-  if(imgs.length===0)return;
+  const track = wrapper.querySelector('.carousel-track');
+  const leftBtn = wrapper.querySelector('.arrow.left');
+  const rightBtn = wrapper.querySelector('.arrow.right');
+  const imgs = Array.from(track.querySelectorAll('img'));
+  if (!track || imgs.length === 0) return;
 
-  let index=0;
+  let index = 0;
 
-  function slideWidth(){
-    const gap=parseFloat(getComputedStyle(track).gap)||30;
-    return imgs[0].getBoundingClientRect().width+gap;
+  function slideSize(){
+    const gap = parseFloat(getComputedStyle(track).gap) || 30;
+    return imgs[0].getBoundingClientRect().width + gap;
   }
 
   function update(){
-    const sWidth=slideWidth();
-    const containerWidth=wrapper.querySelector('.carousel-container').getBoundingClientRect().width;
-    const offset=(containerWidth/2)-(imgs[index].getBoundingClientRect().width/2);
-    track.style.transform=`translateX(${-(index*sWidth)+offset}px)`;
+    const s = slideSize();
+    const containerWidth = wrapper.querySelector('.carousel-container').getBoundingClientRect().width;
+    const offset = (containerWidth / 2) - (imgs[index].getBoundingClientRect().width / 2);
+    track.style.transform = `translateX(${-(index * s) + offset}px)`;
     imgs.forEach((im,i)=>{
       im.classList.remove('center','side');
-      if(i===index)im.classList.add('center');
-      else im.classList.add('side');
+      if (i === index) im.classList.add('center'); else im.classList.add('side');
     });
-    left.disabled=(index===0);
-    right.disabled=(index===imgs.length-1);
+    if (leftBtn) leftBtn.disabled = (index === 0);
+    if (rightBtn) rightBtn.disabled = (index === imgs.length - 1);
   }
 
-  left.addEventListener('click',()=>{ if(index>0){ index--; update(); } });
-  right.addEventListener('click',()=>{ if(index<imgs.length-1){ index++; update(); } });
-  imgs.forEach((im,i)=>im.addEventListener('click',()=>{ index=i; update(); }));
+  if (leftBtn) leftBtn.addEventListener('click', ()=>{ if (index>0) { index--; update(); }});
+  if (rightBtn) rightBtn.addEventListener('click', ()=>{ if (index < imgs.length - 1) { index++; update(); }});
+  imgs.forEach((im,i)=>im.addEventListener('click', ()=>{ index = i; update(); }));
 
-  // Swipe
-  let startX=null;
-  wrapper.addEventListener('touchstart',e=>startX=e.touches[0].clientX);
-  wrapper.addEventListener('touchend',e=>{
-    if(startX===null)return;
-    const dx=e.changedTouches[0].clientX-startX;
-    if(Math.abs(dx)>50){
-      if(dx>0&&index>0)index--;
-      else if(dx<0&&index<imgs.length-1)index++;
-      update();
-    }
-    startX=null;
+  // keyboard support when wrapper is focused
+  wrapper.setAttribute('tabindex', '0');
+  wrapper.addEventListener('keydown', (e)=>{
+    if (e.key === 'ArrowLeft' && index > 0) { index--; update(); }
+    if (e.key === 'ArrowRight' && index < imgs.length - 1) { index++; update(); }
   });
 
-  window.addEventListener('resize',()=>setTimeout(update,100));
-  update();
+  // touch swipe
+  let startX = null;
+  wrapper.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+  wrapper.addEventListener('touchend', e => {
+    if (startX === null) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 50) {
+      if (dx > 0 && index > 0) index--;
+      else if (dx < 0 && index < imgs.length - 1) index++;
+      update();
+    }
+    startX = null;
+  });
+
+  window.addEventListener('resize', ()=>setTimeout(update, 90));
+  // initial positioning after images layout
+  setTimeout(update, 60);
 });
 </script>
 
