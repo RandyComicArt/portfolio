@@ -134,22 +134,20 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     border-radius: 15px 0 0 15px; 
 }
 
-/* Right Column: Description Panel (FIXED TOP-LEFT SHARP CORNER) */
+/* Right Column: Description Panel */
 .description-column {
     flex: 1; 
     background: #333; 
     backdrop-filter: blur(10px); 
-    /* 💥 FIXED: Ensure top-left is sharp and others are rounded (based on the fixed image column) */
     border-radius: 0 15px 15px 0; 
     
-    padding: 25px; /* Base padding for text */
-    padding-bottom: 75px; /* Add space for the navigation bar at the bottom */
+    padding: 25px; 
+    padding-bottom: 75px; /* Space for the navigation bar */
     
     overflow-y: auto; 
     border-left: 1px solid rgba(255, 255, 255, 0.15);
     color: #eee;
-    
-    /* Removed position: relative; for flow-based content */
+    position: relative; /* Essential for positioning the absolute nav panel */
 }
 .description-column h3 {
     font-size: 1.5rem;
@@ -162,29 +160,30 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     margin-bottom: 15px;
 }
 
-/* 💥 UPDATED: Navigation Panel Position (Static at Bottom of Panel) 💥 */
+/* 💥 UPDATED: Navigation Panel Position (Centered at Bottom of Panel) 💥 */
 .modal-nav-panel {
-    /* Fixed positioning relative to the description-column */
     position: absolute; 
     bottom: 0;
-    right: 0; /* Align right to match the border-radius logic */
-    left: 0; /* Span the full width */
+    left: 0; 
+    right: 0;
     
     z-index: 1020;
     display: flex;
     gap: 10px; 
     
-    background: #333; /* Match panel background */
+    background: #333; 
     backdrop-filter: blur(5px);
     
     padding: 10px 25px; 
     
+    /* Center the contents */
+    justify-content: center; 
+    
     /* Match the bottom corners of the description column */
     border-radius: 0 0 15px 0; 
-    border-top: 1px solid rgba(255, 255, 255, 0.15); /* Separator line */
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
     
     align-items: center;
-    justify-content: flex-start;
 }
 .modal-nav-panel .modal-nav-button {
     width: 50px; 
@@ -262,22 +261,22 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
       border-left: none;
       border-top: 1px solid rgba(255, 255, 255, 0.15);
       max-height: 30vh;
-      padding-bottom: 75px; /* Keep space for the nav */
+      padding-bottom: 75px; 
   }
   .description-column h3 { margin-top: 0; }
   #magnifier-container .mag-image { max-height: 55vh; }
 
-  /* Navigation panel on mobile (now at the bottom of the stacked description panel) */
+  /* Navigation panel on mobile (now centered at the bottom of the stacked description panel) */
   .modal-nav-panel {
-      position: absolute; /* Keep it fixed at the bottom of the column */
+      position: absolute; 
       bottom: 0;
       left: 0;
       right: 0;
       width: 100%;
       padding: 10px 0;
       justify-content: center;
-      background: #333; /* Keep background to cover content below */
-      border-radius: 0 0 15px 15px; /* Round the bottom corners */
+      background: #333; 
+      border-radius: 0 0 15px 15px; 
       border-top: 1px solid rgba(255, 255, 255, 0.15);
   }
 }
@@ -473,7 +472,7 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
 });
 
 
-/* --- 🔎 Lightbox Modal and Magnifier Functionality (NO CHANGE) --- */
+/* --- 🔎 Lightbox Modal and Magnifier Functionality (UPDATED HANDLE MAGNIFY) --- */
 const modal = document.getElementById('image-modal');
 const modalImg = document.getElementById('modal-image');
 const descriptionTitle = document.getElementById('description-title');
@@ -491,7 +490,7 @@ let currentSectionImages = [];
 let currentImageIndex = 0;
 
 const zoomFactor = 2.5; 
-const lensRadius = 90; 
+const lensRadius = 90; // Lens width/height is 180px, so radius is 90px
 
 function showLens() {
     magLens.style.opacity = 1;
@@ -636,21 +635,28 @@ function updateMagnifierSize() {
     magLens.style.opacity = 0; 
 }
 
+/* 💥 UPDATED: Magnifier logic to compensate for the lens radius 💥 */
 function handleMagnify(e) {
     const rect = magContainer.getBoundingClientRect();
     let x = e.clientX - rect.left;
     let y = e.clientY - rect.top;
 
-    if (x < 0) x = 0; if (x > rect.width) x = rect.width;
-    if (y < 0) y = 0; if (y > rect.height) y = rect.height;
+    // Clamp coordinates to image boundaries (Optional: prevents lens from leaving container)
+    // if (x < 0) x = 0; if (x > rect.width) x = rect.width;
+    // if (y < 0) y = 0; if (y > rect.height) y = rect.height;
 
+    // Position the center of the lens at the cursor (using transform)
     magLens.style.left = `${x}px`;
     magLens.style.top = `${y}px`;
     magLens.style.transform = `translate(-${lensRadius}px, -${lensRadius}px)`; 
 
+    // Calculate background position: compensate for the zoom factor and the lens radius
+    // Background X position must be the opposite movement of the cursor, scaled by zoomFactor
+    // The lensRadius is subtracted to keep the image centered in the lens when at the edge.
     let backgroundX = x * zoomFactor - lensRadius; 
     let backgroundY = y * zoomFactor - lensRadius;
 
+    // Apply the inverse position to the background image
     magLens.style.backgroundPosition = `-${backgroundX}px -${backgroundY}px`;
 }
 
