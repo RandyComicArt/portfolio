@@ -399,8 +399,6 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
                 Sample description text will go here. This area is perfect for noting the materials used (e.g., Digital Painting in Procreate, Oil on Canvas, Pen & Ink), the time taken, or the conceptual inspiration behind the artwork. This panel will scroll if the description is very long.
             </p>
             <p id="description-meta">
-                Medium: Digital Art<br>
-                Series: Completed Artwork<br>
                 Date: 2024
             </p>
             
@@ -548,9 +546,8 @@ function performImageTransition(newImageElement, direction) {
         const descText = newImageElement.getAttribute('data-desc') || "No detailed description available for this piece.";
         descriptionText.textContent = descText;
         
-        // Update meta info
-        const sectionId = newImageElement.closest('.carousel-wrapper').getAttribute('data-section');
-        descriptionMeta.innerHTML = `Medium: Digital Art<br>Series: ${sectionId.charAt(0).toUpperCase() + sectionId.slice(1)}<br>Date: 2024`;
+        // Update meta info - MODIFIED to remove Medium/Series
+        descriptionMeta.innerHTML = `Date: 2024`;
 
 
         // Wait for the next frame, then start the slide in
@@ -602,8 +599,9 @@ function openModal(imgElement) {
     descriptionTitle.textContent = imgElement.alt;
     const descText = imgElement.getAttribute('data-desc') || "No detailed description available for this piece.";
     descriptionText.textContent = descText;
-    const sectionId = imgElement.closest('.carousel-wrapper').getAttribute('data-section');
-    descriptionMeta.innerHTML = `Medium: Digital Art<br>Series: ${sectionId.charAt(0).toUpperCase() + sectionId.slice(1)}<br>Date: 2024`;
+    
+    // Update meta info - MODIFIED to remove Medium/Series
+    descriptionMeta.innerHTML = `Date: 2024`;
 
 
     modalPrevBtn.disabled = (currentImageIndex === 0);
