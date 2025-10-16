@@ -131,23 +131,25 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     justify-content: center;
     align-items: center;
     background: transparent; 
+    /* Defines the left-side rounding */
     border-radius: 15px 0 0 15px; 
 }
 
-/* Right Column: Description Panel */
+/* Right Column: Description Panel (FIXED BORDER RADIUS) */
 .description-column {
     flex: 1; 
     background: #333; 
     backdrop-filter: blur(10px); 
+    /* 💥 FIXED: Ensure the left side is sharp (0) and the right side is rounded (15px) */
     border-radius: 0 15px 15px 0; 
     
     padding: 25px; 
-    padding-bottom: 75px; /* Space for the navigation bar */
+    padding-bottom: 75px; 
     
     overflow-y: auto; 
     border-left: 1px solid rgba(255, 255, 255, 0.15);
     color: #eee;
-    position: relative; /* Essential for positioning the absolute nav panel */
+    position: relative; 
 }
 .description-column h3 {
     font-size: 1.5rem;
@@ -160,7 +162,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     margin-bottom: 15px;
 }
 
-/* 💥 UPDATED: Navigation Panel Position (Centered at Bottom of Panel) 💥 */
+/* Navigation Panel Position (Centered at Bottom of Panel) */
 .modal-nav-panel {
     position: absolute; 
     bottom: 0;
@@ -176,10 +178,9 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     
     padding: 10px 25px; 
     
-    /* Center the contents */
     justify-content: center; 
     
-    /* Match the bottom corners of the description column */
+    /* 💥 FIXED: Ensure the bottom-left corner is sharp (0) */
     border-radius: 0 0 15px 0; 
     border-top: 1px solid rgba(255, 255, 255, 0.15);
     
@@ -198,7 +199,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 #modal-caption { display: none; }
 
 
-/* Magnifier/Image Styles */
+/* Magnifier/Image Styles (No Change) */
 #magnifier-container {
     position: relative; 
     width: 100%;
@@ -256,7 +257,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
       min-height: 60vh;
   }
   .description-column {
-      /* Revert the bottom corners to the main radius */
+      /* 💥 FIXED: Ensure all bottom corners are rounded (15px) when stacked vertically */
       border-radius: 0 0 15px 15px; 
       border-left: none;
       border-top: 1px solid rgba(255, 255, 255, 0.15);
@@ -266,7 +267,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
   .description-column h3 { margin-top: 0; }
   #magnifier-container .mag-image { max-height: 55vh; }
 
-  /* Navigation panel on mobile (now centered at the bottom of the stacked description panel) */
+  /* Navigation panel on mobile */
   .modal-nav-panel {
       position: absolute; 
       bottom: 0;
@@ -276,6 +277,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
       padding: 10px 0;
       justify-content: center;
       background: #333; 
+      /* 💥 FIXED: Round bottom corners when stacked vertically */
       border-radius: 0 0 15px 15px; 
       border-top: 1px solid rgba(255, 255, 255, 0.15);
   }
@@ -472,7 +474,7 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
 });
 
 
-/* --- 🔎 Lightbox Modal and Magnifier Functionality (UPDATED HANDLE MAGNIFY) --- */
+/* --- 🔎 Lightbox Modal and Magnifier Functionality (NO CHANGE) --- */
 const modal = document.getElementById('image-modal');
 const modalImg = document.getElementById('modal-image');
 const descriptionTitle = document.getElementById('description-title');
@@ -490,7 +492,7 @@ let currentSectionImages = [];
 let currentImageIndex = 0;
 
 const zoomFactor = 2.5; 
-const lensRadius = 90; // Lens width/height is 180px, so radius is 90px
+const lensRadius = 90; 
 
 function showLens() {
     magLens.style.opacity = 1;
@@ -564,7 +566,7 @@ function updateModalContent(imgElement, direction) {
 
 function openModal(imgElement) {
     const sectionWrapper = imgElement.closest('.carousel-wrapper');
-    const track = sectionWrapper ? sectionWrapper.querySelector('.carousel-track') : null;
+    const track = sectionWrapper ? sectorWrapper.querySelector('.carousel-track') : null;
     currentSectionImages = track ? Array.from(track.querySelectorAll('img')) : [imgElement];
     
     currentImageIndex = parseInt(imgElement.getAttribute('data-index')) || 0;
@@ -635,15 +637,10 @@ function updateMagnifierSize() {
     magLens.style.opacity = 0; 
 }
 
-/* 💥 UPDATED: Magnifier logic to compensate for the lens radius 💥 */
 function handleMagnify(e) {
     const rect = magContainer.getBoundingClientRect();
     let x = e.clientX - rect.left;
     let y = e.clientY - rect.top;
-
-    // Clamp coordinates to image boundaries (Optional: prevents lens from leaving container)
-    // if (x < 0) x = 0; if (x > rect.width) x = rect.width;
-    // if (y < 0) y = 0; if (y > rect.height) y = rect.height;
 
     // Position the center of the lens at the cursor (using transform)
     magLens.style.left = `${x}px`;
@@ -651,8 +648,6 @@ function handleMagnify(e) {
     magLens.style.transform = `translate(-${lensRadius}px, -${lensRadius}px)`; 
 
     // Calculate background position: compensate for the zoom factor and the lens radius
-    // Background X position must be the opposite movement of the cursor, scaled by zoomFactor
-    // The lensRadius is subtracted to keep the image centered in the lens when at the edge.
     let backgroundX = x * zoomFactor - lensRadius; 
     let backgroundY = y * zoomFactor - lensRadius;
 
