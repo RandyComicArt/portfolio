@@ -1,254 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Randy Comic Art</title>
-  <style>
-    * { box-sizing: border-box; margin:0; padding:0; }
-    body { font-family: Arial, sans-serif; background-color:#111; color:#fff; overflow-x:hidden; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Randy Comic Art</title>
+<style>
+/* Reset & base styles */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; line-height: 1.6; background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 15%, #16213e 35%, #0f3460 50%, #533a7d 70%, #8b5a8c 85%, #a0616a 100%); color: #fff; }
 
-    header {
-      background-color: #1e1e1e;
-      padding: 20px;
-      text-align: center;
-    }
-    header h1 { font-size: 2.5rem; margin-bottom:10px; }
-    nav { display:flex; justify-content:center; gap:20px; flex-wrap:wrap; }
-    nav a {
-      color:#fff; text-decoration:none; font-weight:bold; padding:8px 15px;
-      border-radius:5px; transition:0.2s;
-    }
-    nav a:hover, nav a.active { background:rgba(255,255,255,0.2); }
+/* Glass effect */
+.glass {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
 
-    .page { display:none; min-height:100vh; padding:40px 20px; }
-    .page.active { display:block; }
+/* Header */
+header {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  text-align: center;
+  padding: 20px;
+}
+header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+nav { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 8px 15px; border-radius: 10px; transition: all 0.3s; }
+nav a:hover, nav a.active { background: rgba(255,255,255,0.1); text-shadow: 0 0 10px rgba(255,255,255,0.5); }
 
-    footer {
-      background-color:#1e1e1e;
-      color:#fff;
-      text-align:center;
-      padding:20px;
-    }
+/* Page sections */
+section { padding: 40px 20px; max-width: 1200px; margin: 40px auto; }
+h2 { text-align: center; margin-bottom: 20px; font-size: 2rem; }
 
-    /* ===== Carousel Styles ===== */
-    .carousel-container {
-      position: relative;
-      max-width: 1200px;
-      margin: 40px auto;
-      perspective: 1000px;
-    }
-    .carousel {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: transform 0.5s ease;
-    }
-    .carousel img {
-      width: 300px;
-      height: auto;
-      border-radius: 10px;
-      border: 2px solid #ddd;
-      margin: 0 -60px;
-      transition: transform 0.5s, opacity 0.5s, z-index 0.5s;
-      cursor: pointer;
-    }
-    .carousel img.center {
-      transform: translateZ(50px) scale(1.1);
-      z-index: 2;
-      opacity: 1;
-      border-color:#1e90ff;
-    }
-    .carousel img.side {
-      transform: translateZ(0px) scale(0.9) rotateY(20deg);
-      z-index: 1;
-      opacity: 0.6;
-    }
-    .carousel img.side.right { transform: translateZ(0px) scale(0.9) rotateY(-20deg); }
+/* Carousel */
+.carousel-container {
+  position: relative;
+  max-width: 1200px;
+  margin: 40px auto;
+  perspective: 1000px;
+  padding: 40px 0;
+}
+.carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+}
+.carousel img {
+  width: 300px;
+  border-radius: 20px;
+  border: 2px solid rgba(255,255,255,0.2);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  transition: transform 0.5s, opacity 0.5s;
+  cursor: pointer;
+}
+.carousel img.center {
+  transform: translateZ(60px) scale(1.1);
+  opacity: 1;
+  z-index: 2;
+}
+.carousel img.side {
+  transform: translateZ(0px) scale(0.85);
+  opacity: 0.7;
+  z-index: 1;
+}
 
-    .carousel-arrow {
-      position: absolute;
-      top:50%;
-      transform: translateY(-50%);
-      font-size:2rem;
-      background: rgba(0,0,0,0.4);
-      color:#fff;
-      padding:10px;
-      cursor:pointer;
-      border-radius:50%;
-      user-select:none;
-    }
-    .carousel-arrow.left { left:10px; }
-    .carousel-arrow.right { right:10px; }
+/* Arrows */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  background: rgba(255,255,255,0.1);
+  padding: 10px 15px;
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+.arrow:hover { background: rgba(255,255,255,0.2); }
+.arrow.left { left: 10px; }
+.arrow.right { right: 10px; }
 
-    @media(max-width:768px){
-      .carousel img { width:200px; margin:0 -30px; }
-    }
+/* Footer */
+footer { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); text-align: center; padding: 20px; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.2); }
 
-  </style>
+/* Responsive */
+@media(max-width: 900px){
+  .carousel img { width: 220px; }
+}
+@media(max-width: 600px){
+  .carousel { flex-direction: column; }
+  .arrow { top: auto; bottom: 10px; }
+}
+</style>
 </head>
 <body>
 
-  <header>
-    <h1>Randy Comic Art</h1>
-    <nav class="nav-links">
-      <a href="#" onclick="showPage('home')" class="active">Home</a>
-      <a href="#" onclick="showPage('fanart')">Fan Art</a>
-      <a href="#" onclick="showPage('nightwatch')">Nightwatch</a>
-      <a href="#" onclick="showPage('original')">Original</a>
-      <a href="#" onclick="showPage('process')">Process</a>
-      <a href="#" onclick="showPage('contact')">Contact</a>
-    </nav>
-  </header>
+<!-- Header -->
+<header class="glass">
+  <h1>Randy Comic Art</h1>
+  <nav>
+    <a href="#fanart">Fan Art</a>
+    <a href="#nightwatch">Nightwatch</a>
+    <a href="#original">Original</a>
+    <a href="#process">Process</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
 
-  <!-- ===== Home Page with Carousel ===== -->
-  <div class="page active" id="home">
-    <div class="carousel-container">
-      <div class="carousel" id="carousel">
-        <!-- Carousel Images dynamically added by JS -->
-      </div>
-      <div class="carousel-arrow left" onclick="prevSlide()">&#10094;</div>
-      <div class="carousel-arrow right" onclick="nextSlide()">&#10095;</div>
+<!-- Home Carousel -->
+<section id="home">
+  <h2>Featured Art</h2>
+  <div class="carousel-container glass">
+    <div class="arrow left">&#10094;</div>
+    <div class="carousel">
+      <img src="images/fanart1.png" class="center" alt="">
+      <img src="images/fanart2.png" class="side" alt="">
+      <img src="images/fanart3.png" class="side" alt="">
     </div>
+    <div class="arrow right">&#10095;</div>
   </div>
+</section>
 
-  <!-- ===== Fan Art Page ===== -->
-  <div class="page" id="fanart">
-    <h2>Fan Art</h2>
-    <div class="gallery">
-      <img src="images/fanart1.png" alt="Fan Art 1">
-      <img src="images/fanart2.png" alt="Fan Art 2">
-      <img src="images/fanart3.png" alt="Fan Art 3">
-      <img src="images/fanart4.png" alt="Fan Art 4">
-      <img src="images/fanart5.png" alt="Fan Art 5">
-      <img src="images/fanart6.png" alt="Fan Art 6">
-      <img src="images/fanart7.png" alt="Fan Art 7">
-      <img src="images/fanart8.png" alt="Fan Art 8">
-      <img src="images/fanart9.png" alt="Fan Art 9">
-      <img src="images/fanart10.png" alt="Fan Art 10">
-      <img src="images/fanart11.png" alt="Fan Art 11">
-      <img src="images/fanart12.png" alt="Fan Art 12">
-      <img src="images/fanart13.png" alt="Fan Art 13">
-      <img src="images/fanart14.png" alt="Fan Art 14">
-    </div>
+<!-- Fan Art -->
+<section id="fanart" class="glass">
+  <h2>Fan Art</h2>
+  <div class="carousel">
+    <!-- Add all fanart images here -->
+    <img src="images/fanart1.png">
+    <img src="images/fanart2.png">
+    <img src="images/fanart3.png">
+    <img src="images/fanart4.png">
   </div>
+</section>
 
-  <!-- ===== Nightwatch Page ===== -->
-  <div class="page" id="nightwatch">
-    <h2>Nightwatch</h2>
-    <div class="gallery">
-      <img src="images/nightwatch1.png" alt="Nightwatch 1">
-      <img src="images/nightwatch2.png" alt="Nightwatch 2">
-      <img src="images/nightwatch3.png" alt="Nightwatch 3">
-      <img src="images/nightwatch4.png" alt="Nightwatch 4">
-    </div>
+<!-- Nightwatch -->
+<section id="nightwatch" class="glass">
+  <h2>Nightwatch</h2>
+  <div class="carousel">
+    <img src="images/nightwatch1.png">
+    <img src="images/nightwatch2.png">
+    <img src="images/nightwatch3.png">
+    <img src="images/nightwatch4.png">
   </div>
+</section>
 
-  <!-- ===== Original Page ===== -->
-  <div class="page" id="original">
-    <h2>Original Art</h2>
-    <div class="gallery">
-      <img src="images/original1.png" alt="Original Art 1">
-    </div>
+<!-- Original Art -->
+<section id="original" class="glass">
+  <h2>Original Art</h2>
+  <div class="carousel">
+    <img src="images/original1.png">
   </div>
+</section>
 
-  <!-- ===== Process Page ===== -->
-  <div class="page" id="process">
-    <h2>Process / Sketches</h2>
-    <div class="gallery">
-      <img src="images/process1.png" alt="Process 1">
-      <img src="images/process2.png" alt="Process 2">
-      <img src="images/process3.png" alt="Process 3">
-      <img src="images/process4.png" alt="Process 4">
-      <img src="images/process5.png" alt="Process 5">
-      <img src="images/process6.png" alt="Process 6">
-      <img src="images/process7.png" alt="Process 7">
-      <img src="images/process8.png" alt="Process 8">
-      <img src="images/process9.png" alt="Process 9">
-      <img src="images/process10.png" alt="Process 10">
-      <img src="images/process11.png" alt="Process 11">
-    </div>
+<!-- Process -->
+<section id="process" class="glass">
+  <h2>Process / Sketches</h2>
+  <div class="carousel">
+    <img src="images/process1.png">
+    <img src="images/process2.png">
+    <img src="images/process3.png">
+    <img src="images/process4.png">
   </div>
+</section>
 
-  <!-- ===== Contact Page ===== -->
-  <div class="page" id="contact">
-    <h2>Contact</h2>
-    <p>Email: <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a></p>
-  </div>
+<!-- Contact -->
+<section id="contact" class="glass">
+  <h2>Contact</h2>
+  <p style="text-align:center;">
+    Email: <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a>
+  </p>
+</section>
 
-  <footer>
-    &copy; 2025 Randy Comic Art
-  </footer>
+<!-- Footer -->
+<footer class="glass">&copy; 2025 Randy Comic Art</footer>
 
-  <!-- ===== Scripts ===== -->
-  <script>
-    // ===== Page Navigation =====
-    function showPage(pageId) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(pageId).classList.add('active');
+<script>
+// Carousel logic
+const carousel = document.querySelector('.carousel');
+const images = Array.from(carousel.querySelectorAll('img'));
+let centerIndex = 0;
 
-      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-      document.querySelector(`[onclick="showPage('${pageId}')"]`).classList.add('active');
-    }
+function updateCarousel() {
+  images.forEach((img,i)=>{
+    img.classList.remove('center','side');
+    if(i===centerIndex) img.classList.add('center');
+    else img.classList.add('side');
+  });
+}
 
-    // ===== Home Carousel =====
-    const categories = [
-      { name: "Fan Art", images: Array.from({length:14}, (_,i)=>`images/fanart${i+1}.png`) },
-      { name: "Nightwatch", images: Array.from({length:4}, (_,i)=>`images/nightwatch${i+1}.png`) },
-      { name: "Original", images: ["images/original1.png"] },
-      { name: "Process", images: Array.from({length:11}, (_,i)=>`images/process${i+1}.png`) }
-    ];
+document.querySelector('.arrow.left').addEventListener('click',()=>{
+  centerIndex = (centerIndex - 1 + images.length) % images.length;
+  updateCarousel();
+});
+document.querySelector('.arrow.right').addEventListener('click',()=>{
+  centerIndex = (centerIndex + 1) % images.length;
+  updateCarousel();
+});
 
-    let currentCategory = 0;
-    let carouselIndex = 0;
+updateCarousel();
+</script>
 
-    const carousel = document.getElementById('carousel');
-
-    function renderCarousel() {
-      carousel.innerHTML = '';
-      const cat = categories[currentCategory];
-      const total = cat.images.length;
-
-      const leftIndex = (carouselIndex-1+total)%total;
-      const centerIndex = carouselIndex;
-      const rightIndex = (carouselIndex+1)%total;
-
-      const leftImg = document.createElement('img');
-      leftImg.src = cat.images[leftIndex];
-      leftImg.classList.add('side', 'left');
-      leftImg.onclick = ()=>showPage(cat.name.toLowerCase().replace(' ',''));
-
-      const centerImg = document.createElement('img');
-      centerImg.src = cat.images[centerIndex];
-      centerImg.classList.add('center');
-      centerImg.onclick = ()=>showPage(cat.name.toLowerCase().replace(' ',''));
-
-      const rightImg = document.createElement('img');
-      rightImg.src = cat.images[rightIndex];
-      rightImg.classList.add('side','right');
-      rightImg.onclick = ()=>showPage(cat.name.toLowerCase().replace(' ',''));
-
-      carousel.appendChild(leftImg);
-      carousel.appendChild(centerImg);
-      carousel.appendChild(rightImg);
-    }
-
-    function prevSlide() {
-      const cat = categories[currentCategory];
-      carouselIndex = (carouselIndex-1+cat.images.length) % cat.images.length;
-      renderCarousel();
-    }
-
-    function nextSlide() {
-      const cat = categories[currentCategory];
-      carouselIndex = (carouselIndex+1) % cat.images.length;
-      renderCarousel();
-    }
-
-    // Optional: auto-rotate carousel
-    setInterval(nextSlide, 5000);
-
-    renderCarousel();
-  </script>
 </body>
 </html>
