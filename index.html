@@ -29,6 +29,11 @@ header {
   text-align: center;
   padding: 20px;
 }
+/* ADDED: Limits the width of the header content and centers it */
+.header-content {
+  max-width: 1200px; 
+  margin: 0 auto;
+}
 header h1 { font-size: 2.5rem; margin-bottom: 10px; }
 nav { display:flex; justify-content:center; gap:15px; flex-wrap:wrap; }
 nav a {
@@ -167,23 +172,21 @@ footer {
 <body>
 
 <header class="glass">
-  <h1>Randy Comic Art</h1>
-  <nav>
-    <a href="#completed">Completed Artwork</a>
-    <a href="#nightwatch">Nightwatch</a>
-    <a href="#process">Process</a>
-    <a href="#contact">Contact</a>
-  </nav>
-</header>
+  <div class="header-content"> <h1>Randy Comic Art</h1>
+    <nav>
+      <a href="#completed">Completed Artwork</a>
+      <a href="#nightwatch">Nightwatch</a>
+      <a href="#process">Process</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div> </header>
 
-<!-- Completed Artwork -->
 <section id="completed" class="glass">
   <h2>Completed Artwork</h2>
   <div class="carousel-wrapper">
     <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
     <div class="carousel-container">
       <div class="carousel-track">
-        <!-- 15 artworks -->
         <img src="images/fanart1.png" alt="Artwork 1" loading="lazy">
         <img src="images/fanart2.png" alt="Artwork 2" loading="lazy">
         <img src="images/fanart3.png" alt="Artwork 3" loading="lazy">
@@ -205,7 +208,6 @@ footer {
   </div>
 </section>
 
-<!-- Nightwatch -->
 <section id="nightwatch" class="glass">
   <h2>Nightwatch</h2>
   <div class="carousel-wrapper">
@@ -222,7 +224,6 @@ footer {
   </div>
 </section>
 
-<!-- Process -->
 <section id="process" class="glass">
   <h2>Process / Sketches</h2>
   <div class="carousel-wrapper">
@@ -246,7 +247,6 @@ footer {
   </div>
 </section>
 
-<!-- Contact -->
 <section id="contact" class="glass">
   <h2>Contact</h2>
   <p style="text-align:center;">Email:
