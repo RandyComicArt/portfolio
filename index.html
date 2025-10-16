@@ -79,7 +79,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 .carousel-track img.center { transform: scale(1.08); z-index: 2; }
 .carousel-track img.side { transform: scale(0.9); opacity: 0.85; z-index: 1; }
 
-/* Arrows (moved OUTSIDE carousel) */
+/* Arrows (moved further out) */
 .arrow {
   position: absolute;
   top: 50%;
@@ -105,20 +105,20 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
   cursor: default;
   transform: translateY(-50%) scale(1);
 }
-.arrow.left { left: -70px; }
-.arrow.right { right: -70px; }
+.arrow.left { left: -90px; }
+.arrow.right { right: -90px; }
 
 /* Responsive */
 @media (max-width: 1100px) {
-  .arrow.left { left: -50px; }
-  .arrow.right { right: -50px; }
+  .arrow.left { left: -70px; }
+  .arrow.right { right: -70px; }
 }
 @media (max-width: 900px) {
   .carousel-track img { width: 220px; }
 }
 @media (max-width: 700px) {
-  .arrow.left { left: -35px; }
-  .arrow.right { right: -35px; }
+  .arrow.left { left: -50px; }
+  .arrow.right { right: -50px; }
 }
 @media (max-width: 600px) {
   .carousel-track { gap: 18px; }
@@ -144,43 +144,43 @@ footer {
 <header class="glass">
   <h1>Randy Comic Art</h1>
   <nav>
-    <a href="#fanart">Fan Art</a>
+    <a href="#completed">Completed Artwork</a>
     <a href="#nightwatch">Nightwatch</a>
-    <a href="#original">Original</a>
     <a href="#process">Process</a>
     <a href="#contact">Contact</a>
   </nav>
 </header>
 
-<!-- Example Section -->
-<section id="fanart" class="glass">
-  <h2>Fan Art</h2>
+<!-- Completed Artwork -->
+<section id="completed" class="glass">
+  <h2>Completed Artwork</h2>
   <div class="carousel-wrapper">
     <button class="arrow left">&#10094;</button>
     <div class="carousel-container">
       <div class="carousel-track">
-        <!-- 14 fan arts -->
-        <img src="images/fanart1.png" alt="Fan Art 1" loading="lazy">
-        <img src="images/fanart2.png" alt="Fan Art 2" loading="lazy">
-        <img src="images/fanart3.png" alt="Fan Art 3" loading="lazy">
-        <img src="images/fanart4.png" alt="Fan Art 4" loading="lazy">
-        <img src="images/fanart5.png" alt="Fan Art 5" loading="lazy">
-        <img src="images/fanart6.png" alt="Fan Art 6" loading="lazy">
-        <img src="images/fanart7.png" alt="Fan Art 7" loading="lazy">
-        <img src="images/fanart8.png" alt="Fan Art 8" loading="lazy">
-        <img src="images/fanart9.png" alt="Fan Art 9" loading="lazy">
-        <img src="images/fanart10.png" alt="Fan Art 10" loading="lazy">
-        <img src="images/fanart11.png" alt="Fan Art 11" loading="lazy">
-        <img src="images/fanart12.png" alt="Fan Art 12" loading="lazy">
-        <img src="images/fanart13.png" alt="Fan Art 13" loading="lazy">
-        <img src="images/fanart14.png" alt="Fan Art 14" loading="lazy">
+        <!-- 15 completed artworks -->
+        <img src="images/fanart1.png" alt="Artwork 1" loading="lazy">
+        <img src="images/fanart2.png" alt="Artwork 2" loading="lazy">
+        <img src="images/fanart3.png" alt="Artwork 3" loading="lazy">
+        <img src="images/fanart4.png" alt="Artwork 4" loading="lazy">
+        <img src="images/fanart5.png" alt="Artwork 5" loading="lazy">
+        <img src="images/fanart6.png" alt="Artwork 6" loading="lazy">
+        <img src="images/fanart7.png" alt="Artwork 7" loading="lazy">
+        <img src="images/fanart8.png" alt="Artwork 8" loading="lazy">
+        <img src="images/fanart9.png" alt="Artwork 9" loading="lazy">
+        <img src="images/fanart10.png" alt="Artwork 10" loading="lazy">
+        <img src="images/fanart11.png" alt="Artwork 11" loading="lazy">
+        <img src="images/fanart12.png" alt="Artwork 12" loading="lazy">
+        <img src="images/fanart13.png" alt="Artwork 13" loading="lazy">
+        <img src="images/fanart14.png" alt="Artwork 14" loading="lazy">
+        <img src="images/fanart15.png" alt="Artwork 15" loading="lazy">
       </div>
     </div>
     <button class="arrow right">&#10095;</button>
   </div>
 </section>
 
-<!-- Repeat for Nightwatch, Original, and Process -->
+<!-- Nightwatch -->
 <section id="nightwatch" class="glass">
   <h2>Nightwatch</h2>
   <div class="carousel-wrapper">
@@ -197,26 +197,13 @@ footer {
   </div>
 </section>
 
-<section id="original" class="glass">
-  <h2>Original Art</h2>
-  <div class="carousel-wrapper">
-    <button class="arrow left">&#10094;</button>
-    <div class="carousel-container">
-      <div class="carousel-track">
-        <img src="images/original1.png" alt="Original Art 1">
-      </div>
-    </div>
-    <button class="arrow right">&#10095;</button>
-  </div>
-</section>
-
+<!-- Process -->
 <section id="process" class="glass">
   <h2>Process / Sketches</h2>
   <div class="carousel-wrapper">
     <button class="arrow left">&#10094;</button>
     <div class="carousel-container">
       <div class="carousel-track">
-        <!-- 11 process -->
         <img src="images/process1.png" alt="Process 1">
         <img src="images/process2.png" alt="Process 2">
         <img src="images/process3.png" alt="Process 3">
@@ -277,7 +264,7 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
   right.addEventListener('click',()=>{ if(index<imgs.length-1){ index++; update(); } });
   imgs.forEach((im,i)=>im.addEventListener('click',()=>{ index=i; update(); }));
 
-  // basic swipe
+  // Swipe
   let startX=null;
   wrapper.addEventListener('touchstart',e=>startX=e.touches[0].clientX);
   wrapper.addEventListener('touchend',e=>{
