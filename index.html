@@ -22,7 +22,7 @@ body {
   box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
 
-/* --- Header & Navigation Styles --- */
+/* --- Header & Navigation Styles (NO CHANGE) --- */
 header { text-align: center; padding: 40px 20px 0; }
 .header-content {
   max-width: 1200px;
@@ -44,7 +44,7 @@ nav a:hover, nav a.active {
   background:rgba(255,255,255,0.1); text-shadow:0 0 10px rgba(255,255,255,0.5);
 }
 
-/* --- Section Content & Carousel Styles --- */
+/* --- Section Content & Carousel Styles (NO CHANGE) --- */
 section { padding:40px 20px; max-width:1200px; margin:40px auto; }
 h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 .carousel-wrapper { position: relative; display: flex; align-items: center; justify-content: center; }
@@ -65,7 +65,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 .carousel-track img.center { transform: scale(1.08); z-index: 2; }
 .carousel-track img.side { transform: scale(0.9); opacity: 0.85; z-index: 1; }
 
-/* Carousel Arrows & Close Button Style */
+/* Carousel Arrows & Close/Modal Button Style */
 .arrow-shell {
   position: absolute; top: 50%; transform: translateY(-50%);
   width: 72px; height: 72px; display: flex; align-items: center;
@@ -73,7 +73,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 }
 .arrow-shell.left { left: -112px; }
 .arrow-shell.right { right: -112px; }
-.arrow, .close-button { /* Applied to arrow and new close-button class */
+.arrow, .modal-nav-button { /* Now includes modal-nav-button */
   pointer-events: auto; width: 64px; height: 64px; border-radius: 50%;
   border: 1px solid rgba(255,255,255,0.45);
   background: linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0.22));
@@ -82,56 +82,43 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
   cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
   box-shadow: inset 0 2px 4px rgba(255,255,255,0.55), 0 10px 24px rgba(0,0,0,0.45);
   outline: none;
-  font-weight: bold; /* Ensures the X is thick */
+  font-weight: bold;
 }
 .arrow:hover:not(:disabled), .arrow:focus:not(:disabled),
-.close-button:hover, .close-button:focus {
+.modal-nav-button:hover:not(:disabled), .modal-nav-button:focus:not(:disabled) {
   transform: scale(1.08);
   background: linear-gradient(180deg, rgba(255,255,255,0.46), rgba(255,255,255,0.28));
   box-shadow: inset 0 3px 6px rgba(255,255,255,0.6), 0 12px 30px rgba(0,0,0,0.5);
 }
-.arrow:disabled { opacity: 0.28; cursor: default; transform: none; }
+.arrow:disabled, .modal-nav-button:disabled { opacity: 0.28; cursor: default; transform: none; }
 
-/* --- Footer Styles (No Change) --- */
-footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
-.footer-content {
-  max-width: 1200px; margin: 0 auto;
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.15);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-  padding: 20px;
-}
 
 /* --- 🖼️ Modal/Lightbox Styles --- */
 .modal-overlay {
-  display: none; /* Controlled by JS: none or flex */
+  display: none; 
   position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
   overflow: auto;
-  /* 💥 This is the updated "glass" background for the ENTIRE overlay 💥 */
-  background: rgba(255,255,255,0.05); /* Lighter base for clarity */
-  backdrop-filter: blur(15px); /* Stronger blur for the glass effect */
-  border: 1px solid rgba(255,255,255,0.15); /* Subtle border for the whole overlay */
-  box-shadow: 0 8px 30px rgba(0,0,0,0.3); /* Soft shadow */
-  /* Ensure content is centered */
+  /* Glass background for the entire overlay */
+  background: rgba(255,255,255,0.05); 
+  backdrop-filter: blur(15px); 
+  border: 1px solid rgba(255,255,255,0.15); 
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3); 
   align-items: center; justify-content: center;
 }
 
 /* Modal Content (Container for the image and caption) */
 .modal-content {
   position: relative; 
-  margin: 5% auto; /* Keep margin for vertical positioning */
+  margin: 5% auto; 
   padding: 20px;
   width: 90%; 
   max-width: 940px; 
   text-align: center; 
-  /* Removed the glass properties from here as it's now on the overlay */
-  background: transparent; /* Make its own background transparent */
-  backdrop-filter: none; /* Remove filter from here */
-  border: none; /* Remove border from here */
-  box-shadow: none; /* Remove shadow from here */
-  border-radius: 20px; /* Keep border-radius for the content area */
+  background: transparent;
+  backdrop-filter: none;
+  border: none; 
+  box-shadow: none; 
+  border-radius: 20px; 
   
   display: flex; 
   flex-direction: column; 
@@ -140,24 +127,55 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
 
 #modal-caption { color: #ccc; font-size: 1.1rem; padding: 10px 0 0; }
 
-/* Close Button Positioning */
+
+/* 💥 1. MODAL NAVIGATION ARROWS 💥 */
+.modal-arrow-shell {
+    position: absolute; 
+    top: 50%; 
+    transform: translateY(-50%); 
+    width: 72px; 
+    height: 72px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    z-index: 1010; 
+    pointer-events: none;
+}
+/* Left Arrow position: to the left of the modal content */
+.modal-arrow-shell.left {
+    left: 50%;
+    /* (Modal max-width / 2) + Modal padding + offset */
+    transform: translate(calc(-470px - 20px - 10px), -50%); 
+}
+/* Right Arrow position: to the right of the modal content */
+.modal-arrow-shell.right {
+    right: 50%;
+    /* (Modal max-width / 2) + Modal padding + offset */
+    transform: translate(calc(470px + 20px + 10px), -50%); 
+}
+
+
+/* 💥 2. CLOSE BUTTON REPOSITIONED (Top-Right) 💥 */
 .close-button-shell {
   position: absolute; 
-  top: 50%; 
-  left: 50%; 
-  /* Adjusted X position: moved further left */
-  transform: translate(calc(-50% - 470px - 90px), -50%); /* Increased offset from -50px to -90px */
+  /* New position: Top Right */
+  top: 5%; 
+  right: 5%; 
+  transform: none; /* No complex transforms needed */
   width: 72px; 
   height: 72px; 
   display: flex; 
   align-items: center; 
   justify-content: center; 
-  z-index: 1010; 
+  z-index: 1020; /* Higher Z-index to ensure it's on top */
   pointer-events: none;
+}
+#modal-close-btn { 
+    font-size: 2.2rem; /* Larger X for visibility */
 }
 
 
-/* --- 🔎 Magnifier Styles (No Change) --- */
+/* --- 🔎 Magnifier Styles (NO CHANGE) --- */
 #magnifier-container {
     position: relative; 
     width: 100%;
@@ -196,7 +214,7 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
-  /* Keep existing carousel responsiveness */
+  /* Carousel */
   .carousel-track { gap: 18px; }
   .carousel-track img { width: 200px; }
   .arrow-shell { top: auto; bottom: -70px; transform: none; width: auto; height: auto; }
@@ -205,23 +223,18 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
   .arrow { width: 56px; height: 56px; font-size: 1.6rem; }
   .modal-content { margin: 20% auto; padding: 10px; }
   
-  /* Responsive positioning for the close button */
+  /* Modal Arrows (on mobile, move arrows close to the content area) */
+  .modal-arrow-shell.left { left: 10px; transform: translateY(-50%); }
+  .modal-arrow-shell.right { right: 10px; transform: translateY(-50%); }
+  .modal-nav-button { width: 56px; height: 56px; font-size: 1.6rem; }
+
+  /* Close Button on Mobile */
   .close-button-shell {
-    left: 10px; 
     top: 10px; 
-    transform: none; 
+    right: 10px; 
     width: 56px; 
     height: 56px; 
   }
-}
-@media (min-width: 980px) {
-    /* Fine-tune position based on max-width 940px for modal and 20px padding */
-    .close-button-shell {
-      left: 50%;
-      top: 50%;
-      /* Adjusted offset to move it further left (was -50px, now -90px) */
-      transform: translate(calc(-470px - 20px - 90px), -50%); 
-    }
 }
 </style>
 </head>
@@ -241,25 +254,25 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
 
 <section id="completed" class="glass">
   <h2>Completed Artwork</h2>
-  <div class="carousel-wrapper">
+  <div class="carousel-wrapper" data-section="completed">
     <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
     <div class="carousel-container">
       <div class="carousel-track">
-        <img src="images/fanart1.png" alt="Artwork 1" loading="lazy">
-        <img src="images/fanart2.png" alt="Artwork 2" loading="lazy">
-        <img src="images/fanart3.png" alt="Artwork 3" loading="lazy">
-        <img src="images/fanart4.png" alt="Artwork 4" loading="lazy">
-        <img src="images/fanart5.png" alt="Artwork 5" loading="lazy">
-        <img src="images/fanart6.png" alt="Artwork 6" loading="lazy">
-        <img src="images/fanart7.png" alt="Artwork 7" loading="lazy">
-        <img src="images/fanart8.png" alt="Artwork 8" loading="lazy">
-        <img src="images/fanart9.png" alt="Artwork 9" loading="lazy">
-        <img src="images/fanart10.png" alt="Artwork 10" loading="lazy">
-        <img src="images/fanart11.png" alt="Artwork 11" loading="lazy">
-        <img src="images/fanart12.png" alt="Artwork 12" loading="lazy">
-        <img src="images/fanart13.png" alt="Artwork 13" loading="lazy">
-        <img src="images/fanart14.png" alt="Artwork 14" loading="lazy">
-        <img src="images/fanart15.png" alt="Artwork 15" loading="lazy">
+        <img src="images/fanart1.png" alt="Artwork 1" loading="lazy" data-index="0">
+        <img src="images/fanart2.png" alt="Artwork 2" loading="lazy" data-index="1">
+        <img src="images/fanart3.png" alt="Artwork 3" loading="lazy" data-index="2">
+        <img src="images/fanart4.png" alt="Artwork 4" loading="lazy" data-index="3">
+        <img src="images/fanart5.png" alt="Artwork 5" loading="lazy" data-index="4">
+        <img src="images/fanart6.png" alt="Artwork 6" loading="lazy" data-index="5">
+        <img src="images/fanart7.png" alt="Artwork 7" loading="lazy" data-index="6">
+        <img src="images/fanart8.png" alt="Artwork 8" loading="lazy" data-index="7">
+        <img src="images/fanart9.png" alt="Artwork 9" loading="lazy" data-index="8">
+        <img src="images/fanart10.png" alt="Artwork 10" loading="lazy" data-index="9">
+        <img src="images/fanart11.png" alt="Artwork 11" loading="lazy" data-index="10">
+        <img src="images/fanart12.png" alt="Artwork 12" loading="lazy" data-index="11">
+        <img src="images/fanart13.png" alt="Artwork 13" loading="lazy" data-index="12">
+        <img src="images/fanart14.png" alt="Artwork 14" loading="lazy" data-index="13">
+        <img src="images/fanart15.png" alt="Artwork 15" loading="lazy" data-index="14">
       </div>
     </div>
     <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
@@ -268,14 +281,14 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
 
 <section id="nightwatch" class="glass">
   <h2>Nightwatch</h2>
-  <div class="carousel-wrapper">
+  <div class="carousel-wrapper" data-section="nightwatch">
     <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
     <div class="carousel-container">
       <div class="carousel-track">
-        <img src="images/nightwatch1.png" alt="Nightwatch 1">
-        <img src="images/nightwatch2.png" alt="Nightwatch 2">
-        <img src="images/nightwatch3.png" alt="Nightwatch 3">
-        <img src="images/nightwatch4.png" alt="Nightwatch 4">
+        <img src="images/nightwatch1.png" alt="Nightwatch 1" data-index="0">
+        <img src="images/nightwatch2.png" alt="Nightwatch 2" data-index="1">
+        <img src="images/nightwatch3.png" alt="Nightwatch 3" data-index="2">
+        <img src="images/nightwatch4.png" alt="Nightwatch 4" data-index="3">
       </div>
     </div>
     <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
@@ -284,21 +297,21 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
 
 <section id="process" class="glass">
   <h2>Process / Sketches</h2>
-  <div class="carousel-wrapper">
+  <div class="carousel-wrapper" data-section="process">
     <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
     <div class="carousel-container">
       <div class="carousel-track">
-        <img src="images/process1.png" alt="Process 1">
-        <img src="images/process2.png" alt="Process 2">
-        <img src="images/process3.png" alt="Process 3">
-        <img src="images/process4.png" alt="Process 4">
-        <img src="images/process5.png" alt="Process 5">
-        <img src="images/process6.png" alt="Process 6">
-        <img src="images/process7.png" alt="Process 7">
-        <img src="images/process8.png" alt="Process 8">
-        <img src="images/process9.png" alt="Process 9">
-        <img src="images/process10.png" alt="Process 10">
-        <img src="images/process11.png" alt="Process 11">
+        <img src="images/process1.png" alt="Process 1" data-index="0">
+        <img src="images/process2.png" alt="Process 2" data-index="1">
+        <img src="images/process3.png" alt="Process 3" data-index="2">
+        <img src="images/process4.png" alt="Process 4" data-index="3">
+        <img src="images/process5.png" alt="Process 5" data-index="4">
+        <img src="images/process6.png" alt="Process 6" data-index="5">
+        <img src="images/process7.png" alt="Process 7" data-index="6">
+        <img src="images/process8.png" alt="Process 8" data-index="7">
+        <img src="images/process9.png" alt="Process 9" data-index="8">
+        <img src="images/process10.png" alt="Process 10" data-index="9">
+        <img src="images/process11.png" alt="Process 11" data-index="10">
       </div>
     </div>
     <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
@@ -321,7 +334,14 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
 <div id="image-modal" class="modal-overlay" style="display: none;">
     
     <div class="close-button-shell" role="button" tabindex="0" aria-label="Close Image">
-        <button id="modal-close-btn" class="close-button">&times;</button>
+        <button id="modal-close-btn" class="modal-nav-button">&times;</button>
+    </div>
+
+    <div class="modal-arrow-shell left">
+        <button id="modal-prev-btn" class="modal-nav-button" aria-label="Previous Image">&#10094;</button>
+    </div>
+    <div class="modal-arrow-shell right">
+        <button id="modal-next-btn" class="modal-nav-button" aria-label="Next Image">&#10095;</button>
     </div>
 
     <div id="modal-content-area" class="modal-content">
@@ -334,12 +354,18 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
     </div>
 </div>
 <script>
-/* --- Carousel Script (NO CHANGES) --- */
+/* --- Carousel Script (Minor Data Attribute Updates) --- */
 document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
   const track = wrapper.querySelector('.carousel-track');
   const leftBtn = wrapper.querySelector('.arrow.left');
   const rightBtn = wrapper.querySelector('.arrow.right');
   const imgs = Array.from(track.querySelectorAll('img'));
+  
+  // Assign data-index if not already present (needed for modal navigation)
+  imgs.forEach((img, i) => {
+      img.setAttribute('data-index', i);
+  });
+
   if (!track || imgs.length === 0) return;
 
   let index = 0;
@@ -392,7 +418,7 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
 });
 
 
-/* --- 🔎 Lightbox Modal and Magnifier Functionality --- */
+/* --- 🔎 Lightbox Modal and Magnifier Functionality (UPDATED) --- */
 const modal = document.getElementById('image-modal');
 const modalImg = document.getElementById('modal-image');
 const modalCaption = document.getElementById('modal-caption');
@@ -401,6 +427,14 @@ const closeModal = document.getElementById('modal-close-btn');
 // Magnifier DOM elements
 const magContainer = document.getElementById('magnifier-container');
 const magLens = document.getElementById('magnifier-lens');
+
+// Modal Navigation Elements
+const modalPrevBtn = document.getElementById('modal-prev-btn');
+const modalNextBtn = document.getElementById('modal-next-btn');
+
+// State variables to track which images we are navigating
+let currentSectionImages = [];
+let currentImageIndex = 0;
 
 // Define constants
 const zoomFactor = 2.5; 
@@ -414,65 +448,93 @@ function hideLens() {
     magLens.style.opacity = 0;
 }
 
-function openModal(imgElement) {
-    modal.style.display = "flex"; 
-    
-    // 1. Setup the main image in the modal
+function updateModalContent(imgElement) {
     modalImg.src = imgElement.src;
     modalImg.alt = imgElement.alt;
     modalCaption.textContent = imgElement.alt;
-    document.body.style.overflow = "hidden";
-
-    // 2. Setup Magnifier Lens properties
     magLens.style.backgroundImage = `url('${imgElement.src}')`;
+
+    // Update button states
+    modalPrevBtn.disabled = (currentImageIndex === 0);
+    modalNextBtn.disabled = (currentImageIndex === currentSectionImages.length - 1);
     
-    // ATTACH JS LISTENERS for visibility and movement
-    magContainer.addEventListener('mouseenter', showLens);
-    magContainer.addEventListener('mouseleave', hideLens);
-    magContainer.addEventListener('mousemove', handleMagnify);
-    
-    // Use setTimeout after image load/complete to ensure correct clientWidth/Height
+    // Recalculate size after changing image source
     modalImg.onload = () => {
         setTimeout(updateMagnifierSize, 50); 
     };
-    
-    // Also attach a resize listener for responsiveness
-    window.addEventListener('resize', updateMagnifierSize);
-    
-    // Handle case where image is already cached/loaded
     if (modalImg.complete) {
         setTimeout(updateMagnifierSize, 50); 
     }
 }
 
+function openModal(imgElement) {
+    // 1. Determine the relevant image list (the section it came from)
+    const sectionWrapper = imgElement.closest('.carousel-wrapper');
+    const track = sectionWrapper ? sectionWrapper.querySelector('.carousel-track') : null;
+    currentSectionImages = track ? Array.from(track.querySelectorAll('img')) : [imgElement];
+    
+    // 2. Set the starting index
+    currentImageIndex = parseInt(imgElement.getAttribute('data-index')) || 0;
+
+    // 3. Display modal and set content
+    modal.style.display = "flex"; 
+    document.body.style.overflow = "hidden";
+    updateModalContent(imgElement);
+
+    // 4. Attach Magnifier Listeners
+    magContainer.addEventListener('mouseenter', showLens);
+    magContainer.addEventListener('mouseleave', hideLens);
+    magContainer.addEventListener('mousemove', handleMagnify);
+    window.addEventListener('resize', updateMagnifierSize);
+    
+    // 5. Attach Navigation Listeners (only once)
+    modalPrevBtn.addEventListener('click', showPrev);
+    modalNextBtn.addEventListener('click', showNext);
+    document.addEventListener('keydown', handleKeyNavigation);
+}
+
+function showPrev() {
+    if (currentImageIndex > 0) {
+        currentImageIndex--;
+        updateModalContent(currentSectionImages[currentImageIndex]);
+    }
+}
+
+function showNext() {
+    if (currentImageIndex < currentSectionImages.length - 1) {
+        currentImageIndex++;
+        updateModalContent(currentSectionImages[currentImageIndex]);
+    }
+}
+
+function handleKeyNavigation(e) {
+    if (modal.style.display === 'flex') {
+        if (e.key === 'ArrowLeft') showPrev();
+        if (e.key === 'ArrowRight') showNext();
+        if (e.key === 'Escape') closeLightbox();
+    }
+}
+
+
 function updateMagnifierSize() {
-    // Calculates the required background size for the lens based on zoomFactor
     const largeSizeX = modalImg.clientWidth * zoomFactor;
     const largeSizeY = modalImg.clientHeight * zoomFactor;
     magLens.style.backgroundSize = `${largeSizeX}px ${largeSizeY}px`;
-    
-    // Ensure the lens starts hidden
     magLens.style.opacity = 0; 
 }
 
-// Magnifier logic reverted to the one you liked
 function handleMagnify(e) {
-    // Get mouse position relative to the image container
     const rect = magContainer.getBoundingClientRect();
     let x = e.clientX - rect.left;
     let y = e.clientY - rect.top;
 
-    // Boundary check 
     if (x < 0) x = 0; if (x > rect.width) x = rect.width;
     if (y < 0) y = 0; if (y > rect.height) y = rect.height;
 
-    // 1. Position the lens: Place the lens's top-left corner at (x, y) 
     magLens.style.left = `${x}px`;
     magLens.style.top = `${y}px`;
-    // Center the lens perfectly under the cursor using translate
     magLens.style.transform = `translate(-${lensRadius}px, -${lensRadius}px)`; 
 
-    // 2. Position the background: Core magnification logic
     let backgroundX = x * zoomFactor - lensRadius; 
     let backgroundY = y * zoomFactor - lensRadius;
 
@@ -483,13 +545,15 @@ function closeLightbox() {
     modal.style.display = "none";
     document.body.style.overflow = "auto";
     
-    // REMOVE ALL LISTENERS to prevent memory leaks and misfires
+    // REMOVE ALL LISTENERS
     magContainer.removeEventListener('mouseenter', showLens);
     magContainer.removeEventListener('mouseleave', hideLens);
     magContainer.removeEventListener('mousemove', handleMagnify);
     window.removeEventListener('resize', updateMagnifierSize);
+    modalPrevBtn.removeEventListener('click', showPrev);
+    modalNextBtn.removeEventListener('click', showNext);
+    document.removeEventListener('keydown', handleKeyNavigation);
     
-    // Ensure the lens is hidden when closing
     magLens.style.opacity = 0;
 }
 
@@ -503,12 +567,6 @@ document.querySelectorAll('.carousel-track img').forEach(img => {
 
 // 2. Attach close handlers 
 closeModal.addEventListener('click', closeLightbox);
-closeModal.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-        closeLightbox();
-    }
-});
-// Attach to the shell for better click target
 document.querySelector('.close-button-shell').addEventListener('click', closeLightbox);
 
 
@@ -519,12 +577,7 @@ modal.addEventListener('click', (e) => {
     }
 });
 
-// Close when ESC key is pressed
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.style.display === 'flex') {
-        closeLightbox();
-    }
-});
+// Keyboard navigation is now handled by handleKeyNavigation
 </script>
 
 </body>
