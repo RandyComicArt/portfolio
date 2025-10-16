@@ -79,46 +79,47 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 .carousel-track img.center { transform: scale(1.08); z-index: 2; }
 .carousel-track img.side { transform: scale(0.9); opacity: 0.85; z-index: 1; }
 
-/* Arrows (moved further out) */
+/* Arrows (enhanced glass look) */
 .arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   font-size: 2.8rem;
-  color: #fff;
+  color: rgba(255,255,255,0.9);
   cursor: pointer;
   user-select: none;
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.35);
   padding: 10px 16px;
-  border-radius: 12px;
-  backdrop-filter: blur(5px);
+  border-radius: 50%;
+  backdrop-filter: blur(10px) brightness(1.2);
+  -webkit-backdrop-filter: blur(10px) brightness(1.2);
+  box-shadow: 0 0 15px rgba(255,255,255,0.08), inset 0 0 5px rgba(255,255,255,0.25);
   transition: all 0.25s ease;
-  z-index: 20;
+  z-index: 50;
 }
 .arrow:hover:not(:disabled) {
-  background: rgba(255,255,255,0.25);
-  transform: translateY(-50%) scale(1.1);
+  background: rgba(255,255,255,0.3);
+  box-shadow: 0 0 20px rgba(255,255,255,0.25), inset 0 0 8px rgba(255,255,255,0.4);
+  transform: translateY(-50%) scale(1.12);
 }
 .arrow:disabled {
   opacity: 0.3;
   cursor: default;
   transform: translateY(-50%) scale(1);
 }
-.arrow.left { left: -90px; }
-.arrow.right { right: -90px; }
+.arrow.left { left: -100px; }
+.arrow.right { right: -100px; }
 
 /* Responsive */
-@media (max-width: 1100px) {
-  .arrow.left { left: -70px; }
-  .arrow.right { right: -70px; }
+@media (max-width: 1200px) {
+  .arrow.left { left: -80px; }
+  .arrow.right { right: -80px; }
 }
 @media (max-width: 900px) {
   .carousel-track img { width: 220px; }
-}
-@media (max-width: 700px) {
-  .arrow.left { left: -50px; }
-  .arrow.right { right: -50px; }
+  .arrow.left { left: -60px; }
+  .arrow.right { right: -60px; }
 }
 @media (max-width: 600px) {
   .carousel-track { gap: 18px; }
@@ -158,7 +159,7 @@ footer {
     <button class="arrow left">&#10094;</button>
     <div class="carousel-container">
       <div class="carousel-track">
-        <!-- 15 completed artworks -->
+        <!-- 15 artworks -->
         <img src="images/fanart1.png" alt="Artwork 1" loading="lazy">
         <img src="images/fanart2.png" alt="Artwork 2" loading="lazy">
         <img src="images/fanart3.png" alt="Artwork 3" loading="lazy">
