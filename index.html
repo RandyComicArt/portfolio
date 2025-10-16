@@ -116,7 +116,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
   background: transparent;
   border: none; 
   box-shadow: none; 
-  border-radius: 20px; /* Outer wrapper gets the main rounded corners */
+  border-radius: 20px; 
   
   display: flex; 
   align-items: stretch; 
@@ -131,23 +131,25 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     justify-content: center;
     align-items: center;
     background: transparent; 
-    border-radius: 15px 0 0 15px; /* Only top-left and bottom-left are rounded here */
+    border-radius: 15px 0 0 15px; 
 }
 
-/* Right Column: Description Panel (UPDATED BORDER-RADIUS) */
+/* Right Column: Description Panel (FIXED TOP-LEFT SHARP CORNER) */
 .description-column {
     flex: 1; 
     background: #333; 
     backdrop-filter: blur(10px); 
-    /* 💥 UPDATED: Rounded all corners but removed the border-left 
-       The modal-nav-panel will create a visual separation. 
-       Re-added border-left back to maintain separation from glass overlay. */
-    border-radius: 0 15px 15px 15px; /* Top-right, bottom-right, bottom-left are rounded */
-    padding: 25px;
+    /* 💥 FIXED: Ensure top-left is sharp and others are rounded (based on the fixed image column) */
+    border-radius: 0 15px 15px 0; 
+    
+    padding: 25px; /* Base padding for text */
+    padding-bottom: 75px; /* Add space for the navigation bar at the bottom */
+    
     overflow-y: auto; 
     border-left: 1px solid rgba(255, 255, 255, 0.15);
     color: #eee;
-    position: relative; /* Needed to position the nav panel inside */
+    
+    /* Removed position: relative; for flow-based content */
 }
 .description-column h3 {
     font-size: 1.5rem;
@@ -160,28 +162,29 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     margin-bottom: 15px;
 }
 
-/* 💥 UPDATED: Navigation Panel Position (Inside Description Column, Bottom-Left) 💥 */
+/* 💥 UPDATED: Navigation Panel Position (Static at Bottom of Panel) 💥 */
 .modal-nav-panel {
-    position: sticky; /* Sticky ensures it stays visible when content scrolls */
-    bottom: -25px; /* Negative margin to pull it into the corner area */
-    left: -25px; 
+    /* Fixed positioning relative to the description-column */
+    position: absolute; 
+    bottom: 0;
+    right: 0; /* Align right to match the border-radius logic */
+    left: 0; /* Span the full width */
     
     z-index: 1020;
     display: flex;
     gap: 10px; 
+    
     background: #333; /* Match panel background */
     backdrop-filter: blur(5px);
-    border-radius: 0 10px 0 10px; /* Subtle rounding */
-    padding: 10px 25px; /* More padding to match main column padding */
-    width: calc(100% + 50px); /* Stretch across the bottom edge */
     
-    /* Ensure content is positioned correctly for sticky to work */
+    padding: 10px 25px; 
+    
+    /* Match the bottom corners of the description column */
+    border-radius: 0 0 15px 0; 
+    border-top: 1px solid rgba(255, 255, 255, 0.15); /* Separator line */
+    
     align-items: center;
     justify-content: flex-start;
-    
-    /* Ensure corner rounding correction */
-    border-bottom-left-radius: 15px;
-    border-top-right-radius: 0;
 }
 .modal-nav-panel .modal-nav-button {
     width: 50px; 
@@ -259,21 +262,23 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
       border-left: none;
       border-top: 1px solid rgba(255, 255, 255, 0.15);
       max-height: 30vh;
+      padding-bottom: 75px; /* Keep space for the nav */
   }
   .description-column h3 { margin-top: 0; }
   #magnifier-container .mag-image { max-height: 55vh; }
 
   /* Navigation panel on mobile (now at the bottom of the stacked description panel) */
   .modal-nav-panel {
-      position: static; /* Remove sticky on mobile */
-      margin-top: 20px; /* Space above nav */
-      bottom: auto;
-      left: auto;
+      position: absolute; /* Keep it fixed at the bottom of the column */
+      bottom: 0;
+      left: 0;
+      right: 0;
       width: 100%;
       padding: 10px 0;
       justify-content: center;
-      background: transparent;
-      border-radius: 0;
+      background: #333; /* Keep background to cover content below */
+      border-radius: 0 0 15px 15px; /* Round the bottom corners */
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
   }
 }
 
@@ -386,7 +391,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
             </div>
         </div>
 
-        <div class="description-column">
+        <div class="description-column" style="position: relative;">
             <h3 id="description-title">Title Placeholder</h3>
             <p id="description-text">
                 Sample description text will go here. This area is perfect for noting the materials used (e.g., Digital Painting in Procreate, Oil on Canvas, Pen & Ink), the time taken, or the conceptual inspiration behind the artwork. This panel will scroll if the description is very long.
