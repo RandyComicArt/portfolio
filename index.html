@@ -92,17 +92,30 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 }
 .arrow:disabled { opacity: 0.28; cursor: default; transform: none; }
 
+/* --- Footer Styles (No Change) --- */
+footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
+.footer-content {
+  max-width: 1200px; margin: 0 auto;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  padding: 20px;
+}
+
 /* --- 🖼️ Modal/Lightbox Styles --- */
 .modal-overlay {
   display: none; /* Controlled by JS: none or flex */
   position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
   overflow: auto;
-  background: rgba(0, 0, 0, 0.9); 
+  /* 💥 Applied transparent background/blur to the overlay 💥 */
+  background: rgba(12, 12, 12, 0.7); 
   backdrop-filter: blur(8px);
   align-items: center; justify-content: center;
 }
 
-/* Modal Content (Now has Glass Aesthetic) */
+/* Modal Content (Container for the image) */
 .modal-content {
   position: relative; 
   margin: 5% auto; 
@@ -110,12 +123,12 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
   width: 90%; 
   max-width: 940px; 
   text-align: center; 
-  /* Inherit glass properties for the container holding the image */
+  /* Applied .glass look to the content container */
   background: rgba(255, 255, 255, 0.08); 
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  border-radius: 20px; /* Added to .modal-content */
+  border-radius: 20px; 
   
   display: flex; 
   flex-direction: column; 
@@ -124,13 +137,13 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 
 #modal-caption { color: #ccc; font-size: 1.1rem; padding: 10px 0 0; }
 
-/* Close Button Positioning (Absolute to the overlay/window) */
+/* Close Button Positioning */
 .close-button-shell {
   position: absolute; 
   top: 50%; 
   left: 50%; 
-  /* Position shell to the top-left of the modal-content area */
-  transform: translate(calc(-50% - 470px - 20px), -50%); /* Half max-width, plus padding, plus some offset */
+  /* Adjusted X position: moved further left by changing -10px to -50px offset */
+  transform: translate(calc(-50% - 470px - 50px), -50%); 
   width: 72px; 
   height: 72px; 
   display: flex; 
@@ -139,26 +152,17 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
   z-index: 1010; 
   pointer-events: none;
 }
-/* Adjust position for the X button relative to the modal */
-.modal-content:before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-}
 
 
-/* --- 🔎 Magnifier Styles --- */
+/* --- 🔎 Magnifier Styles (No Change) --- */
 #magnifier-container {
     position: relative; 
     width: 100%;
-    max-width: 860px; /* Max size for the image container */
+    max-width: 860px; 
     margin: 0 auto;
     cursor: crosshair;
     display: inline-block;
 }
-
-/* The primary image displayed in the modal (the "small" view) */
 #magnifier-container .mag-image {
     display: block;
     width: 100%;
@@ -168,14 +172,10 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     object-fit: contain;
     margin-bottom: 0;
 }
-
-/* The Magnifying Lens (the circular element) */
 .mag-lens {
     position: absolute;
     border: 3px solid rgba(255, 255, 255, 0.8);
     background-repeat: no-repeat;
-    
-    /* Lens dimensions and look */
     width: 180px; 
     height: 180px;
     border-radius: 50%;
@@ -183,12 +183,9 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
         0 0 0 1px #000, 
         0 0 10px rgba(0, 0, 0, 0.6), 
         inset 0 0 20px rgba(255, 255, 255, 0.2);
-        
-    /* Visibility control: Handled entirely by JS opacity property now */
     opacity: 0;
     top: 0; 
     left: 0; 
-    /* Critical: ensures mouse events go to the container for listener activation */
     pointer-events: none; 
     transition: opacity 0.2s;
     z-index: 10;
@@ -219,8 +216,8 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     .close-button-shell {
       left: 50%;
       top: 50%;
-      /* (Modal max-width / 2) + Modal padding + desired offset */
-      transform: translate(calc(-470px - 20px - 10px), -50%);
+      /* Adjusted offset to move it further left (was -10px, now -50px) */
+      transform: translate(calc(-470px - 20px - 50px), -50%); 
     }
 }
 </style>
@@ -396,7 +393,7 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
 const modal = document.getElementById('image-modal');
 const modalImg = document.getElementById('modal-image');
 const modalCaption = document.getElementById('modal-caption');
-const closeModal = document.getElementById('modal-close-btn'); // NOTE: Element ID changed
+const closeModal = document.getElementById('modal-close-btn');
 
 // Magnifier DOM elements
 const magContainer = document.getElementById('magnifier-container');
@@ -404,7 +401,6 @@ const magLens = document.getElementById('magnifier-lens');
 
 // Define constants
 const zoomFactor = 2.5; 
-// Hardcode lensRadius to 90 (180px width / 2) for reliable calculation
 const lensRadius = 90; 
 
 function showLens() {
@@ -502,7 +498,7 @@ document.querySelectorAll('.carousel-track img').forEach(img => {
     });
 });
 
-// 2. Attach close handlers (using the new button ID)
+// 2. Attach close handlers 
 closeModal.addEventListener('click', closeLightbox);
 closeModal.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
