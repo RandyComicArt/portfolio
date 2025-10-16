@@ -13,6 +13,7 @@ body {
   background: linear-gradient(135deg,#0c0c0c 0%,#1a1a2e 15%,#16213e 35%,#0f3460 50%,#533a7d 70%,#8b5a8c 85%,#a0616a 100%);
   color: #fff;
 }
+/* Reusing the .glass class for other sections, but not the header itself */
 .glass {
   background: rgba(255,255,255,0.05);
   backdrop-filter: blur(15px);
@@ -23,18 +24,29 @@ body {
 
 /* Header */
 header {
-  background: rgba(255,255,255,0.1);
+  /* Removed full-width background, border, padding. Added top spacing. */
+  text-align: center;
+  padding: 40px 20px 0; 
+}
+
+/* NEW: This container now holds the content's size, background, and padding */
+.header-content {
+  max-width: 1200px; /* Constrains the width */
+  margin: 0 auto;    /* Centers the box */
+  
+  /* Styles moved from 'header' */
+  background: rgba(255,255,255,0.1); 
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255,255,255,0.2);
-  text-align: center;
-  padding: 20px;
+  padding: 20px; /* Re-added padding */
+
+  /* Adopted from .glass for a container look */
+  border-radius: 20px 20px 0 0; 
+  border: 1px solid rgba(255,255,255,0.15); 
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
-/* ADDED: Limits the width of the header content and centers it */
-.header-content {
-  max-width: 1200px; 
-  margin: 0 auto;
-}
-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+
+header h1 { font-size: 2.5rem; margin-top: 0; margin-bottom: 10px; }
 nav { display:flex; justify-content:center; gap:15px; flex-wrap:wrap; }
 nav a {
   color:#fff; text-decoration:none; font-weight:bold;
@@ -171,15 +183,16 @@ footer {
 </head>
 <body>
 
-<header class="glass">
-  <div class="header-content"> <h1>Randy Comic Art</h1>
+<header> <div class="header-content">
+    <h1>Randy Comic Art</h1>
     <nav>
       <a href="#completed">Completed Artwork</a>
       <a href="#nightwatch">Nightwatch</a>
       <a href="#process">Process</a>
       <a href="#contact">Contact</a>
     </nav>
-  </div> </header>
+  </div>
+</header>
 
 <section id="completed" class="glass">
   <h2>Completed Artwork</h2>
