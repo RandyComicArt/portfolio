@@ -5,153 +5,285 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Randy Comic Art</title>
   <style>
-    /* Reset & base styles */
+    /* ===== Base Styles ===== */
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; line-height: 1.6; background-color: #f7f7f7; color: #333; }
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 15%, #16213e 35%, #0f3460 50%, #533a7d 70%, #8b5a8c 85%, #a0616a 100%);
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
 
+    /* ===== Header ===== */
     header {
-      background-color: #1e1e1e; color: #fff; text-align: center; padding: 30px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background-color: rgba(30,30,30,0.9);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      backdrop-filter: blur(10px);
     }
-    header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-    nav a {
-      color: #fff; text-decoration: none; margin: 0 15px; font-weight: bold;
-    }
-    nav a:hover { text-decoration: underline; }
+    .logo { font-size: 28px; font-weight: bold; cursor: pointer; }
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links a { padding: 8px 15px; border-radius: 8px; transition: 0.3s; }
+    .nav-links a:hover, .nav-links a.active { background: rgba(255,255,255,0.2); }
 
-    section { padding: 40px 20px; max-width: 1200px; margin: auto; }
+    /* ===== Pages ===== */
+    .page { display: none; padding: 120px 20px 60px; min-height: 100vh; }
+    .page.active { display: block; }
+    section h2 { text-align: center; margin-bottom: 20px; font-size: 2.2rem; }
 
-    h2 { text-align: center; margin-bottom: 20px; font-size: 2rem; }
-
-    /* Gallery styles */
+    /* ===== Gallery ===== */
     .gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
       gap: 15px;
       justify-items: center;
+      margin-top: 20px;
     }
     .gallery img {
       width: 100%;
       max-width: 300px;
-      border-radius: 8px;
-      border: 2px solid #ddd;
-      transition: transform 0.2s, border-color 0.2s;
+      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.2);
+      transition: transform 0.3s, border-color 0.3s;
+      cursor: pointer;
     }
-    .gallery img:hover {
-      transform: scale(1.05);
-      border-color: #1e90ff;
+    .gallery img:hover { transform: scale(1.05); border-color: #1e90ff; }
+
+    /* ===== Glass Panels ===== */
+    .glass {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 40px;
+      transition: 0.3s;
     }
+    .glass:hover { background: rgba(255,255,255,0.15); }
 
-    /* Section headings */
-    .section-title { margin-bottom: 30px; }
+    /* ===== Footer ===== */
+    #footer { padding: 30px 20px; text-align: center; background: rgba(30,30,30,0.9); border-top: 1px solid rgba(255,255,255,0.2); }
 
-    footer {
-      background-color: #1e1e1e; color: #fff;
-      text-align: center; padding: 20px; margin-top: 40px;
-    }
+    /* ===== Parallax Shapes ===== */
+    .bg-shapes { position: fixed; top:0; left:0; width:100%; height:100%; z-index:-1; overflow:hidden; }
+    .shape { position:absolute; background: rgba(255,255,255,0.08); animation: float 6s ease-in-out infinite; }
+    .shape:nth-child(1){ width:120px;height:80px;top:20%;left:10%;border-radius:15px;animation-delay:0s;transform:rotate(15deg);}
+    .shape:nth-child(2){ width:90px;height:140px;top:60%;right:15%;border-radius:12px;animation-delay:2s;transform:rotate(-20deg);}
+    .shape:nth-child(3){ width:100px;height:60px;bottom:20%;left:20%;border-radius:10px;animation-delay:4s;transform:rotate(25deg);}
+    .shape:nth-child(4){ width:80px;height:120px;top:10%;right:30%;border-radius:8px;animation-delay:1s;transform:rotate(-10deg);}
+    .shape:nth-child(5){ width:110px;height:70px;bottom:40%;right:20%;border-radius:14px;animation-delay:3s;transform:rotate(30deg);}
+    .shape:nth-child(6){ width:95px;height:95px;top:40%;left:5%;border-radius:20px;animation-delay:5s;transform:rotate(-15deg);}
+    @keyframes float{0%,100%{transform:translateY(0px) rotate(var(--start-rotation,0deg));}50%{transform:translateY(-20px) rotate(calc(var(--start-rotation,0deg)+180deg));}}
 
-    /* Responsive text */
-    @media(max-width:600px){
-      header h1 { font-size: 2rem; }
-      h2 { font-size: 1.5rem; }
+    /* ===== Responsive ===== */
+    @media(max-width:768px){ 
+      header { flex-direction: column; gap:15px; }
+      .page { padding: 160px 20px 60px; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Background Shapes -->
+  <div class="bg-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+
   <!-- Header -->
   <header>
-    <h1>Randy Comic Art</h1>
-    <nav>
-      <a href="#about">About Me</a>
-      <a href="#fanart">Fan Art</a>
-      <a href="#nightwatch">Nightwatch</a>
-      <a href="#original">Original</a>
-      <a href="#process">Process</a>
-      <a href="#contact">Contact</a>
-    </nav>
+    <div class="logo">Randy Comic Art</div>
+    <div class="nav-links">
+      <a href="#" onclick="showPage('about')" class="active">About</a>
+      <a href="#" onclick="showPage('fanart')">Fan Art</a>
+      <a href="#" onclick="showPage('nightwatch')">Nightwatch</a>
+      <a href="#" onclick="showPage('original')">Original</a>
+      <a href="#" onclick="showPage('process')">Process</a>
+      <a href="#" onclick="showPage('contact')">Contact</a>
+    </div>
   </header>
 
-  <!-- About Section -->
-  <section id="about">
-    <h2>About Me</h2>
-    <p style="text-align:center; max-width:700px; margin:auto;">
-      Hi! I'm Randy, a comic artist passionate about storytelling and visual art.  
-      This portfolio showcases my fan art, original characters, and creative process. Below, you will also find artwork
-      from Nightwatch, a video game that me and my friend are currently hard at work on!
-      Thanks for visiting!
-    </p>
-  </section>
-
-  <!-- Fan Art Gallery -->
-  <section id="fanart">
-    <h2 class="section-title">Fan Art</h2>
-    <div class="gallery">
-      <img src="images/fanart1.png" alt="Fan Art 1">
-      <img src="images/fanart2.png" alt="Fan Art 2">
-      <img src="images/fanart3.png" alt="Fan Art 3">
-      <img src="images/fanart4.png" alt="Fan Art 4">
-      <img src="images/fanart5.png" alt="Fan Art 5">
-      <img src="images/fanart6.png" alt="Fan Art 6">
-      <img src="images/fanart7.png" alt="Fan Art 7">
-      <img src="images/fanart8.png" alt="Fan Art 8">
-      <img src="images/fanart9.png" alt="Fan Art 9">
-      <img src="images/fanart10.png" alt="Fan Art 10">
-      <img src="images/fanart11.png" alt="Fan Art 11">
-      <img src="images/fanart12.png" alt="Fan Art 12">
-      <img src="images/fanart13.png" alt="Fan Art 13">
-      <img src="images/fanart14.png" alt="Fan Art 14">
+  <!-- About Page -->
+  <div class="page active" id="about">
+    <div class="glass">
+      <h2>About Me</h2>
+      <p style="text-align:center; max-width:700px; margin:auto;">
+        Hi! I'm Randy, a comic artist passionate about storytelling and visual art.  
+        This portfolio showcases my fan art, original characters, and creative process.  
+        Below, you will also find artwork from Nightwatch, a video game that my friend and I are working on.  
+        Thanks for visiting!
+      </p>
     </div>
-  </section>
+  </div>
 
-  <!-- Nightwatch Gallery -->
-  <section id="nightwatch">
-    <h2 class="section-title">Nightwatch</h2>
-    <div class="gallery">
-      <img src="images/nightwatch1.png" alt="Nightwatch 1">
-      <img src="images/nightwatch2.png" alt="Nightwatch 2">
-      <img src="images/nightwatch3.png" alt="Nightwatch 3">
-      <img src="images/nightwatch4.png" alt="Nightwatch 4">
+  <!-- Fan Art Page -->
+  <div class="page" id="fanart">
+    <div class="glass">
+      <h2>Fan Art</h2>
+      <div class="gallery">
+        <img src="images/fanart1.png" alt="Fan Art 1">
+        <img src="images/fanart2.png" alt="Fan Art 2">
+        <img src="images/fanart3.png" alt="Fan Art 3">
+        <img src="images/fanart4.png" alt="Fan Art 4">
+        <img src="images/fanart5.png" alt="Fan Art 5">
+        <img src="images/fanart6.png" alt="Fan Art 6">
+        <img src="images/fanart7.png" alt="Fan Art 7">
+        <img src="images/fanart8.png" alt="Fan Art 8">
+        <img src="images/fanart9.png" alt="Fan Art 9">
+        <img src="images/fanart10.png" alt="Fan Art 10">
+        <img src="images/fanart11.png" alt="Fan Art 11">
+        <img src="images/fanart12.png" alt="Fan Art 12">
+        <img src="images/fanart13.png" alt="Fan Art 13">
+        <img src="images/fanart14.png" alt="Fan Art 14">
+      </div>
     </div>
-  </section>
+  </div>
 
-  <!-- Original Art -->
-  <section id="original">
-    <h2 class="section-title">Original Art</h2>
-    <div class="gallery">
-      <img src="images/original1.png" alt="Original Art 1">
+  <!-- Nightwatch Page -->
+  <div class="page" id="nightwatch">
+    <div class="glass">
+      <h2>Nightwatch</h2>
+      <div class="gallery">
+        <img src="images/nightwatch1.png" alt="Nightwatch 1">
+        <img src="images/nightwatch2.png" alt="Nightwatch 2">
+        <img src="images/nightwatch3.png" alt="Nightwatch 3">
+        <img src="images/nightwatch4.png" alt="Nightwatch 4">
+      </div>
     </div>
-  </section>
+  </div>
 
-  <!-- Process / Sketches -->
-  <section id="process">
-    <h2 class="section-title">Process / Sketches</h2>
-    <div class="gallery">
-      <img src="images/process1.png" alt="Process 1">
-      <img src="images/process2.png" alt="Process 2">
-      <img src="images/process3.png" alt="Process 3">
-      <img src="images/process4.png" alt="Process 4">
-      <img src="images/process5.png" alt="Process 5">
-      <img src="images/process6.png" alt="Process 6">
-      <img src="images/process7.png" alt="Process 7">
-      <img src="images/process8.png" alt="Process 8">
-      <img src="images/process9.png" alt="Process 9">
-      <img src="images/process10.png" alt="Process 10">
-      <img src="images/process11.png" alt="Process 11">
+  <!-- Original Page -->
+  <div class="page" id="original">
+    <div class="glass">
+      <h2>Original Art</h2>
+      <div class="gallery">
+        <img src="images/original1.png" alt="Original Art 1">
+      </div>
     </div>
-  </section>
+  </div>
 
-  <!-- Contact Section -->
-  <section id="contact">
-    <h2>Contact</h2>
-    <p style="text-align:center;">
-      Email: <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a>
-    </p>
-  </section>
+  <!-- Process Page -->
+  <div class="page" id="process">
+    <div class="glass">
+      <h2>Process / Sketches</h2>
+      <div class="gallery">
+        <img src="images/process1.png" alt="Process 1">
+        <img src="images/process2.png" alt="Process 2">
+        <img src="images/process3.png" alt="Process 3">
+        <img src="images/process4.png" alt="Process 4">
+        <img src="images/process5.png" alt="Process 5">
+        <img src="images/process6.png" alt="Process 6">
+        <img src="images/process7.png" alt="Process 7">
+        <img src="images/process8.png" alt="Process 8">
+        <img src="images/process9.png" alt="Process 9">
+        <img src="images/process10.png" alt="Process 10">
+        <img src="images/process11.png" alt="Process 11">
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Page -->
+  <div class="page" id="contact">
+    <div class="glass">
+      <h2>Contact</h2>
+      <p style="text-align:center;">
+        Email: <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a>
+      </p>
+    </div>
+  </div>
 
   <!-- Footer -->
-  <footer>
-    &copy; 2025 randycomicart
+  <footer id="footer">
+    &copy; 2025 Randy Comic Art
   </footer>
 
+  <!-- ===== Scripts ===== -->
+  <script>
+    let currentPage = 'about';
+
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+
+      document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
+      document.querySelector(`[onclick="showPage('${pageId}')"]`).classList.add('active');
+
+      currentPage = pageId;
+
+      // Move footer
+      const footer = document.getElementById('footer');
+      document.getElementById(pageId).appendChild(footer);
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Parallax shapes
+    document.addEventListener('mousemove', e => {
+      const shapes = document.querySelectorAll('.shape');
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
+      shapes.forEach((shape, i) => {
+        const speed = (i+1)*0.5;
+        const xPos = (x-0.5)*speed*20;
+        const yPos = (y-0.5)*speed*20;
+        shape.style.transform = `translate(${xPos}px, ${yPos}px)`;
+      });
+    });
+
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const parallax = document.querySelector('.bg-shapes');
+      if(parallax) parallax.style.transform = `translateY(${scrolled*0.5}px)`;
+    });
+
+    // Ripple click effect on images
+    document.querySelectorAll('.gallery img').forEach(img => {
+      img.addEventListener('click', function(e){
+        const ripple = document.createElement('div');
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size/2;
+        const y = e.clientY - rect.top - size/2;
+        ripple.style.cssText = `
+          position:absolute;
+          width:${size}px;
+          height:${size}px;
+          left:${x}px;
+          top:${y}px;
+          background: rgba(255,255,255,0.3);
+          border-radius: 50%;
+          transform: scale(0);
+          animation: ripple 0.6s linear;
+          pointer-events:none;
+          z-index:1000;
+        `;
+        this.style.position='relative';
+        this.appendChild(ripple);
+        setTimeout(()=>ripple.remove(),600);
+      });
+    });
+
+    // Ripple keyframes
+    const style = document.createElement('style');
+    style.textContent=`@keyframes ripple{to{transform:scale(4);opacity:0;}}`;
+    document.head.appendChild(style);
+
+    window.addEventListener('DOMContentLoaded', ()=>{
+      const footer = document.getElementById('footer');
+      document.getElementById('about').appendChild(footer);
+    });
+  </script>
 </body>
 </html>
