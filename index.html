@@ -144,17 +144,14 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     top: 50%;
     transform: translateY(-50%);
     left: 50%;
-    /* Pushed further out: (Modal max-width / 2) + Modal padding + increased offset (40px -> 80px) */
-    transform: translate(calc(-470px - 20px - 80px), -50%); 
+    /* Pushed further out: (Modal max-width / 2) + Modal padding + increased offset (100px) */
+    transform: translate(calc(-470px - 20px - 100px), -50%); 
 }
-/* Right Arrow position: aligned vertically with the X button, further out */
+/* Right Arrow position: aligned vertically with the X button, next to it */
 .modal-arrow-shell.right {
-    top: 5%; /* Aligned with the top: 5% of the viewport height */
-    right: 5%;
-    transform: none; /* No vertical transform needed */
-    z-index: 1021; /* Slightly higher than X button */
-    /* Pushed further out: (Modal max-width / 2) + Modal padding + increased offset (40px -> 80px) */
-    /* NOTE: We now use top/right absolute positioning, so we don't need complex calc() here. */
+    top: 5%; /* Aligned with the top: 5% of the viewport height (same as X button) */
+    right: calc(5% + 72px + 10px); /* 5% + width of X button shell + gap */
+    transform: none; 
 }
 
 
@@ -177,7 +174,6 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 }
 
 /* 💥 3. SLIDING TRANSITION EFFECT 💥 */
-/* Container for the image, ensures content is clipped during slide */
 #magnifier-container {
     position: relative; 
     width: 100%;
@@ -185,7 +181,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     margin: 0 auto;
     cursor: crosshair;
     display: inline-block;
-    overflow: hidden; /* Important: keeps the sliding image clipped */
+    overflow: hidden; 
 }
 #magnifier-container .mag-image {
     display: block;
@@ -196,7 +192,6 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     object-fit: contain;
     margin-bottom: 0;
     
-    /* New: Initial setup for the sliding effect */
     position: relative;
     left: 0;
     opacity: 1;
@@ -235,7 +230,8 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
   
   /* Modal Arrows (on mobile, move arrows close to the content area) */
   .modal-arrow-shell.left { left: 10px; top: 50%; transform: translateY(-50%); }
-  .modal-arrow-shell.right { right: 10px; top: 50%; transform: translateY(-50%); }
+  /* Fixed right arrow mobile position */
+  .modal-arrow-shell.right { right: calc(10px + 56px + 10px); top: 10px; transform: none; }
   .modal-nav-button { width: 56px; height: 56px; font-size: 1.6rem; }
 
   /* Close Button on Mobile */
@@ -355,12 +351,13 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
         <button id="modal-close-btn" class="modal-nav-button">&times;</button>
     </div>
 
-    <div class="modal-arrow-shell left">
-        <button id="modal-prev-btn" class="modal-nav-button" aria-label="Previous Image">&#10094;</button>
-    </div>
     <div class="modal-arrow-shell right">
         <button id="modal-next-btn" class="modal-nav-button" aria-label="Next Image">&#10095;</button>
     </div>
+    <div class="modal-arrow-shell left">
+        <button id="modal-prev-btn" class="modal-nav-button" aria-label="Previous Image">&#10094;</button>
+    </div>
+    
 
     <div id="modal-content-area" class="modal-content">
         <div id="magnifier-container">
@@ -460,8 +457,16 @@ function hideLens() {
 
 // Function to handle the actual image change with a slide effect
 function performImageTransition(newImageElement, direction) {
-    const slideDistance = (direction === 'next') ? '100%' : '-100%';
-    const resetDistance = (direction === 'next') ? '-100%' : '100%';
+    let slideDistance, resetDistance;
+
+    // 💥 SWAPPED LOGIC: Current image goes the direction of motion 💥
+    if (direction === 'next') { // Right arrow pressed: current image flies LEFT
+        slideDistance = '-100%';
+        resetDistance = '100%';
+    } else { // Left arrow pressed: current image flies RIGHT
+        slideDistance = '100%';
+        resetDistance = '-100%';
+    }
 
     // 1. Start the slide out animation
     modalImg.style.left = slideDistance;
