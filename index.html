@@ -12,7 +12,18 @@ body {
   line-height: 1.6;
   background: linear-gradient(135deg,#0c0c0c 0%,#1a1a2e 15%,#16213e 35%,#0f3460 50%,#533a7d 70%,#8b5a8c 85%,#a0616a 100%);
   color: #fff;
+  margin: 40px; 
 }
+
+@media (max-width: 700px) {
+  body { margin: 20px; }
+}
+
+header, footer {
+  border-radius: 20px;
+  overflow: hidden;    /* keeps inner blur smooth inside rounded corners */
+}
+  
 .glass {
   background: rgba(255,255,255,0.05);
   backdrop-filter: blur(15px);
