@@ -65,7 +65,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 .carousel-track img.center { transform: scale(1.08); z-index: 2; }
 .carousel-track img.side { transform: scale(0.9); opacity: 0.85; z-index: 1; }
 
-/* Carousel Arrows */
+/* Carousel Arrows & Close Button Style */
 .arrow-shell {
   position: absolute; top: 50%; transform: translateY(-50%);
   width: 72px; height: 72px; display: flex; align-items: center;
@@ -73,7 +73,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 }
 .arrow-shell.left { left: -112px; }
 .arrow-shell.right { right: -112px; }
-.arrow {
+.arrow, .close-button { /* Applied to arrow and new close-button class */
   pointer-events: auto; width: 64px; height: 64px; border-radius: 50%;
   border: 1px solid rgba(255,255,255,0.45);
   background: linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0.22));
@@ -82,25 +82,15 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
   cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
   box-shadow: inset 0 2px 4px rgba(255,255,255,0.55), 0 10px 24px rgba(0,0,0,0.45);
   outline: none;
+  font-weight: bold; /* Ensures the X is thick */
 }
-.arrow:hover:not(:disabled), .arrow:focus:not(:disabled) {
+.arrow:hover:not(:disabled), .arrow:focus:not(:disabled),
+.close-button:hover, .close-button:focus {
   transform: scale(1.08);
   background: linear-gradient(180deg, rgba(255,255,255,0.46), rgba(255,255,255,0.28));
   box-shadow: inset 0 3px 6px rgba(255,255,255,0.6), 0 12px 30px rgba(0,0,0,0.5);
 }
 .arrow:disabled { opacity: 0.28; cursor: default; transform: none; }
-
-/* --- Footer Styles --- */
-footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
-.footer-content {
-  max-width: 1200px; margin: 0 auto;
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.15);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-  padding: 20px;
-}
 
 /* --- 🖼️ Modal/Lightbox Styles --- */
 .modal-overlay {
@@ -111,23 +101,51 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
   backdrop-filter: blur(8px);
   align-items: center; justify-content: center;
 }
+
+/* Modal Content (Now has Glass Aesthetic) */
 .modal-content {
-  position: relative; margin: 5% auto; padding: 20px;
-  width: 90%; max-width: 940px; 
-  text-align: center; border-radius: 20px;
-  background: rgba(255, 255, 255, 0.08);
+  position: relative; 
+  margin: 5% auto; 
+  padding: 20px;
+  width: 90%; 
+  max-width: 940px; 
+  text-align: center; 
+  /* Inherit glass properties for the container holding the image */
+  background: rgba(255, 255, 255, 0.08); 
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  display: flex; flex-direction: column; align-items: center;
+  border-radius: 20px; /* Added to .modal-content */
+  
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
 }
+
 #modal-caption { color: #ccc; font-size: 1.1rem; padding: 10px 0 0; }
-.modal-close {
-  position: absolute; top: 15px; right: 25px; color: #fff;
-  font-size: 40px; font-weight: bold; transition: 0.3s; cursor: pointer;
-  opacity: 0.8; text-shadow: 0 0 10px #000;
+
+/* Close Button Positioning (Absolute to the overlay/window) */
+.close-button-shell {
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  /* Position shell to the top-left of the modal-content area */
+  transform: translate(calc(-50% - 470px - 20px), -50%); /* Half max-width, plus padding, plus some offset */
+  width: 72px; 
+  height: 72px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  z-index: 1010; 
+  pointer-events: none;
 }
-.modal-close:hover, .modal-close:focus { opacity: 1; color: #ddd; }
+/* Adjust position for the X button relative to the modal */
+.modal-content:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+}
 
 
 /* --- 🔎 Magnifier Styles --- */
@@ -176,10 +194,9 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
     z-index: 10;
 }
 
-/* **NOTE:** The previous CSS :hover rule is removed, replaced by JavaScript's showLens/hideLens functions. */
-
 /* Responsive adjustments */
 @media (max-width: 600px) {
+  /* Keep existing carousel responsiveness */
   .carousel-track { gap: 18px; }
   .carousel-track img { width: 200px; }
   .arrow-shell { top: auto; bottom: -70px; transform: none; width: auto; height: auto; }
@@ -187,6 +204,24 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
   .arrow-shell.right { right: 25%; }
   .arrow { width: 56px; height: 56px; font-size: 1.6rem; }
   .modal-content { margin: 20% auto; padding: 10px; }
+  
+  /* Responsive positioning for the close button */
+  .close-button-shell {
+    left: 10px; 
+    top: 10px; 
+    transform: none; 
+    width: 56px; 
+    height: 56px; 
+  }
+}
+@media (min-width: 980px) {
+    /* Fine-tune position based on max-width 940px for modal and 20px padding */
+    .close-button-shell {
+      left: 50%;
+      top: 50%;
+      /* (Modal max-width / 2) + Modal padding + desired offset */
+      transform: translate(calc(-470px - 20px - 10px), -50%);
+    }
 }
 </style>
 </head>
@@ -284,9 +319,12 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
 </footer>
 
 <div id="image-modal" class="modal-overlay" style="display: none;">
-    <div class="modal-content">
-        <span class="modal-close" role="button" tabindex="0" aria-label="Close Image">&times;</span>
+    
+    <div class="close-button-shell" role="button" tabindex="0" aria-label="Close Image">
+        <button id="modal-close-btn" class="close-button">&times;</button>
+    </div>
 
+    <div id="modal-content-area" class="modal-content">
         <div id="magnifier-container">
             <img id="modal-image" class="mag-image" src="" alt="">
             <div id="magnifier-lens" class="mag-lens"></div>
@@ -354,11 +392,11 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
 });
 
 
-/* --- 🔎 Lightbox Modal and Magnifier Functionality (FINAL JAVASCRIPT FIX) --- */
+/* --- 🔎 Lightbox Modal and Magnifier Functionality --- */
 const modal = document.getElementById('image-modal');
 const modalImg = document.getElementById('modal-image');
 const modalCaption = document.getElementById('modal-caption');
-const closeModal = document.querySelector('.modal-close');
+const closeModal = document.getElementById('modal-close-btn'); // NOTE: Element ID changed
 
 // Magnifier DOM elements
 const magContainer = document.getElementById('magnifier-container');
@@ -418,6 +456,7 @@ function updateMagnifierSize() {
     magLens.style.opacity = 0; 
 }
 
+// Magnifier logic reverted to the one you liked
 function handleMagnify(e) {
     // Get mouse position relative to the image container
     const rect = magContainer.getBoundingClientRect();
@@ -433,7 +472,6 @@ function handleMagnify(e) {
     magLens.style.top = `${y}px`;
     // Center the lens perfectly under the cursor using translate
     magLens.style.transform = `translate(-${lensRadius}px, -${lensRadius}px)`; 
-
 
     // 2. Position the background: Core magnification logic
     let backgroundX = x * zoomFactor - lensRadius; 
@@ -464,13 +502,16 @@ document.querySelectorAll('.carousel-track img').forEach(img => {
     });
 });
 
-// 2. Attach close handlers
+// 2. Attach close handlers (using the new button ID)
 closeModal.addEventListener('click', closeLightbox);
 closeModal.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
         closeLightbox();
     }
 });
+// Attach to the shell for better click target
+document.querySelector('.close-button-shell').addEventListener('click', closeLightbox);
+
 
 // Close when clicking outside the image content (on the dark overlay)
 modal.addEventListener('click', (e) => {
