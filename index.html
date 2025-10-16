@@ -7,7 +7,13 @@
 <style>
 /* Reset & base styles */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: Arial, sans-serif; line-height: 1.6; background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 15%, #16213e 35%, #0f3460 50%, #533a7d 70%, #8b5a8c 85%, #a0616a 100%); color: #fff; }
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background: linear-gradient(135deg,
+    #0c0c0c 0%, #1a1a2e 15%, #16213e 35%, #0f3460 50%, #533a7d 70%, #8b5a8c 85%, #a0616a 100%);
+  color: #fff;
+}
 
 /* Glass effect */
 .glass {
@@ -30,51 +36,70 @@ header {
 }
 header h1 { font-size: 2.5rem; margin-bottom: 10px; }
 nav { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 8px 15px; border-radius: 10px; transition: all 0.3s; }
-nav a:hover, nav a.active { background: rgba(255,255,255,0.1); text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 15px;
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+nav a:hover, nav a.active {
+  background: rgba(255,255,255,0.1);
+  text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
 
 /* Page sections */
 section { padding: 40px 20px; max-width: 1200px; margin: 40px auto; }
 h2 { text-align: center; margin-bottom: 20px; font-size: 2rem; }
 
-/* Carousel */
+/* Carousel containers */
 .carousel-container {
   position: relative;
   max-width: 1200px;
   margin: 40px auto;
-  perspective: 1000px;
   padding: 40px 0;
 }
-.carousel {
+
+/* Viewport clips overflow */
+.carousel-viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Track slides horizontally */
+.carousel-track {
   display: flex;
-  justify-content: center;
-  align-items: center;
   gap: 30px;
-  transform-style: preserve-3d;
-  transition: transform 0.5s ease;
+  align-items: center;
+  transition: transform 450ms cubic-bezier(.2,.8,.2,1);
+  will-change: transform;
+  padding: 20px 10px;
 }
-.carousel img {
+
+/* Images inside carousel */
+.carousel-track img {
   width: 300px;
+  flex: 0 0 auto;
   border-radius: 20px;
-  border: 2px solid rgba(255,255,255,0.2);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  transition: transform 0.5s, opacity 0.5s;
+  border: 2px solid rgba(255,255,255,0.12);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  transition: transform 300ms, opacity 300ms;
   cursor: pointer;
-  outline: none;
 }
-.carousel img.center {
-  transform: translateZ(60px) scale(1.1);
-  opacity: 1;
+.carousel-track img.center {
+  transform: scale(1.08);
   z-index: 2;
 }
-.carousel img.side {
-  transform: translateZ(0px) scale(0.85);
-  opacity: 0.7;
+.carousel-track img.side {
+  transform: scale(0.9);
+  opacity: 0.85;
   z-index: 1;
 }
 
 /* Arrows */
 .arrow {
+  z-index: 10;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -86,29 +111,37 @@ h2 { text-align: center; margin-bottom: 20px; font-size: 2rem; }
   padding: 10px 15px;
   border-radius: 10px;
   transition: all 0.3s;
+  border: none;
 }
 .arrow:hover { background: rgba(255,255,255,0.2); }
 .arrow.left { left: 10px; }
 .arrow.right { right: 10px; }
 
 /* Footer */
-footer { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); text-align: center; padding: 20px; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.2); }
+footer {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+}
 
 /* Responsive */
-@media(max-width: 900px){
-  .carousel img { width: 220px; }
+@media(max-width:900px){
+  .carousel-track img { width:220px; }
 }
-@media(max-width: 600px){
-  .carousel { flex-direction: column; gap: 18px; }
-  .arrow { top: auto; bottom: 10px; transform: none;}
-  .arrow.left { left: 30%; }
-  .arrow.right { right: 30%; }
+@media(max-width:600px){
+  .carousel-track { gap:18px; }
+  .carousel-track img { width:200px; }
+  .arrow { top:auto; bottom:10px; transform:none; }
+  .arrow.left { left:30%; }
+  .arrow.right { right:30%; }
 }
 </style>
 </head>
 <body>
 
-<!-- Header -->
 <header class="glass">
   <h1>Randy Comic Art</h1>
   <nav>
@@ -120,74 +153,84 @@ footer { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); text-al
   </nav>
 </header>
 
-<!-- Home Carousel -->
+<!-- Featured -->
 <section id="home">
   <h2>Featured Art</h2>
-  <div class="carousel-container glass" aria-label="Featured art carousel">
-    <button class="arrow left" aria-label="Previous">&#10094;</button>
-    <div class="carousel" role="list">
-      <img src="images/fanart1.png" class="center" alt="Featured image 1" role="listitem" tabindex="0">
-      <img src="images/fanart2.png" class="side" alt="Featured image 2" role="listitem" tabindex="0">
-      <img src="images/fanart3.png" class="side" alt="Featured image 3" role="listitem" tabindex="0">
+  <div class="carousel-container glass">
+    <button class="arrow left">&#10094;</button>
+    <div class="carousel-viewport">
+      <div class="carousel-track">
+        <img src="images/fanart1.png" alt="Featured 1">
+        <img src="images/fanart2.png" alt="Featured 2">
+        <img src="images/fanart3.png" alt="Featured 3">
+      </div>
     </div>
-    <button class="arrow right" aria-label="Next">&#10095;</button>
+    <button class="arrow right">&#10095;</button>
   </div>
 </section>
 
 <!-- Fan Art -->
 <section id="fanart" class="glass">
   <h2>Fan Art</h2>
-  <div class="carousel-container glass" aria-label="Fan art carousel">
-    <button class="arrow left" aria-label="Previous">&#10094;</button>
-    <div class="carousel" role="list">
-      <img src="images/fanart1.png" alt="Fan art 1" role="listitem" tabindex="0">
-      <img src="images/fanart2.png" alt="Fan art 2" role="listitem" tabindex="0">
-      <img src="images/fanart3.png" alt="Fan art 3" role="listitem" tabindex="0">
-      <img src="images/fanart4.png" alt="Fan art 4" role="listitem" tabindex="0">
+  <div class="carousel-container glass">
+    <button class="arrow left">&#10094;</button>
+    <div class="carousel-viewport">
+      <div class="carousel-track">
+        <img src="images/fanart1.png" alt="Fan Art 1">
+        <img src="images/fanart2.png" alt="Fan Art 2">
+        <img src="images/fanart3.png" alt="Fan Art 3">
+        <img src="images/fanart4.png" alt="Fan Art 4">
+      </div>
     </div>
-    <button class="arrow right" aria-label="Next">&#10095;</button>
+    <button class="arrow right">&#10095;</button>
   </div>
 </section>
 
 <!-- Nightwatch -->
 <section id="nightwatch" class="glass">
   <h2>Nightwatch</h2>
-  <div class="carousel-container glass" aria-label="Nightwatch carousel">
-    <button class="arrow left" aria-label="Previous">&#10094;</button>
-    <div class="carousel" role="list">
-      <img src="images/nightwatch1.png" alt="Nightwatch 1" role="listitem" tabindex="0">
-      <img src="images/nightwatch2.png" alt="Nightwatch 2" role="listitem" tabindex="0">
-      <img src="images/nightwatch3.png" alt="Nightwatch 3" role="listitem" tabindex="0">
-      <img src="images/nightwatch4.png" alt="Nightwatch 4" role="listitem" tabindex="0">
+  <div class="carousel-container glass">
+    <button class="arrow left">&#10094;</button>
+    <div class="carousel-viewport">
+      <div class="carousel-track">
+        <img src="images/nightwatch1.png" alt="Nightwatch 1">
+        <img src="images/nightwatch2.png" alt="Nightwatch 2">
+        <img src="images/nightwatch3.png" alt="Nightwatch 3">
+        <img src="images/nightwatch4.png" alt="Nightwatch 4">
+      </div>
     </div>
-    <button class="arrow right" aria-label="Next">&#10095;</button>
+    <button class="arrow right">&#10095;</button>
   </div>
 </section>
 
-<!-- Original Art -->
+<!-- Original -->
 <section id="original" class="glass">
   <h2>Original Art</h2>
-  <div class="carousel-container glass" aria-label="Original art carousel">
-    <button class="arrow left" aria-label="Previous">&#10094;</button>
-    <div class="carousel" role="list">
-      <img src="images/original1.png" alt="Original art 1" role="listitem" tabindex="0">
+  <div class="carousel-container glass">
+    <button class="arrow left">&#10094;</button>
+    <div class="carousel-viewport">
+      <div class="carousel-track">
+        <img src="images/original1.png" alt="Original Art 1">
+      </div>
     </div>
-    <button class="arrow right" aria-label="Next">&#10095;</button>
+    <button class="arrow right">&#10095;</button>
   </div>
 </section>
 
 <!-- Process -->
 <section id="process" class="glass">
   <h2>Process / Sketches</h2>
-  <div class="carousel-container glass" aria-label="Process sketches carousel">
-    <button class="arrow left" aria-label="Previous">&#10094;</button>
-    <div class="carousel" role="list">
-      <img src="images/process1.png" alt="Process 1" role="listitem" tabindex="0">
-      <img src="images/process2.png" alt="Process 2" role="listitem" tabindex="0">
-      <img src="images/process3.png" alt="Process 3" role="listitem" tabindex="0">
-      <img src="images/process4.png" alt="Process 4" role="listitem" tabindex="0">
+  <div class="carousel-container glass">
+    <button class="arrow left">&#10094;</button>
+    <div class="carousel-viewport">
+      <div class="carousel-track">
+        <img src="images/process1.png" alt="Process 1">
+        <img src="images/process2.png" alt="Process 2">
+        <img src="images/process3.png" alt="Process 3">
+        <img src="images/process4.png" alt="Process 4">
+      </div>
     </div>
-    <button class="arrow right" aria-label="Next">&#10095;</button>
+    <button class="arrow right">&#10095;</button>
   </div>
 </section>
 
@@ -199,78 +242,78 @@ footer { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); text-al
   </p>
 </section>
 
-<!-- Footer -->
 <footer class="glass">&copy; 2025 Randy Comic Art</footer>
 
 <script>
-/*
-  General carousel initializer:
-  - Finds every .carousel-container and sets up independent left/right controls.
-  - Clicking an image centers it.
-  - Arrow keys (Left/Right) work when the container is focused.
-*/
 document.querySelectorAll('.carousel-container').forEach((container) => {
-  const carousel = container.querySelector('.carousel');
-  const imgs = Array.from(carousel.querySelectorAll('img'));
-  if (imgs.length === 0) return;
+  const viewport = container.querySelector('.carousel-viewport');
+  const track = container.querySelector('.carousel-track');
+  const imgs = Array.from(track.querySelectorAll('img'));
+  const leftBtn = container.querySelector('.arrow.left');
+  const rightBtn = container.querySelector('.arrow.right');
+  if (!viewport || !track || imgs.length === 0) return;
 
-  // make container focusable for keyboard control
-  container.setAttribute('tabindex', '0');
+  viewport.setAttribute('tabindex', '0');
+
+  function getSlideSize() {
+    const gap = parseFloat(getComputedStyle(track).gap) || 30;
+    const imgWidth = imgs[0].getBoundingClientRect().width;
+    return imgWidth + gap;
+  }
 
   let centerIndex = 0;
 
-  const leftBtn = container.querySelector('.arrow.left');
-  const rightBtn = container.querySelector('.arrow.right');
+  function update() {
+    const slideSize = getSlideSize();
+    const viewportWidth = viewport.getBoundingClientRect().width;
+    const trackLeftOffset = (viewportWidth / 2) - (imgs[centerIndex].getBoundingClientRect().width / 2);
+    const translateX = -(centerIndex * slideSize) + trackLeftOffset - parseFloat(getComputedStyle(track).paddingLeft || 0);
+    track.style.transform = `translateX(${translateX}px)`;
 
-  function updateCarousel() {
     imgs.forEach((img, i) => {
-      img.classList.remove('center', 'side');
+      img.classList.remove('center','side');
       if (i === centerIndex) img.classList.add('center');
       else img.classList.add('side');
     });
+
+    if (leftBtn) leftBtn.disabled = (centerIndex === 0);
+    if (rightBtn) rightBtn.disabled = (centerIndex === imgs.length - 1);
   }
 
   leftBtn && leftBtn.addEventListener('click', () => {
-    centerIndex = (centerIndex - 1 + imgs.length) % imgs.length;
-    updateCarousel();
+    centerIndex = Math.max(0, centerIndex - 1);
+    update();
   });
-
   rightBtn && rightBtn.addEventListener('click', () => {
-    centerIndex = (centerIndex + 1) % imgs.length;
-    updateCarousel();
+    centerIndex = Math.min(imgs.length - 1, centerIndex + 1);
+    update();
   });
 
-  // clicking an image centers it
   imgs.forEach((img, i) => {
     img.addEventListener('click', () => {
       centerIndex = i;
-      updateCarousel();
+      update();
     });
-    // allow Enter/Space to center when focused
     img.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         centerIndex = i;
-        updateCarousel();
+        update();
       }
     });
   });
 
-  // keyboard controls when the container has focus
-  container.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault();
-      centerIndex = (centerIndex - 1 + imgs.length) % imgs.length;
-      updateCarousel();
-    } else if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      centerIndex = (centerIndex + 1) % imgs.length;
-      updateCarousel();
-    }
+  viewport.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); centerIndex = Math.max(0, centerIndex - 1); update(); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); centerIndex = Math.min(imgs.length - 1, centerIndex + 1); update(); }
   });
 
-  // initial state
-  updateCarousel();
+  window.addEventListener('resize', () => {
+    clearTimeout(container._resizeTO);
+    container._resizeTO = setTimeout(update, 80);
+  });
+
+  setTimeout(update, 60);
 });
 </script>
 
