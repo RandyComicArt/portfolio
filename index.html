@@ -3,46 +3,46 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Randy Mattoka Artist Portfolio</title>
+<title>Randy Mattoka Art</title>
 <style>
 /* Base */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
-  /* Updated Background Gradient */
-  background: linear-gradient(135deg,#0c0c0c 0%,#1a1a2e 15%,#16213e 35%,#0f3460 50%,#533a7d 70%,#8b5a8c 85%,#a0616a 100%);
-  color: #fff;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  /* Updated Background Gradient */
+  background: linear-gradient(135deg,#0c0c0c 0%,#1a1a2e 15%,#16213e 35%,#0f3460 50%,#533a7d 70%,#8b5a8c 85%,#a0616a 100%);
+  color: #fff;
 }
 /* Reusing the .glass class for other sections */
 .glass {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(15px);
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.15);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
 
 /* --- Header & Navigation Styles --- */
 header { text-align: center; padding: 40px 20px 0; }
 .header-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  background: rgba(255,255,255,0.1); 
-  backdrop-filter: blur(10px);
-  padding: 20px;
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.15); 
-  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  max-width: 1200px;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.1); 
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.15); 
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
 header h1 { font-size: 2.5rem; margin-top: 0; margin-bottom: 10px; }
 nav { display:flex; justify-content:center; gap:15px; flex-wrap:wrap; }
 nav a {
-  color:#fff; text-decoration:none; font-weight:bold;
-  padding:8px 15px; border-radius:10px; transition:all .3s;
+  color:#fff; text-decoration:none; font-weight:bold;
+  padding:8px 15px; border-radius:10px; transition:all .3s;
 }
 nav a:hover, nav a.active {
-  background:rgba(255,255,255,0.1); text-shadow:0 0 10px rgba(255,255,255,0.5);
+  background:rgba(255,255,255,0.1); text-shadow:0 0 10px rgba(255,255,255,0.5);
 }
 
 /* --- Section Content & Carousel Styles (Non-Modal) --- */
@@ -51,149 +51,149 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 .carousel-wrapper { position: relative; display: flex; align-items: center; justify-content: center; }
 .carousel-container { position: relative; width: 100%; max-width: 1200px; overflow: hidden; }
 .carousel-track {
-  display: flex; gap: 30px; align-items: center;
-  transition: transform 450ms cubic-bezier(.2,.8,.2,1);
-  will-change: transform; padding: 20px 10px;
+  display: flex; gap: 30px; align-items: center;
+  transition: transform 450ms cubic-bezier(.2,.8,.2,1);
+  will-change: transform; padding: 20px 10px;
 }
 
 /* Carousel Images */
 .carousel-track img {
-  width: 300px; flex: 0 0 auto; border-radius: 20px;
-  border: 2px solid rgba(255,255,255,0.12); box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-  transition: transform 300ms, opacity 300ms;
-  cursor: pointer; user-select: none;
+  width: 300px; flex: 0 0 auto; border-radius: 20px;
+  border: 2px solid rgba(255,255,255,0.12); box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  transition: transform 300ms, opacity 300ms;
+  cursor: pointer; user-select: none;
 }
 .carousel-track img.center { transform: scale(1.08); z-index: 2; }
 .carousel-track img.side { transform: scale(0.9); opacity: 0.85; z-index: 1; }
 
 /* Carousel Arrows & Modal Button Style */
 .arrow-shell {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  width: 72px; height: 72px; display: flex; align-items: center;
-  justify-content: center; z-index: 60; pointer-events: none;
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 72px; height: 72px; display: flex; align-items: center;
+  justify-content: center; z-index: 60; pointer-events: none;
 }
 .arrow-shell.left { left: -112px; }
 .arrow-shell.right { right: -112px; }
-.arrow, .modal-nav-button { 
-  pointer-events: auto; width: 64px; height: 64px; border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.45);
-  background: linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0.22));
-  color: rgba(12,12,12,0.95); font-size: 1.8rem;
-  display: inline-flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
-  box-shadow: inset 0 2px 4px rgba(255,255,255,0.55), 0 10px 24px rgba(0,0,0,0.45);
-  outline: none;
-  font-weight: bold;
+.arrow, .modal-nav-button { 
+  pointer-events: auto; width: 64px; height: 64px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.45);
+  background: linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0.22));
+  color: rgba(12,12,12,0.95); font-size: 1.8rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.55), 0 10px 24px rgba(0,0,0,0.45);
+  outline: none;
+  font-weight: bold;
 }
 .arrow:hover:not(:disabled), .arrow:focus:not(:disabled),
 .modal-nav-button:hover:not(:disabled), .modal-nav-button:focus:not(:disabled) {
-  transform: scale(1.08);
-  background: linear-gradient(180deg, rgba(255,255,255,0.46), rgba(255,255,255,0.28));
-  box-shadow: inset 0 3px 6px rgba(255,255,255,0.6), 0 12px 30px rgba(0,0,0,0.5);
+  transform: scale(1.08);
+  background: linear-gradient(180deg, rgba(255,255,255,0.46), rgba(255,255,255,0.28));
+  box-shadow: inset 0 3px 6px rgba(255,255,255,0.6), 0 12px 30px rgba(0,0,0,0.5);
 }
 .arrow:disabled, .modal-nav-button:disabled { opacity: 0.28; cursor: default; transform: none; }
 
 
 /* --- 🖼️ Modal/Lightbox Styles --- */
 .modal-overlay {
-  display: none; 
-  position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
-  overflow: auto;
-  background: rgba(255,255,255,0.05); 
-  backdrop-filter: blur(15px); 
-  border: 1px solid rgba(255,255,255,0.15); 
-  box-shadow: 0 8px 30px rgba(0,0,0,0.3); 
-  align-items: center; justify-content: center;
+  display: none; 
+  position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+  overflow: auto;
+  background: rgba(255,255,255,0.05); 
+  backdrop-filter: blur(15px); 
+  border: 1px solid rgba(255,255,255,0.15); 
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3); 
+  align-items: center; justify-content: center;
 }
 
 /* Modal Content (The two columns container) */
 .modal-content {
-  position: relative; 
-  margin: 5% auto; 
-  padding: 0; 
-  width: 90%; 
-  max-width: 1200px; 
-  height: 85vh; 
-  background: transparent;
-  border: none; 
-  box-shadow: none; 
-  border-radius: 20px; 
-  
-  display: flex; 
-  align-items: stretch; 
+  position: relative; 
+  margin: 5% auto; 
+  padding: 0; 
+  width: 90%; 
+  max-width: 1200px; 
+  height: 85vh; 
+  background: transparent;
+  border: none; 
+  box-shadow: none; 
+  border-radius: 20px; 
+  
+  display: flex; 
+  align-items: stretch; 
 }
 
 /* Left Column: Image and Magnifier */
 .image-column {
-    flex: 2; 
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: transparent; 
-    /* Defines the left-side rounding */
-    border-radius: 15px 0 0 15px; 
+    flex: 2; 
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: transparent; 
+    /* Defines the left-side rounding */
+    border-radius: 15px 0 0 15px; 
 }
 
 /* Right Column: Description Panel (FIXED BORDER RADIUS) */
 .description-column {
-    flex: 1; 
-    background: #333; 
-    backdrop-filter: blur(10px); 
-    /* FIXED: Ensures all corners of the panel are rounded (15px) for desktop view */
-    border-radius: 15px 15px 15px 15px; 
-    
-    padding: 25px; 
-    padding-bottom: 75px; 
-    
-    overflow-y: auto; 
-    border-left: 1px solid rgba(255, 255, 255, 0.15);
-    color: #eee;
-    position: relative; 
+    flex: 1; 
+    background: #333; 
+    backdrop-filter: blur(10px); 
+    /* FIXED: Ensures all corners of the panel are rounded (15px) for desktop view */
+    border-radius: 15px 15px 15px 15px; 
+    
+    padding: 25px; 
+    padding-bottom: 75px; 
+    
+    overflow-y: auto; 
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    color: #eee;
+    position: relative; 
 }
 .description-column h3 {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    color: #fff;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    padding-bottom: 5px;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 5px;
 }
 .description-column p {
-    margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 /* Navigation Panel Position (Centered at Bottom of Panel) */
 .modal-nav-panel {
-    position: absolute; 
-    bottom: 0;
-    left: 0; 
-    right: 0;
-    
-    z-index: 1020;
-    display: flex;
-    gap: 10px; 
-    
-    background: #333; 
-    backdrop-filter: blur(5px);
-    
-    padding: 10px 25px; 
-    
-    justify-content: center; 
-    
-    /* FIXED: Ensure the bottom corners are rounded */
-    border-radius: 0 0 15px 15px; 
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
-    
-    align-items: center;
+    position: absolute; 
+    bottom: 0;
+    left: 0; 
+    right: 0;
+    
+    z-index: 1020;
+    display: flex;
+    gap: 10px; 
+    
+    background: #333; 
+    backdrop-filter: blur(5px);
+    
+    padding: 10px 25px; 
+    
+    justify-content: center; 
+    
+    /* FIXED: Ensure the bottom corners are rounded */
+    border-radius: 0 0 15px 15px; 
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    
+    align-items: center;
 }
 .modal-nav-panel .modal-nav-button {
-    width: 50px; 
-    height: 50px; 
-    font-size: 1.4rem;
+    width: 50px; 
+    height: 50px; 
+    font-size: 1.4rem;
 }
-#modal-close-btn { 
-    font-size: 2.0rem; 
+#modal-close-btn { 
+    font-size: 2.0rem; 
 }
 
 
@@ -202,86 +202,86 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 
 /* Magnifier/Image Styles */
 #magnifier-container {
-    position: relative; 
-    width: 100%;
-    max-width: 100%; 
-    margin: 0 auto;
-    cursor: crosshair;
-    display: inline-block;
-    overflow: hidden; 
+    position: relative; 
+    width: 100%;
+    max-width: 100%; 
+    margin: 0 auto;
+    cursor: crosshair;
+    display: inline-block;
+    overflow: hidden; 
 }
 #magnifier-container .mag-image {
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: 15px;
-    max-height: 78vh; 
-    object-fit: contain;
-    margin-bottom: 0;
-    
-    position: relative;
-    left: 0;
-    opacity: 1;
-    transition: left 300ms ease-out, opacity 100ms;
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+    max-height: 78vh; 
+    object-fit: contain;
+    margin-bottom: 0;
+    
+    position: relative;
+    left: 0;
+    opacity: 1;
+    transition: left 300ms ease-out, opacity 100ms;
 }
 
 .mag-lens {
-    position: absolute;
-    border: 3px solid rgba(255, 255, 255, 0.8);
-    background-repeat: no-repeat;
-    width: 180px; 
-    height: 180px;
-    border-radius: 50%;
-    box-shadow: 
-        0 0 0 1px #000, 
-        0 0 10px rgba(0, 0, 0, 0.6), 
-        inset 0 0 20px rgba(255, 255, 255, 0.2);
-    opacity: 0;
-    top: 0; 
-    left: 0; 
-    pointer-events: none; 
-    transition: opacity 0.2s;
-    z-index: 10;
+    position: absolute;
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    background-repeat: no-repeat;
+    width: 180px; 
+    height: 180px;
+    border-radius: 50%;
+    box-shadow: 
+        0 0 0 1px #000, 
+        0 0 10px rgba(0, 0, 0, 0.6), 
+        inset 0 0 20px rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    top: 0; 
+    left: 0; 
+    pointer-events: none; 
+    transition: opacity 0.2s;
+    z-index: 10;
 }
 
 
 /* --- Responsive adjustments --- */
 @media (max-width: 900px) {
-  /* Stack columns vertically on smaller screens */
-  .modal-content {
-      flex-direction: column;
-      height: 90vh;
-      max-width: 90%;
-  }
-  .image-column {
-      border-radius: 15px 15px 0 0;
-      min-height: 60vh;
-  }
-  .description-column {
-      /* FIXED: Ensure all bottom corners are rounded (15px) when stacked vertically */
-      border-radius: 0 0 15px 15px; 
-      border-left: none;
-      border-top: 1px solid rgba(255, 255, 255, 0.15);
-      max-height: 30vh;
-      padding-bottom: 75px; 
-  }
-  .description-column h3 { margin-top: 0; }
-  #magnifier-container .mag-image { max-height: 55vh; }
+  /* Stack columns vertically on smaller screens */
+  .modal-content {
+      flex-direction: column;
+      height: 90vh;
+      max-width: 90%;
+  }
+  .image-column {
+      border-radius: 15px 15px 0 0;
+      min-height: 60vh;
+  }
+  .description-column {
+      /* FIXED: Ensure all bottom corners are rounded (15px) when stacked vertically */
+      border-radius: 0 0 15px 15px; 
+      border-left: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      max-height: 30vh;
+      padding-bottom: 75px; 
+  }
+  .description-column h3 { margin-top: 0; }
+  #magnifier-container .mag-image { max-height: 55vh; }
 
-  /* Navigation panel on mobile */
-  .modal-nav-panel {
-      position: absolute; 
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      padding: 10px 0;
-      justify-content: center;
-      background: #333; 
-      /* FIXED: Round bottom corners when stacked vertically */
-      border-radius: 0 0 15px 15px; 
-      border-top: 1px solid rgba(255, 255, 255, 0.15);
-  }
+  /* Navigation panel on mobile */
+  .modal-nav-panel {
+      position: absolute; 
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      padding: 10px 0;
+      justify-content: center;
+      background: #333; 
+      /* FIXED: Round bottom corners when stacked vertically */
+      border-radius: 0 0 15px 15px; 
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+  }
 }
 
 /* Clean up unused modal arrow positioning from previous versions */
@@ -292,184 +292,184 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 <body>
 
 <header>
-  <div class="header-content">
-    <h1>Randy Mattoka</h1>
-    <nav>
-      <a href="#completed">Completed Artwork</a>
-      <a href="#nightwatch">Nightwatch</a>
-      <a href="#process">Process</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </div>
+  <div class="header-content">
+    <h1>Randy Mattoka</h1>
+    <nav>
+      <a href="#completed">Completed Artwork</a>
+      <a href="#nightwatch">Nightwatch</a>
+      <a href="#process">Process</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
 </header>
 
 <section id="completed" class="glass">
-  <h2>Completed Artwork</h2>
-  <div class="carousel-wrapper" data-section="completed">
-    <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
-    <div class="carousel-container">
-      <div class="carousel-track">
-        <img src="images/fanart1.png" alt="Artwork 1 - Sandman X Metallica" loading="lazy" data-index="0" data-desc="This is a piece I made of the comic book character Dream, otherwise know as The Sandmam. He is depicted shredding on an electric guitar, giving a nod to Metallica's timeless hit &quot;Enter Sandman&quot;" data-date="October 2nd, 2025">
-        <img src="images/fanart2.png" alt="Artwork 2 - Spiderman" loading="lazy" data-index="1" data-desc="A drawing of spiderman that utilizes bold colors and shadows, emphasizing his iconic 'spidey senses' in the foreground" data-date="September 26th, 2025">
-        <img src="images/fanart3.png" alt="Artwork 3" loading="lazy" data-index="2" data-desc="" data-date="">
-        <img src="images/fanart4.png" alt="Artwork 4" loading="lazy" data-index="3" data-desc="" data-date="">
-        <img src="images/fanart5.png" alt="Artwork 5" loading="lazy" data-index="4" data-desc="" data-date="">
-        <img src="images/fanart6.png" alt="Artwork 6" loading="lazy" data-index="5" data-desc="" data-date="">
-        <img src="images/fanart7.png" alt="Artwork 7" loading="lazy" data-index="6" data-desc="" data-date="">
-        <img src="images/fanart8.png" alt="Artwork 8" loading="lazy" data-index="7" data-desc="" data-date="">
-        <img src="images/fanart9.png" alt="Artwork 9" loading="lazy" data-index="8" data-desc="" data-date="">
-        <img src="images/fanart10.png" alt="Artwork 10" loading="lazy" data-index="9" data-desc="" data-date="">
-        <img src="images/fanart11.png" alt="Artwork 11" loading="lazy" data-index="10" data-desc="" data-date="">
-        <img src="images/fanart12.png" alt="Artwork 12" loading="lazy" data-index="11" data-desc="" data-date="">
-        <img src="images/fanart13.png" alt="Artwork 13" loading="lazy" data-index="12" data-desc="" data-date="">
-        <img src="images/fanart14.png" alt="Artwork 14" loading="lazy" data-index="13" data-desc="" data-date="">
-        <img src="images/fanart15.png" alt="Artwork 15" loading="lazy" data-index="14" data-desc="" data-date="">
-      </div>
-    </div>
-    <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
-  </div>
+  <h2>Completed Artwork</h2>
+  <div class="carousel-wrapper" data-section="completed">
+    <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
+    <div class="carousel-container">
+      <div class="carousel-track">
+        <img src="images/fanart1.png" alt="Artwork 1 - Sandman X Metallica" loading="lazy" data-index="0" data-desc="This is a piece I made of the comic book character Dream, otherwise know as The Sandmam. He is depicted shredding on an electric guitar, giving a nod to Metallica's timeless hit &quot;Enter Sandman&quot;" data-date="October 2nd, 2025">
+        <img src="images/fanart2.png" alt="Artwork 2" loading="lazy" data-index="1" data-desc="A study in monochrome focusing on character expression. Created entirely in Procreate, this sketch explores line weight and shadow placement over color saturation." data-date="2023">
+        <img src="images/fanart3.png" alt="Artwork 3" loading="lazy" data-index="2" data-desc="High-contrast environment art featuring a cyberpunk city street. The primary challenge was balancing the neon glow with the surrounding dark, rainy atmosphere." data-date="Jan 2024">
+        <img src="images/fanart4.png" alt="Artwork 4" loading="lazy" data-index="3" data-desc="Traditional oil painting digitized and enhanced with subtle post-production effects. This piece captures a quiet moment of reflection in nature." data-date="2022">
+        <img src="images/fanart5.png" alt="Artwork 5" loading="lazy" data-index="4" data-desc="A vibrant character design using a limited color palette (red, blue, yellow) to create maximum impact. The style is inspired by classic comic book ink work." data-date="2024">
+        <img src="images/fanart6.png" alt="Artwork 6" loading="lazy" data-index="5" data-desc="Conceptual piece for a video game boss. Focus was placed on heavy armor plating and intimidating silhouette. Drawn primarily in Adobe Photoshop." data-date="2023">
+        <img src="images/fanart7.png" alt="Artwork 7" loading="lazy" data-index="6" data-desc="A detailed portrait exploring different skin tones and hair textures. This was an exercise in subtle value shifts to achieve a hyper-realistic feel." data-date="2024">
+        <img src="images/fanart8.png" alt="Artwork 8" loading="lazy" data-index="7" data-desc="Abstract watercolor done digitally. The goal was to simulate the unpredictable flow and bleed of physical watercolor paint." data-date="2024">
+        <img src="images/fanart9.png" alt="Artwork 9" loading="lazy" data-index="8" data-desc="Stylized illustration of a mythical creature in flight. Attention was paid to dynamic composition and movement blur on the wings." data-date="2023">
+        <img src="images/fanart10.png" alt="Artwork 10" loading="lazy" data-index="9" data-desc="A serene landscape featuring a distant mountain range and dramatic clouds. Used textured brushes to give the digital painting a canvas feel." data-date="2024">
+        <img src="images/fanart11.png" alt="Artwork 11" loading="lazy" data-index="10" data-desc="Pop art inspired piece with bold lines and flat colors. This design emphasizes simplicity and immediate visual appeal." data-date="2023">
+        <img src="images/fanart12.png" alt="Artwork 12" loading="lazy" data-index="11" data-desc="Horror-themed piece utilizing negative space and strong directional light to build tension. The color palette is minimal and unsettling." data-date="2024">
+        <img src="images/fanart13.png" alt="Artwork 13" loading="lazy" data-index="12" data-desc="Fantasy armor concept focusing on metallic texture and surface reflectivity. Several layers were used to build up the highlights and shadows." data-date="2023">
+        <img src="images/fanart14.png" alt="Artwork 14" loading="lazy" data-index="13" data-desc="Sci-fi vehicle design, emphasizing complex mechanical details and wear/tear. The piece was aged using grit and dirt texture overlays." data-date="2024">
+        <img src="images/fanart15.png" alt="Artwork 15" loading="lazy" data-index="14" data-desc="Nature study of a forest canopy, experimenting with depth of field and atmospheric perspective to create a sense of vastness." data-date="2023">
+      </div>
+    </div>
+    <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
+  </div>
 </section>
 
 <section id="nightwatch" class="glass">
-  <h2>Nightwatch</h2>
-  <div class="carousel-wrapper" data-section="nightwatch">
-    <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
-    <div class="carousel-container">
-      <div class="carousel-track">
-        <img src="images/nightwatch1.png" alt="Nightwatch 1" data-index="0" data-desc="" data-date="">
-        <img src="images/nightwatch2.png" alt="Nightwatch 2" data-index="1" data-desc="" data-date="">
-        <img src="images/nightwatch3.png" alt="Nightwatch 3" data-index="2" data-desc="" data-date="">
-        <img src="images/nightwatch4.png" alt="Nightwatch 4" data-index="3" data-desc="" data-date="">
-      </div>
-    </div>
-    <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
-  </div>
+  <h2>Nightwatch</h2>
+  <div class="carousel-wrapper" data-section="nightwatch">
+    <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
+    <div class="carousel-container">
+      <div class="carousel-track">
+        <img src="images/nightwatch1.png" alt="Nightwatch 1" data-index="0" data-desc="The first entry in the Nightwatch series. This piece defines the central theme: a lone figure observing a desolate, futuristic landscape." data-date="2024">
+        <img src="images/nightwatch2.png" alt="Nightwatch 2" data-index="1" data-desc="Nightwatch 2 introduces color contrast, using warm streetlights against the cold blue night sky, highlighting the figure's isolation." data-date="2024">
+        <img src="images/nightwatch3.png" alt="Nightwatch 3" data-index="2" data-desc="Nightwatch 3 focuses on atmospheric effects, particularly mist and haze, giving the urban environment a mysterious, almost dreamlike quality." data-date="2024">
+        <img src="images/nightwatch4.png" alt="Nightwatch 4" data-index="3" data-desc="The final piece in this set, Nightwatch 4, brings the character closer, allowing for a deeper look at their gear and the reflective surfaces of the city." data-date="2024">
+      </div>
+    </div>
+    <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
+  </div>
 </section>
 
 <section id="process" class="glass">
-  <h2>Process / Sketches</h2>
-  <div class="carousel-wrapper" data-section="process">
-    <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
-    <div class="carousel-container">
-      <div class="carousel-track">
-        <img src="images/process1.png" alt="Process 1" data-index="0" data-desc="" data-date="">
-        <img src="images/process2.png" alt="Process 2" data-index="1" data-desc="" data-date="">
-        <img src="images/process3.png" alt="Process 3" data-index="2" data-desc="" data-date="">
-        <img src="images/process4.png" alt="Process 4" data-index="3" data-desc="" data-date="">
-        <img src="images/process5.png" alt="Process 5" data-index="4" data-desc="" data-date="">
-        <img src="images/process6.png" alt="Process 6" data-index="5" data-desc="" data-date="">
-        <img src="images/process7.png" alt="Process 7" data-index="6" data-desc="" data-date="">
-        <img src="images/process8.png" alt="Process 8" data-index="7" data-desc="" data-date="">
-        <img src="images/process9.png" alt="Process 9" data-index="8" data-desc="" data-date="">
-        <img src="images/process10.png" alt="Process 10" data-index="9" data-desc="" data-date="">
-        <img src="images/process11.png" alt="Process 11" data-index="10" data-desc="" data-date="">
-      </div>
-    </div>
-    <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
-  </div>
+  <h2>Process / Sketches</h2>
+  <div class="carousel-wrapper" data-section="process">
+    <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
+    <div class="carousel-container">
+      <div class="carousel-track">
+        <img src="images/process1.png" alt="Process 1" data-index="0" data-desc="Initial gesture sketch, done quickly to capture the flow and movement of the pose before any detailed rendering began." data-date="2023">
+        <img src="images/process2.png" alt="Process 2" data-index="1" data-desc="Early stage character blocking, establishing the basic shapes and proportion. This is crucial before committing to line work." data-date="2023">
+        <img src="images/process3.png" alt="Process 3" data-index="2" data-desc="Anatomy study focusing on the human arm and hand, exploring musculature and bone structure from multiple angles." data-date="2024">
+        <img src="images/process4.png" alt="Process 4" data-index="3" data-desc="Line art refinement for a complex mechanical prop. The focus here is on clean, consistent lines and surface detail." data-date="2024">
+        <img src="images/process5.png" alt="Process 5" data-index="4" data-desc="Value study using only three levels of gray to define light and shadow areas, aiding in depth perception for the final piece." data-date="2023">
+        <img src="images/process6.png" alt="Process 6" data-index="5" data-desc="Color key exploration. Testing different color schemes to find the optimal mood and temperature for the finished illustration." data-date="2024">
+        <img src="images/process7.png" alt="Process 7" data-index="6" data-desc="Quick environmental thumbnails to find a strong, dynamic composition for a landscape piece." data-date="2023">
+        <img src="images/process8.png" alt="Process 8" data-index="7" data-desc="Digital ink practice, focusing on feathering and cross-hatching to build form and texture in a traditional comic style." data-date="2024">
+        <img src="images/process9.png" alt="Process 9" data-index="8" data-desc="Portrait sketch focusing on facial plane analysis, determining how light falls on the head." data-date="2023">
+        <img src="images/process10.png" alt="Process 10" data-index="9" data-desc="Detailed sketch of clothing and fabric folds, studying how different materials drape and wrinkle." data-date="2024">
+        <img src="images/process11.png" alt="Process 11" data-index="10" data-desc="A compilation of doodles and warm-up exercises, showing experimentation with various brush types and styles." data-date="2024">
+      </div>
+    </div>
+    <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
+  </div>
 </section>
 
 <section id="contact" class="glass">
-  <h2>Contact</h2>
-  <p style="text-align:center;">Email:
-    <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a>
-  </p>
+  <h2>Contact</h2>
+  <p style="text-align:center;">Email:
+    <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a>
+  </p>
 </section>
 
 <footer>
-  <div class="footer-content">
-    &copy; 2025 Randy Mattoka
-  </div>
+  <div class="footer-content">
+    &copy; 2025 Randy Mattoka
+  </div>
 </footer>
 
 <div id="image-modal" class="modal-overlay" style="display: none;">
-    
-    <div id="modal-content-area" class="modal-content">
-        
-        <div class="image-column">
-            <div id="magnifier-container">
-                <img id="modal-image" class="mag-image" src="" alt="">
-                <div id="magnifier-lens" class="mag-lens"></div>
-            </div>
-        </div>
+    
+    <div id="modal-content-area" class="modal-content">
+        
+        <div class="image-column">
+            <div id="magnifier-container">
+                <img id="modal-image" class="mag-image" src="" alt="">
+                <div id="magnifier-lens" class="mag-lens"></div>
+            </div>
+        </div>
 
-        <div class="description-column" style="position: relative;">
-            <h3 id="description-title">Title Placeholder</h3>
-            <p id="description-text">
-                Sample description text will go here.
-            </p>
-            <p id="description-meta">
-                Date: 2024
-            </p>
-            
-            <div class="modal-nav-panel">
-                <button id="modal-close-btn" class="modal-nav-button" aria-label="Close Image">&times;</button>
-                <button id="modal-prev-btn" class="modal-nav-button" aria-label="Previous Image">&#10094;</button>
-                <button id="modal-next-btn" class="modal-nav-button" aria-label="Next Image">&#10095;</button>
-            </div>
-        </div>
-        
-    </div>
-    <p id="modal-caption"></p> 
+        <div class="description-column" style="position: relative;">
+            <h3 id="description-title">Title Placeholder</h3>
+            <p id="description-text">
+                Sample description text will go here.
+            </p>
+            <p id="description-meta">
+                Date: 2024
+            </p>
+            
+            <div class="modal-nav-panel">
+                <button id="modal-close-btn" class="modal-nav-button" aria-label="Close Image">&times;</button>
+                <button id="modal-prev-btn" class="modal-nav-button" aria-label="Previous Image">&#10094;</button>
+                <button id="modal-next-btn" class="modal-nav-button" aria-label="Next Image">&#10095;</button>
+            </div>
+        </div>
+        
+    </div>
+    <p id="modal-caption"></p> 
 </div>
 <script>
 /* --- Carousel Script --- */
 document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
-  const track = wrapper.querySelector('.carousel-track');
-  const leftBtn = wrapper.querySelector('.arrow.left');
-  const rightBtn = wrapper.querySelector('.arrow.right');
-  const imgs = Array.from(track.querySelectorAll('img'));
-  
-  imgs.forEach((img, i) => {
-      img.setAttribute('data-index', i);
-  });
+  const track = wrapper.querySelector('.carousel-track');
+  const leftBtn = wrapper.querySelector('.arrow.left');
+  const rightBtn = wrapper.querySelector('.arrow.right');
+  const imgs = Array.from(track.querySelectorAll('img'));
+  
+  imgs.forEach((img, i) => {
+      img.setAttribute('data-index', i);
+  });
 
-  if (!track || imgs.length === 0) return;
+  if (!track || imgs.length === 0) return;
 
-  let index = 0;
+  let index = 0;
 
-  function slideSize(){
-    const gap = parseFloat(getComputedStyle(track).gap) || 30;
-    return imgs[0].getBoundingClientRect().width + gap;
-  }
+  function slideSize(){
+    const gap = parseFloat(getComputedStyle(track).gap) || 30;
+    return imgs[0].getBoundingClientRect().width + gap;
+  }
 
-  function update(){
-    const s = slideSize();
-    const containerWidth = wrapper.querySelector('.carousel-container').getBoundingClientRect().width;
-    const offset = (containerWidth / 2) - (imgs[index].getBoundingClientRect().width / 2);
-    track.style.transform = `translateX(${-(index * s) + offset}px)`;
-    imgs.forEach((im,i)=>{
-      im.classList.remove('center','side');
-      if (i === index) im.classList.add('center'); else im.classList.add('side');
-    });
-    if (leftBtn) leftBtn.disabled = (index === 0);
-    if (rightBtn) rightBtn.disabled = (index === imgs.length - 1);
-  }
+  function update(){
+    const s = slideSize();
+    const containerWidth = wrapper.querySelector('.carousel-container').getBoundingClientRect().width;
+    const offset = (containerWidth / 2) - (imgs[index].getBoundingClientRect().width / 2);
+    track.style.transform = `translateX(${-(index * s) + offset}px)`;
+    imgs.forEach((im,i)=>{
+      im.classList.remove('center','side');
+      if (i === index) im.classList.add('center'); else im.classList.add('side');
+    });
+    if (leftBtn) leftBtn.disabled = (index === 0);
+    if (rightBtn) rightBtn.disabled = (index === imgs.length - 1);
+  }
 
-  if (leftBtn) leftBtn.addEventListener('click', ()=>{ if (index>0) { index--; update(); }});
-  if (rightBtn) rightBtn.addEventListener('click', ()=>{ if (index < imgs.length - 1) { index++; update(); }});
-  
-  wrapper.setAttribute('tabindex', '0');
-  wrapper.addEventListener('keydown', (e)=>{
-    if (e.key === 'ArrowLeft' && index > 0) { index--; update(); }
-    if (e.key === 'ArrowRight' && index < imgs.length - 1) { index++; update(); }
-  });
+  if (leftBtn) leftBtn.addEventListener('click', ()=>{ if (index>0) { index--; update(); }});
+  if (rightBtn) rightBtn.addEventListener('click', ()=>{ if (index < imgs.length - 1) { index++; update(); }});
+  
+  wrapper.setAttribute('tabindex', '0');
+  wrapper.addEventListener('keydown', (e)=>{
+    if (e.key === 'ArrowLeft' && index > 0) { index--; update(); }
+    if (e.key === 'ArrowRight' && index < imgs.length - 1) { index++; update(); }
+  });
 
-  let startX = null;
-  wrapper.addEventListener('touchstart', e => startX = e.touches[0].clientX);
-  wrapper.addEventListener('touchend', e => {
-    if (startX === null) return;
-    const dx = e.changedTouches[0].clientX - startX;
-    if (Math.abs(dx) > 50) {
-      if (dx > 0 && index > 0) index--;
-      else if (dx < 0 && index < imgs.length - 1) index++;
-      update();
-    }
-    startX = null;
-  });
+  let startX = null;
+  wrapper.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+  wrapper.addEventListener('touchend', e => {
+    if (startX === null) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 50) {
+      if (dx > 0 && index > 0) index--;
+      else if (dx < 0 && index < imgs.length - 1) index++;
+      update();
+    }
+    startX = null;
+  });
 
-  window.addEventListener('resize', ()=>setTimeout(update, 90));
-  setTimeout(update, 60);
+  window.addEventListener('resize', ()=>setTimeout(update, 90));
+  setTimeout(update, 60);
 });
 
 
@@ -490,226 +490,226 @@ const modalNextBtn = document.getElementById('modal-next-btn');
 let currentSectionImages = [];
 let currentImageIndex = 0;
 
-const zoomFactor = 2.5; 
-const lensRadius = 90; 
+const zoomFactor = 2.5; 
+const lensRadius = 90; 
 
 function showLens() {
-    magLens.style.opacity = 1;
+    magLens.style.opacity = 1;
 }
 
 function hideLens() {
-    magLens.style.opacity = 0;
+    magLens.style.opacity = 0;
 }
 
 /**
- * Preloads an image into the browser cache for faster display later.
- * @param {number} index - The index of the image in currentSectionImages to preload.
- */
+ * Preloads an image into the browser cache for faster display later.
+ * @param {number} index - The index of the image in currentSectionImages to preload.
+ */
 function preloadImage(index) {
-    if (index >= 0 && index < currentSectionImages.length) {
-        const imgElement = currentSectionImages[index];
-        const tempImg = new Image();
-        tempImg.src = imgElement.src;
-    }
+    if (index >= 0 && index < currentSectionImages.length) {
+        const imgElement = currentSectionImages[index];
+        const tempImg = new Image();
+        tempImg.src = imgElement.src;
+    }
 }
 
 // Function to handle the actual image change with a slide effect
 function performImageTransition(newImageElement, direction) {
-    let slideDistance, resetDistance;
+    let slideDistance, resetDistance;
 
-    // Next button (right arrow): slide current image LEFT
-    if (direction === 'next') { 
-        slideDistance = '-100%';
-        resetDistance = '100%';
-    } else { // Previous button (left arrow): slide current image RIGHT
-        slideDistance = '100%';
-        resetDistance = '-100%';
-    }
+    // Next button (right arrow): slide current image LEFT
+    if (direction === 'next') { 
+        slideDistance = '-100%';
+        resetDistance = '100%';
+    } else { // Previous button (left arrow): slide current image RIGHT
+        slideDistance = '100%';
+        resetDistance = '-100%';
+    }
 
-    // 1. Start the slide out animation
-    modalImg.style.left = slideDistance;
-    modalImg.style.opacity = 0;
+    // 1. Start the slide out animation
+    modalImg.style.left = slideDistance;
+    modalImg.style.opacity = 0;
 
-    // 2. After the animation completes, change the source and slide back in
-    setTimeout(() => {
-        // Reset the image position off-screen on the opposite side
-        modalImg.style.transition = 'none'; // Temporarily disable transition
-        modalImg.style.left = resetDistance;
-        
-        // UPDATE CONTENT
-        modalImg.src = newImageElement.src;
-        modalImg.alt = newImageElement.alt;
-        magLens.style.backgroundImage = `url('${newImageElement.src}')`;
-        descriptionTitle.textContent = newImageElement.alt; // Use alt tag for title
-        
-        // Use data-desc attribute for description
-        const descText = newImageElement.getAttribute('data-desc') || "No detailed description available for this piece.";
-        descriptionText.textContent = descText;
-        
-        // Update meta info - MODIFIED to read from data-date
-        const artworkDate = newImageElement.getAttribute('data-date') || "N/A";
-        descriptionMeta.innerHTML = `Date: ${artworkDate}`; 
+    // 2. After the animation completes, change the source and slide back in
+    setTimeout(() => {
+        // Reset the image position off-screen on the opposite side
+        modalImg.style.transition = 'none'; // Temporarily disable transition
+        modalImg.style.left = resetDistance;
+        
+        // UPDATE CONTENT
+        modalImg.src = newImageElement.src;
+        modalImg.alt = newImageElement.alt;
+        magLens.style.backgroundImage = `url('${newImageElement.src}')`;
+        descriptionTitle.textContent = newImageElement.alt; // Use alt tag for title
+        
+        // Use data-desc attribute for description
+        const descText = newImageElement.getAttribute('data-desc') || "No detailed description available for this piece.";
+        descriptionText.textContent = descText;
+        
+        // Update meta info - MODIFIED to read from data-date
+        const artworkDate = newImageElement.getAttribute('data-date') || "N/A";
+        descriptionMeta.innerHTML = `Date: ${artworkDate}`; 
 
 
-        // Wait for the next frame, then start the slide in
-        requestAnimationFrame(() => {
-            modalImg.style.transition = 'left 300ms ease-out, opacity 100ms';
-            modalImg.style.left = '0';
-            modalImg.style.opacity = 1;
-            
-            // Re-run magnifier size calculation
-            if (modalImg.complete) {
-                setTimeout(updateMagnifierSize, 50); 
-            }
-        });
-    }, 300); // 300ms matches the CSS transition time
+        // Wait for the next frame, then start the slide in
+        requestAnimationFrame(() => {
+            modalImg.style.transition = 'left 300ms ease-out, opacity 100ms';
+            modalImg.style.left = '0';
+            modalImg.style.opacity = 1;
+            
+            // Re-run magnifier size calculation
+            if (modalImg.complete) {
+                setTimeout(updateMagnifierSize, 50); 
+            }
+        });
+    }, 300); // 300ms matches the CSS transition time
 }
 
 
 function updateModalContent(imgElement, direction) {
-    // Perform the slide transition
-    performImageTransition(imgElement, direction);
-    
-    // Update button states immediately
-    modalPrevBtn.disabled = (currentImageIndex === 0);
-    modalNextBtn.disabled = (currentImageIndex === currentSectionImages.length - 1);
-    
-    // PRELOAD next images (or previous, depending on the current index)
-    preloadImage(currentImageIndex + 1);
-    preloadImage(currentImageIndex - 1);
+    // Perform the slide transition
+    performImageTransition(imgElement, direction);
+    
+    // Update button states immediately
+    modalPrevBtn.disabled = (currentImageIndex === 0);
+    modalNextBtn.disabled = (currentImageIndex === currentSectionImages.length - 1);
+    
+    // PRELOAD next images (or previous, depending on the current index)
+    preloadImage(currentImageIndex + 1);
+    preloadImage(currentImageIndex - 1);
 }
 
 function openModal(imgElement) {
-    const sectionWrapper = imgElement.closest('.carousel-wrapper');
-    const track = sectionWrapper ? sectionWrapper.querySelector('.carousel-track') : null;
-    currentSectionImages = track ? Array.from(track.querySelectorAll('img')) : [imgElement];
-    
-    currentImageIndex = parseInt(imgElement.getAttribute('data-index')) || 0;
+    const sectionWrapper = imgElement.closest('.carousel-wrapper');
+    const track = sectionWrapper ? sectionWrapper.querySelector('.carousel-track') : null;
+    currentSectionImages = track ? Array.from(track.querySelectorAll('img')) : [imgElement];
+    
+    currentImageIndex = parseInt(imgElement.getAttribute('data-index')) || 0;
 
-    modal.style.display = "flex"; 
-    document.body.style.overflow = "hidden";
-    
-    // Initial content setup (without transition)
-    modalImg.src = imgElement.src;
-    modalImg.alt = imgElement.alt;
-    magLens.style.backgroundImage = `url('${imgElement.src}')`;
-    modalImg.style.left = '0'; 
-    modalImg.style.opacity = 1;
-    
-    // Initial Description Panel Content
-    descriptionTitle.textContent = imgElement.alt;
-    const descText = imgElement.getAttribute('data-desc') || "No detailed description available for this piece.";
-    descriptionText.textContent = descText;
-    
-    // Update meta info - MODIFIED to read from data-date
-    const artworkDate = imgElement.getAttribute('data-date') || "N/A";
-    descriptionMeta.innerHTML = `Date: ${artworkDate}`;
+    modal.style.display = "flex"; 
+    document.body.style.overflow = "hidden";
+    
+    // Initial content setup (without transition)
+    modalImg.src = imgElement.src;
+    modalImg.alt = imgElement.alt;
+    magLens.style.backgroundImage = `url('${imgElement.src}')`;
+    modalImg.style.left = '0'; 
+    modalImg.style.opacity = 1;
+    
+    // Initial Description Panel Content
+    descriptionTitle.textContent = imgElement.alt;
+    const descText = imgElement.getAttribute('data-desc') || "No detailed description available for this piece.";
+    descriptionText.textContent = descText;
+    
+    // Update meta info - MODIFIED to read from data-date
+    const artworkDate = imgElement.getAttribute('data-date') || "N/A";
+    descriptionMeta.innerHTML = `Date: ${artworkDate}`;
 
 
-    modalPrevBtn.disabled = (currentImageIndex === 0);
-    modalNextBtn.disabled = (currentImageIndex === currentSectionImages.length - 1);
+    modalPrevBtn.disabled = (currentImageIndex === 0);
+    modalNextBtn.disabled = (currentImageIndex === currentSectionImages.length - 1);
 
-    magContainer.addEventListener('mouseenter', showLens);
-    magContainer.addEventListener('mouseleave', hideLens);
-    magContainer.addEventListener('mousemove', handleMagnify);
-    window.addEventListener('resize', updateMagnifierSize);
-    
-    // Attach Navigation Listeners (only once)
-    modalPrevBtn.addEventListener('click', showPrev);
-    modalNextBtn.addEventListener('click', showNext);
-    document.addEventListener('keydown', handleKeyNavigation);
-    
-    if (modalImg.complete) {
-        setTimeout(updateMagnifierSize, 50); 
-    }
-    
-    // PRELOAD next images on open
-    preloadImage(currentImageIndex + 1); 
-    preloadImage(currentImageIndex - 1); 
+    magContainer.addEventListener('mouseenter', showLens);
+    magContainer.addEventListener('mouseleave', hideLens);
+    magContainer.addEventListener('mousemove', handleMagnify);
+    window.addEventListener('resize', updateMagnifierSize);
+    
+    // Attach Navigation Listeners (only once)
+    modalPrevBtn.addEventListener('click', showPrev);
+    modalNextBtn.addEventListener('click', showNext);
+    document.addEventListener('keydown', handleKeyNavigation);
+    
+    if (modalImg.complete) {
+        setTimeout(updateMagnifierSize, 50); 
+    }
+    
+    // PRELOAD next images on open
+    preloadImage(currentImageIndex + 1); 
+    preloadImage(currentImageIndex - 1); 
 }
 
 function showPrev() {
-    if (currentImageIndex > 0) {
-        currentImageIndex--;
-        updateModalContent(currentSectionImages[currentImageIndex], 'prev');
-    }
+    if (currentImageIndex > 0) {
+        currentImageIndex--;
+        updateModalContent(currentSectionImages[currentImageIndex], 'prev');
+    }
 }
 
 function showNext() {
-    if (currentImageIndex < currentSectionImages.length - 1) {
-        currentImageIndex++;
-        updateModalContent(currentSectionImages[currentImageIndex], 'next');
-    }
+    if (currentImageIndex < currentSectionImages.length - 1) {
+        currentImageIndex++;
+        updateModalContent(currentSectionImages[currentImageIndex], 'next');
+    }
 }
 
 function handleKeyNavigation(e) {
-    if (modal.style.display === 'flex') {
-        if (e.key === 'ArrowLeft') showPrev();
-        if (e.key === 'ArrowRight') showNext();
-        if (e.key === 'Escape') closeLightbox();
-    }
+    if (modal.style.display === 'flex') {
+        if (e.key === 'ArrowLeft') showPrev();
+        if (e.key === 'ArrowRight') showNext();
+        if (e.key === 'Escape') closeLightbox();
+    }
 }
 
 
 function updateMagnifierSize() {
-    const largeSizeX = modalImg.clientWidth * zoomFactor;
-    const largeSizeY = modalImg.clientHeight * zoomFactor;
-    magLens.style.backgroundSize = `${largeSizeX}px ${largeSizeY}px`;
-    magLens.style.opacity = 0; 
+    const largeSizeX = modalImg.clientWidth * zoomFactor;
+    const largeSizeY = modalImg.clientHeight * zoomFactor;
+    magLens.style.backgroundSize = `${largeSizeX}px ${largeSizeY}px`;
+    magLens.style.opacity = 0; 
 }
 
 function handleMagnify(e) {
-    const rect = magContainer.getBoundingClientRect();
-    let x = e.clientX - rect.left;
-    let y = e.clientY - rect.top;
+    const rect = magContainer.getBoundingClientRect();
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
 
-    // Position the center of the lens at the cursor (using transform)
-    magLens.style.left = `${x}px`;
-    magLens.style.top = `${y}px`;
-    magLens.style.transform = `translate(-${lensRadius}px, -${lensRadius}px)`; 
+    // Position the center of the lens at the cursor (using transform)
+    magLens.style.left = `${x}px`;
+    magLens.style.top = `${y}px`;
+    magLens.style.transform = `translate(-${lensRadius}px, -${lensRadius}px)`; 
 
-    // Calculate background position: compensate for the zoom factor and the lens radius
-    let backgroundX = x * zoomFactor - lensRadius; 
-    let backgroundY = y * zoomFactor - lensRadius;
+    // Calculate background position: compensate for the zoom factor and the lens radius
+    let backgroundX = x * zoomFactor - lensRadius; 
+    let backgroundY = y * zoomFactor - lensRadius;
 
-    // Apply the inverse position to the background image
-    magLens.style.backgroundPosition = `-${backgroundX}px -${backgroundY}px`;
+    // Apply the inverse position to the background image
+    magLens.style.backgroundPosition = `-${backgroundX}px -${backgroundY}px`;
 }
 
 function closeLightbox() {
-    modal.style.display = "none";
-    document.body.style.overflow = "auto";
-    
-    // REMOVE ALL LISTENERS
-    magContainer.removeEventListener('mouseenter', showLens);
-    magContainer.removeEventListener('mouseleave', hideLens);
-    magContainer.removeEventListener('mousemove', handleMagnify);
-    window.removeEventListener('resize', updateMagnifierSize);
-    modalPrevBtn.removeEventListener('click', showPrev);
-    modalNextBtn.removeEventListener('click', showNext);
-    document.removeEventListener('keydown', handleKeyNavigation);
-    
-    magLens.style.opacity = 0;
+    modal.style.display = "none";
+    document.body.style.overflow = "auto";
+    
+    // REMOVE ALL LISTENERS
+    magContainer.removeEventListener('mouseenter', showLens);
+    magContainer.removeEventListener('mouseleave', hideLens);
+    magContainer.removeEventListener('mousemove', handleMagnify);
+    window.removeEventListener('resize', updateMagnifierSize);
+    modalPrevBtn.removeEventListener('click', showPrev);
+    modalNextBtn.removeEventListener('click', showNext);
+    document.removeEventListener('keydown', handleKeyNavigation);
+    
+    magLens.style.opacity = 0;
 }
 
-// 1. Attach click handler to every carousel image to open the modal 
+// 1. Attach click handler to every carousel image to open the modal 
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.carousel-track img').forEach(img => {
-        img.addEventListener('click', (e) => {
-            e.stopPropagation(); 
-            openModal(img);
-        });
-    });
+    document.querySelectorAll('.carousel-track img').forEach(img => {
+        img.addEventListener('click', (e) => {
+            e.stopPropagation(); 
+            openModal(img);
+        });
+    });
 });
 
-// 2. Attach close handlers 
+// 2. Attach close handlers 
 closeModal.addEventListener('click', closeLightbox);
 
 // Close when clicking outside the image content (on the dark overlay)
 modal.addEventListener('click', (e) => {
-    if (e.target.id === 'image-modal') {
-        closeLightbox();
-    }
+    if (e.target.id === 'image-modal') {
+        closeLightbox();
+    }
 });
 </script>
 
