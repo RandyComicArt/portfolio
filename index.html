@@ -10,6 +10,7 @@
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
+  /* Updated Background Gradient */
   background: linear-gradient(135deg,#0c0c0c 0%,#1a1a2e 15%,#16213e 35%,#0f3460 50%,#533a7d 70%,#8b5a8c 85%,#a0616a 100%);
   color: #fff;
 }
@@ -140,7 +141,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     flex: 1; 
     background: #333; 
     backdrop-filter: blur(10px); 
-    /* 💥 FIXED: Use full 15px rounding on all four corners of the inner panel */
+    /* FIXED: Ensures all corners of the panel are rounded (15px) for desktop view */
     border-radius: 15px 15px 15px 15px; 
     
     padding: 25px; 
@@ -180,7 +181,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     
     justify-content: center; 
     
-    /* 💥 FIXED: Ensure the bottom-left corner is rounded (15px) */
+    /* FIXED: Ensure the bottom corners are rounded */
     border-radius: 0 0 15px 15px; 
     border-top: 1px solid rgba(255, 255, 255, 0.15);
     
@@ -414,7 +415,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     <p id="modal-caption"></p> 
 </div>
 <script>
-/* --- Carousel Script (NO CHANGE) --- */
+/* --- Carousel Script --- */
 document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
   const track = wrapper.querySelector('.carousel-track');
   const leftBtn = wrapper.querySelector('.arrow.left');
@@ -474,7 +475,7 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
 });
 
 
-/* --- 🔎 Lightbox Modal and Magnifier Functionality (NO CHANGE) --- */
+/* --- 🔎 Lightbox Modal and Magnifier Functionality (WITH PRELOADING) --- */
 const modal = document.getElementById('image-modal');
 const modalImg = document.getElementById('modal-image');
 const descriptionTitle = document.getElementById('description-title');
@@ -500,6 +501,18 @@ function showLens() {
 
 function hideLens() {
     magLens.style.opacity = 0;
+}
+
+/**
+ * Preloads an image into the browser cache for faster display later.
+ * @param {number} index - The index of the image in currentSectionImages to preload.
+ */
+function preloadImage(index) {
+    if (index >= 0 && index < currentSectionImages.length) {
+        const imgElement = currentSectionImages[index];
+        const tempImg = new Image();
+        tempImg.src = imgElement.src;
+    }
 }
 
 // Function to handle the actual image change with a slide effect
@@ -562,6 +575,10 @@ function updateModalContent(imgElement, direction) {
     // Update button states immediately
     modalPrevBtn.disabled = (currentImageIndex === 0);
     modalNextBtn.disabled = (currentImageIndex === currentSectionImages.length - 1);
+    
+    // PRELOAD next images (or previous, depending on the current index)
+    preloadImage(currentImageIndex + 1);
+    preloadImage(currentImageIndex - 1);
 }
 
 function openModal(imgElement) {
@@ -605,6 +622,10 @@ function openModal(imgElement) {
     if (modalImg.complete) {
         setTimeout(updateMagnifierSize, 50); 
     }
+    
+    // PRELOAD next images on open
+    preloadImage(currentImageIndex + 1); 
+    preloadImage(currentImageIndex - 1); 
 }
 
 function showPrev() {
