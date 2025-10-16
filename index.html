@@ -109,26 +109,29 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
   display: none; /* Controlled by JS: none or flex */
   position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
   overflow: auto;
-  /* 💥 Applied transparent background/blur to the overlay 💥 */
-  background: rgba(12, 12, 12, 0.7); 
-  backdrop-filter: blur(8px);
+  /* 💥 This is the updated "glass" background for the ENTIRE overlay 💥 */
+  background: rgba(255,255,255,0.05); /* Lighter base for clarity */
+  backdrop-filter: blur(15px); /* Stronger blur for the glass effect */
+  border: 1px solid rgba(255,255,255,0.15); /* Subtle border for the whole overlay */
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3); /* Soft shadow */
+  /* Ensure content is centered */
   align-items: center; justify-content: center;
 }
 
-/* Modal Content (Container for the image) */
+/* Modal Content (Container for the image and caption) */
 .modal-content {
   position: relative; 
-  margin: 5% auto; 
+  margin: 5% auto; /* Keep margin for vertical positioning */
   padding: 20px;
   width: 90%; 
   max-width: 940px; 
   text-align: center; 
-  /* Applied .glass look to the content container */
-  background: rgba(255, 255, 255, 0.08); 
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  border-radius: 20px; 
+  /* Removed the glass properties from here as it's now on the overlay */
+  background: transparent; /* Make its own background transparent */
+  backdrop-filter: none; /* Remove filter from here */
+  border: none; /* Remove border from here */
+  box-shadow: none; /* Remove shadow from here */
+  border-radius: 20px; /* Keep border-radius for the content area */
   
   display: flex; 
   flex-direction: column; 
@@ -142,8 +145,8 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
   position: absolute; 
   top: 50%; 
   left: 50%; 
-  /* Adjusted X position: moved further left by changing -10px to -50px offset */
-  transform: translate(calc(-50% - 470px - 50px), -50%); 
+  /* Adjusted X position: moved further left */
+  transform: translate(calc(-50% - 470px - 90px), -50%); /* Increased offset from -50px to -90px */
   width: 72px; 
   height: 72px; 
   display: flex; 
@@ -216,8 +219,8 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
     .close-button-shell {
       left: 50%;
       top: 50%;
-      /* Adjusted offset to move it further left (was -10px, now -50px) */
-      transform: translate(calc(-470px - 20px - 50px), -50%); 
+      /* Adjusted offset to move it further left (was -50px, now -90px) */
+      transform: translate(calc(-470px - 20px - 90px), -50%); 
     }
 }
 </style>
