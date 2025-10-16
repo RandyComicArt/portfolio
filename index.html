@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Randy Comic Art</title>
 <style>
 /* Reset & base styles */
@@ -60,6 +60,7 @@ h2 { text-align: center; margin-bottom: 20px; font-size: 2rem; }
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
   transition: transform 0.5s, opacity 0.5s;
   cursor: pointer;
+  outline: none;
 }
 .carousel img.center {
   transform: translateZ(60px) scale(1.1);
@@ -98,8 +99,10 @@ footer { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); text-al
   .carousel img { width: 220px; }
 }
 @media(max-width: 600px){
-  .carousel { flex-direction: column; }
-  .arrow { top: auto; bottom: 10px; }
+  .carousel { flex-direction: column; gap: 18px; }
+  .arrow { top: auto; bottom: 10px; transform: none;}
+  .arrow.left { left: 30%; }
+  .arrow.right { right: 30%; }
 }
 </style>
 </head>
@@ -120,56 +123,71 @@ footer { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); text-al
 <!-- Home Carousel -->
 <section id="home">
   <h2>Featured Art</h2>
-  <div class="carousel-container glass">
-    <div class="arrow left">&#10094;</div>
-    <div class="carousel">
-      <img src="images/fanart1.png" class="center" alt="">
-      <img src="images/fanart2.png" class="side" alt="">
-      <img src="images/fanart3.png" class="side" alt="">
+  <div class="carousel-container glass" aria-label="Featured art carousel">
+    <button class="arrow left" aria-label="Previous">&#10094;</button>
+    <div class="carousel" role="list">
+      <img src="images/fanart1.png" class="center" alt="Featured image 1" role="listitem" tabindex="0">
+      <img src="images/fanart2.png" class="side" alt="Featured image 2" role="listitem" tabindex="0">
+      <img src="images/fanart3.png" class="side" alt="Featured image 3" role="listitem" tabindex="0">
     </div>
-    <div class="arrow right">&#10095;</div>
+    <button class="arrow right" aria-label="Next">&#10095;</button>
   </div>
 </section>
 
 <!-- Fan Art -->
 <section id="fanart" class="glass">
   <h2>Fan Art</h2>
-  <div class="carousel">
-    <!-- Add all fanart images here -->
-    <img src="images/fanart1.png">
-    <img src="images/fanart2.png">
-    <img src="images/fanart3.png">
-    <img src="images/fanart4.png">
+  <div class="carousel-container glass" aria-label="Fan art carousel">
+    <button class="arrow left" aria-label="Previous">&#10094;</button>
+    <div class="carousel" role="list">
+      <img src="images/fanart1.png" alt="Fan art 1" role="listitem" tabindex="0">
+      <img src="images/fanart2.png" alt="Fan art 2" role="listitem" tabindex="0">
+      <img src="images/fanart3.png" alt="Fan art 3" role="listitem" tabindex="0">
+      <img src="images/fanart4.png" alt="Fan art 4" role="listitem" tabindex="0">
+    </div>
+    <button class="arrow right" aria-label="Next">&#10095;</button>
   </div>
 </section>
 
 <!-- Nightwatch -->
 <section id="nightwatch" class="glass">
   <h2>Nightwatch</h2>
-  <div class="carousel">
-    <img src="images/nightwatch1.png">
-    <img src="images/nightwatch2.png">
-    <img src="images/nightwatch3.png">
-    <img src="images/nightwatch4.png">
+  <div class="carousel-container glass" aria-label="Nightwatch carousel">
+    <button class="arrow left" aria-label="Previous">&#10094;</button>
+    <div class="carousel" role="list">
+      <img src="images/nightwatch1.png" alt="Nightwatch 1" role="listitem" tabindex="0">
+      <img src="images/nightwatch2.png" alt="Nightwatch 2" role="listitem" tabindex="0">
+      <img src="images/nightwatch3.png" alt="Nightwatch 3" role="listitem" tabindex="0">
+      <img src="images/nightwatch4.png" alt="Nightwatch 4" role="listitem" tabindex="0">
+    </div>
+    <button class="arrow right" aria-label="Next">&#10095;</button>
   </div>
 </section>
 
 <!-- Original Art -->
 <section id="original" class="glass">
   <h2>Original Art</h2>
-  <div class="carousel">
-    <img src="images/original1.png">
+  <div class="carousel-container glass" aria-label="Original art carousel">
+    <button class="arrow left" aria-label="Previous">&#10094;</button>
+    <div class="carousel" role="list">
+      <img src="images/original1.png" alt="Original art 1" role="listitem" tabindex="0">
+    </div>
+    <button class="arrow right" aria-label="Next">&#10095;</button>
   </div>
 </section>
 
 <!-- Process -->
 <section id="process" class="glass">
   <h2>Process / Sketches</h2>
-  <div class="carousel">
-    <img src="images/process1.png">
-    <img src="images/process2.png">
-    <img src="images/process3.png">
-    <img src="images/process4.png">
+  <div class="carousel-container glass" aria-label="Process sketches carousel">
+    <button class="arrow left" aria-label="Previous">&#10094;</button>
+    <div class="carousel" role="list">
+      <img src="images/process1.png" alt="Process 1" role="listitem" tabindex="0">
+      <img src="images/process2.png" alt="Process 2" role="listitem" tabindex="0">
+      <img src="images/process3.png" alt="Process 3" role="listitem" tabindex="0">
+      <img src="images/process4.png" alt="Process 4" role="listitem" tabindex="0">
+    </div>
+    <button class="arrow right" aria-label="Next">&#10095;</button>
   </div>
 </section>
 
@@ -185,29 +203,75 @@ footer { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); text-al
 <footer class="glass">&copy; 2025 Randy Comic Art</footer>
 
 <script>
-// Carousel logic
-const carousel = document.querySelector('.carousel');
-const images = Array.from(carousel.querySelectorAll('img'));
-let centerIndex = 0;
+/*
+  General carousel initializer:
+  - Finds every .carousel-container and sets up independent left/right controls.
+  - Clicking an image centers it.
+  - Arrow keys (Left/Right) work when the container is focused.
+*/
+document.querySelectorAll('.carousel-container').forEach((container) => {
+  const carousel = container.querySelector('.carousel');
+  const imgs = Array.from(carousel.querySelectorAll('img'));
+  if (imgs.length === 0) return;
 
-function updateCarousel() {
-  images.forEach((img,i)=>{
-    img.classList.remove('center','side');
-    if(i===centerIndex) img.classList.add('center');
-    else img.classList.add('side');
+  // make container focusable for keyboard control
+  container.setAttribute('tabindex', '0');
+
+  let centerIndex = 0;
+
+  const leftBtn = container.querySelector('.arrow.left');
+  const rightBtn = container.querySelector('.arrow.right');
+
+  function updateCarousel() {
+    imgs.forEach((img, i) => {
+      img.classList.remove('center', 'side');
+      if (i === centerIndex) img.classList.add('center');
+      else img.classList.add('side');
+    });
+  }
+
+  leftBtn && leftBtn.addEventListener('click', () => {
+    centerIndex = (centerIndex - 1 + imgs.length) % imgs.length;
+    updateCarousel();
   });
-}
 
-document.querySelector('.arrow.left').addEventListener('click',()=>{
-  centerIndex = (centerIndex - 1 + images.length) % images.length;
+  rightBtn && rightBtn.addEventListener('click', () => {
+    centerIndex = (centerIndex + 1) % imgs.length;
+    updateCarousel();
+  });
+
+  // clicking an image centers it
+  imgs.forEach((img, i) => {
+    img.addEventListener('click', () => {
+      centerIndex = i;
+      updateCarousel();
+    });
+    // allow Enter/Space to center when focused
+    img.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        centerIndex = i;
+        updateCarousel();
+      }
+    });
+  });
+
+  // keyboard controls when the container has focus
+  container.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      centerIndex = (centerIndex - 1 + imgs.length) % imgs.length;
+      updateCarousel();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      centerIndex = (centerIndex + 1) % imgs.length;
+      updateCarousel();
+    }
+  });
+
+  // initial state
   updateCarousel();
 });
-document.querySelector('.arrow.right').addEventListener('click',()=>{
-  centerIndex = (centerIndex + 1) % images.length;
-  updateCarousel();
-});
-
-updateCarousel();
 </script>
 
 </body>
