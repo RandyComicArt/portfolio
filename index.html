@@ -166,20 +166,17 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
         0 0 10px rgba(0, 0, 0, 0.6), 
         inset 0 0 20px rgba(255, 255, 255, 0.2);
         
-    /* Visibility control */
+    /* Visibility control: Handled entirely by JS opacity property now */
     opacity: 0;
     top: 0; 
     left: 0; 
-    /* This is critical: ensures mouse events go to the container for hover effect */
+    /* Critical: ensures mouse events go to the container for listener activation */
     pointer-events: none; 
     transition: opacity 0.2s;
     z-index: 10;
 }
 
-/* Show the lens on hover of the container */
-#magnifier-container:hover .mag-lens {
-    opacity: 1;
-}
+/* **NOTE:** The previous CSS :hover rule is removed, replaced by JavaScript's showLens/hideLens functions. */
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
@@ -357,7 +354,7 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
 });
 
 
-/* --- 🔎 Lightbox Modal and Magnifier Functionality (FINAL CODE) --- */
+/* --- 🔎 Lightbox Modal and Magnifier Functionality (FINAL JAVASCRIPT FIX) --- */
 const modal = document.getElementById('image-modal');
 const modalImg = document.getElementById('modal-image');
 const modalCaption = document.getElementById('modal-caption');
@@ -372,6 +369,14 @@ const zoomFactor = 2.5;
 // Hardcode lensRadius to 90 (180px width / 2) for reliable calculation
 const lensRadius = 90; 
 
+function showLens() {
+    magLens.style.opacity = 1;
+}
+
+function hideLens() {
+    magLens.style.opacity = 0;
+}
+
 function openModal(imgElement) {
     modal.style.display = "flex"; 
     
@@ -384,7 +389,9 @@ function openModal(imgElement) {
     // 2. Setup Magnifier Lens properties
     magLens.style.backgroundImage = `url('${imgElement.src}')`;
     
-    // Attach listener for the zoom effect
+    // ATTACH JS LISTENERS for visibility and movement
+    magContainer.addEventListener('mouseenter', showLens);
+    magContainer.addEventListener('mouseleave', hideLens);
     magContainer.addEventListener('mousemove', handleMagnify);
     
     // Use setTimeout after image load/complete to ensure correct clientWidth/Height
@@ -407,7 +414,7 @@ function updateMagnifierSize() {
     const largeSizeY = modalImg.clientHeight * zoomFactor;
     magLens.style.backgroundSize = `${largeSizeX}px ${largeSizeY}px`;
     
-    // FIX: Reset opacity to 0 so the CSS :hover can correctly trigger the magnifying effect 
+    // Ensure the lens starts hidden
     magLens.style.opacity = 0; 
 }
 
@@ -439,7 +446,9 @@ function closeLightbox() {
     modal.style.display = "none";
     document.body.style.overflow = "auto";
     
-    // Remove listeners when closing to save resources
+    // REMOVE ALL LISTENERS to prevent memory leaks and misfires
+    magContainer.removeEventListener('mouseenter', showLens);
+    magContainer.removeEventListener('mouseleave', hideLens);
     magContainer.removeEventListener('mousemove', handleMagnify);
     window.removeEventListener('resize', updateMagnifierSize);
     
