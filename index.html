@@ -79,7 +79,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 .carousel-track img.center { transform: scale(1.08); z-index: 2; }
 .carousel-track img.side { transform: scale(0.9); opacity: 0.85; z-index: 1; }
 
-/* Arrows (enhanced glass look) */
+/* --- General Arrow Style (glass buttons) --- */
 .arrow {
   position: absolute;
   top: 50%;
@@ -89,21 +89,18 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
   cursor: pointer;
   user-select: none;
 
-  /* stronger semi-opaque fill so it looks consistent over any backdrop */
   background: linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0.16));
   border: 1px solid rgba(255,255,255,0.45);
   padding: 12px 18px;
   border-radius: 50%;
   
-  /* keep a subtle frosted effect but don't rely on it for main color */
   backdrop-filter: blur(6px) saturate(1.05);
   -webkit-backdrop-filter: blur(6px) saturate(1.05);
 
-  /* inner highlight + outer glow to sell the glass */
   box-shadow:
-    inset 0 1.5px 2px rgba(255,255,255,0.35),      /* soft inner highlight */
-    0 6px 18px rgba(0,0,0,0.45),                   /* darker drop shadow for depth */
-    0 0 18px rgba(255,255,255,0.06);               /* faint outer glow */
+    inset 0 1.5px 2px rgba(255,255,255,0.35),
+    0 6px 18px rgba(0,0,0,0.45),
+    0 0 18px rgba(255,255,255,0.06);
 
   transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
   z-index: 50;
@@ -123,6 +120,24 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 }
 .arrow.left { left: -100px; }
 .arrow.right { right: -100px; }
+
+/* --- Fix for Completed Artwork arrows (prevent half-black look) --- */
+#completed .arrow {
+  background: rgba(255,255,255,0.35);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow:
+    inset 0 1px 3px rgba(255,255,255,0.4),
+    0 4px 10px rgba(0,0,0,0.4),
+    0 0 10px rgba(255,255,255,0.08);
+}
+#completed .arrow:hover:not(:disabled) {
+  background: rgba(255,255,255,0.45);
+  box-shadow:
+    inset 0 2px 5px rgba(255,255,255,0.5),
+    0 6px 14px rgba(0,0,0,0.5),
+    0 0 16px rgba(255,255,255,0.15);
+}
 
 /* Responsive */
 @media (max-width: 1200px) {
