@@ -29,7 +29,7 @@ header {
   padding: 40px 20px 0; 
 }
 
-/* NEW: This container now holds the content's size, background, and padding */
+/* This container now holds the content's size, background, and padding */
 .header-content {
   max-width: 1200px; /* Constrains the width */
   margin: 0 auto;    /* Centers the box */
@@ -40,7 +40,7 @@ header {
   border-bottom: 1px solid rgba(255,255,255,0.2);
   padding: 20px; /* Re-added padding */
 
-  /* MODIFIED: Adopted from .glass for a container look with all corners rounded */
+  /* Adopted from .glass for a container look with all corners rounded */
   border-radius: 20px; /* This will round all four corners */
   border: 1px solid rgba(255,255,255,0.15); 
   box-shadow: 0 8px 30px rgba(0,0,0,0.3);
@@ -172,20 +172,32 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 
 /* Footer */
 footer {
+  /* Removed full-width background, border, padding. Added bottom spacing. */
+  padding: 0 20px 40px; 
+  margin-top: 40px;
+  text-align: center;
+}
+/* NEW: This container now holds the footer content's size, background, and padding */
+.footer-content {
+  max-width: 1200px; /* Constrains the width */
+  margin: 0 auto;    /* Centers the box */
+
+  /* Adopted from .glass for a container look with all corners rounded */
   background: rgba(255,255,255,0.1);
   backdrop-filter: blur(10px);
-  text-align: center;
-  padding: 20px;
-  margin-top: 40px;
+  border-radius: 20px;
   border-top: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  padding: 20px;
 }
 </style>
 </head>
 <body>
 
-<header> <div class="header-content">
-    <h1>Randy Comic Art</h1>
-    <nav>
+<header>
+  <div class="header-content">
+    <h1>Randy Mattoka</h1> <nav>
       <a href="#completed">Completed Artwork</a>
       <a href="#nightwatch">Nightwatch</a>
       <a href="#process">Process</a>
@@ -267,7 +279,8 @@ footer {
   </p>
 </section>
 
-<footer class="glass">&copy; 2025 Randy Comic Art</footer>
+<footer> <div class="footer-content"> &copy; 2025 Randy Mattoka </div>
+</footer>
 
 <script>
 /* Carousel init (non-looping, click, keyboard, swipe) */
