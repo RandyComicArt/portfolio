@@ -93,7 +93,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 .arrow:disabled, .modal-nav-button:disabled { opacity: 0.28; cursor: default; transform: none; }
 
 
-/* --- 🖼️ Modal/Lightbox Styles (MAJOR UPDATE) --- */
+/* --- 🖼️ Modal/Lightbox Styles --- */
 .modal-overlay {
   display: none; 
   position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
@@ -105,28 +105,26 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
   align-items: center; justify-content: center;
 }
 
-/* 💥 New: Consolidated Navigation Panel (Top Left) 💥 */
+/* Consolidated Navigation Panel (Top Left) */
 .modal-nav-panel {
     position: absolute;
     top: 5%;
     left: 5%;
     z-index: 1020;
     display: flex;
-    gap: 10px; /* Space between buttons */
-    /* Add a slight background/glass effect for visibility */
+    gap: 10px; 
     background: rgba(255,255,255,0.1);
     backdrop-filter: blur(5px);
     border-radius: 10px;
     padding: 5px;
 }
 .modal-nav-panel .modal-nav-button {
-    /* Reduce size slightly for the header placement */
     width: 50px; 
     height: 50px; 
     font-size: 1.4rem;
 }
 #modal-close-btn { 
-    font-size: 2.0rem; /* Tweak X size */
+    font-size: 2.0rem; 
 }
 
 
@@ -134,39 +132,41 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 .modal-content {
   position: relative; 
   margin: 5% auto; 
-  padding: 0; /* Remove padding as columns will handle it */
+  padding: 0; 
   width: 90%; 
-  max-width: 1200px; /* Increased max-width for the two-column view */
-  height: 85vh; /* Set a height limit */
+  max-width: 1200px; 
+  height: 85vh; 
   background: transparent;
   border: none; 
   box-shadow: none; 
   border-radius: 20px; 
   
-  display: flex; /* Enable column layout */
-  align-items: stretch; /* Stretch children vertically */
+  display: flex; 
+  align-items: stretch; 
 }
 
-/* 💥 New: Image and Magnifier Column (Left Side) 💥 */
+/* Left Column: Image and Magnifier */
 .image-column {
-    flex: 2; /* Takes up 2/3 of the space */
+    flex: 2; 
     padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: rgba(0, 0, 0, 0.1); /* Slight separation background */
+    /* 💥 REMOVED: Dark background to blend with modal background 💥 */
+    background: transparent; 
     border-radius: 15px 0 0 15px;
 }
 
-/* 💥 New: Description Panel (Right Side) 💥 */
+/* Right Column: Description Panel (UPDATED BACKGROUND) */
 .description-column {
-    flex: 1; /* Takes up 1/3 of the space */
-    background: rgba(255, 255, 255, 0.1); /* Light glass effect */
-    backdrop-filter: blur(10px);
+    flex: 1; 
+    /* 💥 UPDATED: Solid dark gray background 💥 */
+    background: #333; 
+    backdrop-filter: blur(10px); /* Kept blur for aesthetic detail */
     border-radius: 0 15px 15px 0;
     padding: 25px;
-    overflow-y: auto; /* Scroll if content is too long */
+    overflow-y: auto; 
     border-left: 1px solid rgba(255, 255, 255, 0.15);
     color: #eee;
 }
@@ -181,15 +181,13 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     margin-bottom: 15px;
 }
 
-/* Hide the old, separated caption */
 #modal-caption { display: none; }
 
 
-/* 💥 Magnifier/Image Styles (Adjusted Max-Height) 💥 */
+/* Magnifier/Image Styles */
 #magnifier-container {
     position: relative; 
     width: 100%;
-    /* Max width is relative to the column size now */
     max-width: 100%; 
     margin: 0 auto;
     cursor: crosshair;
@@ -201,7 +199,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
     width: 100%;
     height: auto;
     border-radius: 15px;
-    max-height: 78vh; /* Reduced max height to fit the column height */
+    max-height: 78vh; 
     object-fit: contain;
     margin-bottom: 0;
     
@@ -387,7 +385,8 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
         </div>
         
     </div>
-    <p id="modal-caption"></p> </div>
+    <p id="modal-caption"></p> 
+</div>
 <script>
 /* --- Carousel Script (NO CHANGE) --- */
 document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
@@ -449,7 +448,7 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
 });
 
 
-/* --- 🔎 Lightbox Modal and Magnifier Functionality (UPDATED) --- */
+/* --- 🔎 Lightbox Modal and Magnifier Functionality (NO CHANGE) --- */
 const modal = document.getElementById('image-modal');
 const modalImg = document.getElementById('modal-image');
 const descriptionTitle = document.getElementById('description-title');
@@ -656,7 +655,6 @@ document.querySelectorAll('.carousel-track img').forEach(img => {
 
 // 2. Attach close handlers 
 closeModal.addEventListener('click', closeLightbox);
-// No need to listen to the shell anymore, as buttons are direct children of the nav panel
 
 // Close when clicking outside the image content (on the dark overlay)
 modal.addEventListener('click', (e) => {
