@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Randy Comic Art</title>
 <style>
-/* Base + theme */
+/* Base */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   font-family: Arial, sans-serif;
@@ -16,7 +16,6 @@ body {
 .glass {
   background: rgba(255,255,255,0.05);
   backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
   border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.15);
   box-shadow: 0 8px 30px rgba(0,0,0,0.3);
@@ -40,56 +39,103 @@ nav a:hover, nav a.active {
   background:rgba(255,255,255,0.1); text-shadow:0 0 10px rgba(255,255,255,0.5);
 }
 
-/* Layout */
+/* Sections */
 section { padding:40px 20px; max-width:1200px; margin:40px auto; }
 h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
 
-/* Carousel structure */
-.carousel-container { position:relative; max-width:1200px; margin:40px auto; padding:30px 0; }
-.carousel-viewport { overflow:hidden; width:100%; outline:none; }
+/* Carousel layout */
+.carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  overflow: hidden;
+}
 .carousel-track {
-  display:flex; gap:30px; align-items:center;
-  transition:transform 450ms cubic-bezier(.2,.8,.2,1);
-  will-change:transform; padding:20px 10px;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  transition: transform 450ms cubic-bezier(.2,.8,.2,1);
+  will-change: transform;
+  padding: 20px 10px;
 }
 
-/* Slides */
+/* Images */
 .carousel-track img {
-  width:300px; flex:0 0 auto; border-radius:20px;
-  border:2px solid rgba(255,255,255,0.12);
-  box-shadow:0 6px 18px rgba(0,0,0,0.35);
-  transition:transform 300ms, opacity 300ms;
-  cursor:pointer; user-select:none;
+  width: 300px;
+  flex: 0 0 auto;
+  border-radius: 20px;
+  border: 2px solid rgba(255,255,255,0.12);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  transition: transform 300ms, opacity 300ms;
+  cursor: pointer;
+  user-select: none;
 }
-.carousel-track img.center { transform:scale(1.08); z-index:2; }
-.carousel-track img.side { transform:scale(0.9); opacity:0.85; z-index:1; }
+.carousel-track img.center { transform: scale(1.08); z-index: 2; }
+.carousel-track img.side { transform: scale(0.9); opacity: 0.85; z-index: 1; }
 
-/* Arrows */
+/* Arrows (moved OUTSIDE carousel) */
 .arrow {
-  z-index:10; position:absolute; top:50%; transform:translateY(-50%);
-  font-size:2rem; color:#fff; cursor:pointer;
-  background:rgba(255,255,255,0.1); padding:10px 14px;
-  border-radius:10px; border:none; transition:all .2s;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2.8rem;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  padding: 10px 16px;
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
+  transition: all 0.25s ease;
+  z-index: 20;
 }
-.arrow:hover:not(:disabled) { background:rgba(255,255,255,0.2); }
-.arrow:disabled { opacity:0.3; cursor:default; }
-.arrow.left { left:10px; } .arrow.right { right:10px; }
+.arrow:hover:not(:disabled) {
+  background: rgba(255,255,255,0.25);
+  transform: translateY(-50%) scale(1.1);
+}
+.arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+  transform: translateY(-50%) scale(1);
+}
+.arrow.left { left: -70px; }
+.arrow.right { right: -70px; }
 
 /* Responsive */
-@media(max-width:900px){ .carousel-track img{ width:220px; } }
-@media(max-width:600px){
-  .carousel-track { gap:18px; }
-  .carousel-track img{ width:200px; }
-  .arrow { top:auto; bottom:10px; transform:none; }
-  .arrow.left{ left:30%; } .arrow.right{ right:30%; }
+@media (max-width: 1100px) {
+  .arrow.left { left: -50px; }
+  .arrow.right { right: -50px; }
+}
+@media (max-width: 900px) {
+  .carousel-track img { width: 220px; }
+}
+@media (max-width: 700px) {
+  .arrow.left { left: -35px; }
+  .arrow.right { right: -35px; }
+}
+@media (max-width: 600px) {
+  .carousel-track { gap: 18px; }
+  .carousel-track img { width: 200px; }
+  .arrow { font-size: 2.2rem; top: auto; bottom: -60px; transform: none; }
+  .arrow.left { left: 25%; }
+  .arrow.right { right: 25%; }
 }
 
 /* Footer */
 footer {
-  background:rgba(255,255,255,0.1);
-  backdrop-filter:blur(10px);
-  text-align:center; padding:20px; margin-top:40px;
-  border-top:1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+  border-top: 1px solid rgba(255,255,255,0.2);
 }
 </style>
 </head>
@@ -106,14 +152,14 @@ footer {
   </nav>
 </header>
 
-<!-- Example: Fan Art -->
+<!-- Example Section -->
 <section id="fanart" class="glass">
   <h2>Fan Art</h2>
-  <div class="carousel-container glass">
+  <div class="carousel-wrapper">
     <button class="arrow left">&#10094;</button>
-    <div class="carousel-viewport" tabindex="0">
+    <div class="carousel-container">
       <div class="carousel-track">
-        <!-- replace with all 14 fanart images -->
+        <!-- 14 fan arts -->
         <img src="images/fanart1.png" alt="Fan Art 1" loading="lazy">
         <img src="images/fanart2.png" alt="Fan Art 2" loading="lazy">
         <img src="images/fanart3.png" alt="Fan Art 3" loading="lazy">
@@ -134,12 +180,12 @@ footer {
   </div>
 </section>
 
-<!-- Nightwatch -->
+<!-- Repeat for Nightwatch, Original, and Process -->
 <section id="nightwatch" class="glass">
   <h2>Nightwatch</h2>
-  <div class="carousel-container glass">
+  <div class="carousel-wrapper">
     <button class="arrow left">&#10094;</button>
-    <div class="carousel-viewport" tabindex="0">
+    <div class="carousel-container">
       <div class="carousel-track">
         <img src="images/nightwatch1.png" alt="Nightwatch 1">
         <img src="images/nightwatch2.png" alt="Nightwatch 2">
@@ -151,12 +197,11 @@ footer {
   </div>
 </section>
 
-<!-- Original -->
 <section id="original" class="glass">
   <h2>Original Art</h2>
-  <div class="carousel-container glass">
+  <div class="carousel-wrapper">
     <button class="arrow left">&#10094;</button>
-    <div class="carousel-viewport" tabindex="0">
+    <div class="carousel-container">
       <div class="carousel-track">
         <img src="images/original1.png" alt="Original Art 1">
       </div>
@@ -165,14 +210,13 @@ footer {
   </div>
 </section>
 
-<!-- Process -->
 <section id="process" class="glass">
   <h2>Process / Sketches</h2>
-  <div class="carousel-container glass">
+  <div class="carousel-wrapper">
     <button class="arrow left">&#10094;</button>
-    <div class="carousel-viewport" tabindex="0">
+    <div class="carousel-container">
       <div class="carousel-track">
-        <!-- 11 process images -->
+        <!-- 11 process -->
         <img src="images/process1.png" alt="Process 1">
         <img src="images/process2.png" alt="Process 2">
         <img src="images/process3.png" alt="Process 3">
@@ -201,27 +245,24 @@ footer {
 <footer class="glass">&copy; 2025 Randy Comic Art</footer>
 
 <script>
-document.querySelectorAll('.carousel-container').forEach(container=>{
-  const viewport=container.querySelector('.carousel-viewport');
-  const track=container.querySelector('.carousel-track');
-  const left=container.querySelector('.arrow.left');
-  const right=container.querySelector('.arrow.right');
+document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
+  const track=wrapper.querySelector('.carousel-track');
+  const left=wrapper.querySelector('.arrow.left');
+  const right=wrapper.querySelector('.arrow.right');
   const imgs=Array.from(track.querySelectorAll('img'));
   if(imgs.length===0)return;
 
   let index=0;
-  viewport.setAttribute('tabindex','0');
 
   function slideWidth(){
     const gap=parseFloat(getComputedStyle(track).gap)||30;
-    const w=imgs[0].getBoundingClientRect().width;
-    return w+gap;
+    return imgs[0].getBoundingClientRect().width+gap;
   }
 
   function update(){
     const sWidth=slideWidth();
-    const vw=viewport.getBoundingClientRect().width;
-    const offset=(vw/2)-(imgs[index].getBoundingClientRect().width/2);
+    const containerWidth=wrapper.querySelector('.carousel-container').getBoundingClientRect().width;
+    const offset=(containerWidth/2)-(imgs[index].getBoundingClientRect().width/2);
     track.style.transform=`translateX(${-(index*sWidth)+offset}px)`;
     imgs.forEach((im,i)=>{
       im.classList.remove('center','side');
@@ -234,16 +275,12 @@ document.querySelectorAll('.carousel-container').forEach(container=>{
 
   left.addEventListener('click',()=>{ if(index>0){ index--; update(); } });
   right.addEventListener('click',()=>{ if(index<imgs.length-1){ index++; update(); } });
-  viewport.addEventListener('keydown',e=>{
-    if(e.key==='ArrowLeft'&&index>0){ index--; update(); }
-    if(e.key==='ArrowRight'&&index<imgs.length-1){ index++; update(); }
-  });
   imgs.forEach((im,i)=>im.addEventListener('click',()=>{ index=i; update(); }));
 
   // basic swipe
   let startX=null;
-  viewport.addEventListener('touchstart',e=>startX=e.touches[0].clientX);
-  viewport.addEventListener('touchend',e=>{
+  wrapper.addEventListener('touchstart',e=>startX=e.touches[0].clientX);
+  wrapper.addEventListener('touchend',e=>{
     if(startX===null)return;
     const dx=e.changedTouches[0].clientX-startX;
     if(Math.abs(dx)>50){
