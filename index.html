@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Randy Comic Art</title>
+<title>Randy Mattoka Art</title>
 <style>
 /* Base */
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -13,7 +13,7 @@ body {
   background: linear-gradient(135deg,#0c0c0c 0%,#1a1a2e 15%,#16213e 35%,#0f3460 50%,#533a7d 70%,#8b5a8c 85%,#a0616a 100%);
   color: #fff;
 }
-/* Reusing the .glass class for other sections, but not the header itself */
+/* Reusing the .glass class for other sections */
 .glass {
   background: rgba(255,255,255,0.05);
   backdrop-filter: blur(15px);
@@ -22,30 +22,18 @@ body {
   box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
 
-/* Header */
-header {
-  /* Removed full-width background, border, padding. Added top spacing. */
-  text-align: center;
-  padding: 40px 20px 0; 
-}
-
-/* This container now holds the content's size, background, and padding */
+/* --- Header & Navigation Styles --- */
+header { text-align: center; padding: 40px 20px 0; }
 .header-content {
-  max-width: 1200px; /* Constrains the width */
-  margin: 0 auto;    /* Centers the box */
-  
-  /* Styles moved from 'header' */
+  max-width: 1200px;
+  margin: 0 auto;
   background: rgba(255,255,255,0.1); 
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255,255,255,0.2);
-  padding: 20px; /* Re-added padding */
-
-  /* Adopted from .glass for a container look with all corners rounded */
-  border-radius: 20px; /* This will round all four corners */
+  padding: 20px;
+  border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.15); 
   box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
-
 header h1 { font-size: 2.5rem; margin-top: 0; margin-bottom: 10px; }
 nav { display:flex; justify-content:center; gap:15px; flex-wrap:wrap; }
 nav a {
@@ -56,111 +44,142 @@ nav a:hover, nav a.active {
   background:rgba(255,255,255,0.1); text-shadow:0 0 10px rgba(255,255,255,0.5);
 }
 
-/* Sections */
+/* --- Section Content & Carousel Styles --- */
 section { padding:40px 20px; max-width:1200px; margin:40px auto; }
 h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
-
-/* Carousel layout */
-.carousel-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.carousel-container {
-  position: relative;
-  width: 100%;
-  max-width: 1200px;
-  overflow: hidden;
-}
+.carousel-wrapper { position: relative; display: flex; align-items: center; justify-content: center; }
+.carousel-container { position: relative; width: 100%; max-width: 1200px; overflow: hidden; }
 .carousel-track {
-  display: flex;
-  gap: 30px;
-  align-items: center;
+  display: flex; gap: 30px; align-items: center;
   transition: transform 450ms cubic-bezier(.2,.8,.2,1);
-  will-change: transform;
-  padding: 20px 10px;
+  will-change: transform; padding: 20px 10px;
 }
 
-/* Images */
+/* Carousel Images */
 .carousel-track img {
-  width: 300px;
-  flex: 0 0 auto;
-  border-radius: 20px;
-  border: 2px solid rgba(255,255,255,0.12);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  width: 300px; flex: 0 0 auto; border-radius: 20px;
+  border: 2px solid rgba(255,255,255,0.12); box-shadow: 0 6px 18px rgba(0,0,0,0.35);
   transition: transform 300ms, opacity 300ms;
-  cursor: pointer;
-  user-select: none;
+  cursor: pointer; user-select: none;
 }
 .carousel-track img.center { transform: scale(1.08); z-index: 2; }
 .carousel-track img.side { transform: scale(0.9); opacity: 0.85; z-index: 1; }
 
-/* NEW: Arrow shell (outer panel) */
+/* Carousel Arrows */
 .arrow-shell {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 72px;
-  height: 72px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 60;
-  pointer-events: none; /* container doesn't intercept - button does */
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 72px; height: 72px; display: flex; align-items: center;
+  justify-content: center; z-index: 60; pointer-events: none;
 }
-
-/* left/right shell positions (outside the carousel) */
 .arrow-shell.left { left: -112px; }
 .arrow-shell.right { right: -112px; }
-
-/* the actual button inside shell */
 .arrow {
-  pointer-events: auto;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
+  pointer-events: auto; width: 64px; height: 64px; border-radius: 50%;
   border: 1px solid rgba(255,255,255,0.45);
   background: linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0.22));
-  color: rgba(12,12,12,0.95); /* dark icon color for contrast */
-  font-size: 1.8rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
-  box-shadow:
-    inset 0 2px 4px rgba(255,255,255,0.55),
-    0 10px 24px rgba(0,0,0,0.45);
+  color: rgba(12,12,12,0.95); font-size: 1.8rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.55), 0 10px 24px rgba(0,0,0,0.45);
   outline: none;
 }
-
-/* visible hover + focus */
 .arrow:hover:not(:disabled), .arrow:focus:not(:disabled) {
   transform: scale(1.08);
   background: linear-gradient(180deg, rgba(255,255,255,0.46), rgba(255,255,255,0.28));
-  box-shadow:
-    inset 0 3px 6px rgba(255,255,255,0.6),
-    0 12px 30px rgba(0,0,0,0.5);
+  box-shadow: inset 0 3px 6px rgba(255,255,255,0.6), 0 12px 30px rgba(0,0,0,0.5);
+}
+.arrow:disabled { opacity: 0.28; cursor: default; transform: none; }
+
+/* --- Footer Styles --- */
+footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
+.footer-content {
+  max-width: 1200px; margin: 0 auto;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  padding: 20px;
 }
 
-/* disabled look */
-.arrow:disabled {
-  opacity: 0.28;
-  cursor: default;
-  transform: none;
+/* --- 🖼️ NEW: Modal/Lightbox Styles --- */
+.modal-overlay {
+  display: none; /* Controlled by JS: none or flex */
+  position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+  overflow: auto;
+  background: rgba(0, 0, 0, 0.9); 
+  backdrop-filter: blur(8px);
+  align-items: center; justify-content: center;
+}
+.modal-content {
+  position: relative; margin: 5% auto; padding: 20px;
+  width: 90%; max-width: 940px; 
+  text-align: center; border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  /* Added for centering the image/caption */
+  display: flex; flex-direction: column; align-items: center;
+}
+#modal-caption { color: #ccc; font-size: 1.1rem; padding: 10px 0 0; }
+.modal-close {
+  position: absolute; top: 15px; right: 25px; color: #fff;
+  font-size: 40px; font-weight: bold; transition: 0.3s; cursor: pointer;
+  opacity: 0.8; text-shadow: 0 0 10px #000;
+}
+.modal-close:hover, .modal-close:focus { opacity: 1; color: #ddd; }
+
+
+/* --- 🔎 NEW: Magnifier Styles --- */
+#magnifier-container {
+    position: relative; 
+    width: 100%;
+    max-width: 860px; /* Max size for the image container */
+    margin: 0 auto;
+    cursor: crosshair;
+    display: inline-block;
 }
 
-/* Responsive adjustments for shells */
-@media (max-width: 1200px) {
-  .arrow-shell.left { left: -90px; }
-  .arrow-shell.right { right: -90px; }
+/* The primary image displayed in the modal (the "small" view) */
+#magnifier-container .mag-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+    max-height: 80vh; 
+    object-fit: contain;
+    margin-bottom: 0;
 }
-@media (max-width: 900px) {
-  .carousel-track img { width: 220px; }
-  .arrow-shell.left { left: -70px; }
-  .arrow-shell.right { right: -70px; }
+
+/* The Magnifying Lens (the circular element) */
+.mag-lens {
+    position: absolute;
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    background-repeat: no-repeat;
+    
+    /* Lens dimensions and look */
+    width: 180px; 
+    height: 180px;
+    border-radius: 50%;
+    box-shadow: 
+        0 0 0 1px #000, 
+        0 0 10px rgba(0, 0, 0, 0.6), 
+        inset 0 0 20px rgba(255, 255, 255, 0.2);
+        
+    /* Visibility control */
+    opacity: 0;
+    pointer-events: none; /* Allows mouse events to pass through to the image below */
+    transition: opacity 0.2s;
+    z-index: 10;
 }
+
+/* Show the lens on hover */
+#magnifier-container:hover .mag-lens {
+    opacity: 1;
+}
+
+/* Responsive adjustments */
 @media (max-width: 600px) {
   .carousel-track { gap: 18px; }
   .carousel-track img { width: 200px; }
@@ -168,105 +187,7 @@ h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
   .arrow-shell.left { left: 25%; }
   .arrow-shell.right { right: 25%; }
   .arrow { width: 56px; height: 56px; font-size: 1.6rem; }
-}
-
-/* Footer */
-footer {
-  /* Removed full-width background, border, padding. Added bottom spacing. */
-  padding: 0 20px 40px; 
-  margin-top: 40px;
-  text-align: center;
-}
-/* NEW: This container now holds the footer content's size, background, and padding */
-.footer-content {
-  max-width: 1200px; /* Constrains the width */
-  margin: 0 auto;    /* Centers the box */
-
-  /* Adopted from .glass for a container look with all corners rounded */
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  border-top: 1px solid rgba(255,255,255,0.2);
-  border: 1px solid rgba(255,255,255,0.15);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-  padding: 20px;
-}
-
-/* NEW: Modal/Lightbox Styles */
-.modal-overlay {
-  display: none; /* Initially hidden */
-  position: fixed; 
-  z-index: 1000; /* Ensure it's on top of everything */
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  /* Dark, blurred background for lightbox effect */
-  background: rgba(0, 0, 0, 0.9); 
-  backdrop-filter: blur(8px);
-  /* Use flex for easy content centering */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-content {
-  position: relative;
-  margin: 5% auto; /* Keep margin for spacing */
-  padding: 20px;
-  width: 90%;
-  max-width: 900px; /* Max size for enlarged image */
-  text-align: center;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.08); /* Light box background */
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-#modal-image {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 15px;
-  max-height: 80vh; /* Limit height on tall screens */
-  object-fit: contain;
-  margin-bottom: 10px;
-}
-
-#modal-caption {
-  color: #ccc;
-  font-size: 1.1rem;
-  padding: 10px 0 0;
-}
-
-/* Close button style */
-.modal-close {
-  position: absolute;
-  top: 15px;
-  right: 25px;
-  color: #fff;
-  font-size: 40px;
-  font-weight: bold;
-  transition: 0.3s;
-  cursor: pointer;
-  opacity: 0.8;
-  text-shadow: 0 0 10px #000;
-}
-
-.modal-close:hover,
-.modal-close:focus {
-  opacity: 1;
-  color: #ddd;
-}
-
-/* Responsive adjustment for small screens */
-@media (max-width: 768px) {
-    .modal-content {
-        margin: 20% auto;
-        padding: 10px;
-    }
+  .modal-content { margin: 20% auto; padding: 10px; }
 }
 </style>
 </head>
@@ -366,13 +287,17 @@ footer {
 <div id="image-modal" class="modal-overlay" style="display: none;">
     <div class="modal-content">
         <span class="modal-close" role="button" tabindex="0" aria-label="Close Image">&times;</span>
-        <img id="modal-image" src="" alt="">
+
+        <div id="magnifier-container">
+            <img id="modal-image" class="mag-image" src="" alt="">
+            <div id="magnifier-lens" class="mag-lens"></div>
+        </div>
+        
         <p id="modal-caption"></p>
     </div>
 </div>
 <script>
-/* Carousel init (non-looping, click, keyboard, swipe) */
-/* Buttons have .arrow class and left/right classes */
+/* --- Carousel Script --- */
 document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
   const track = wrapper.querySelector('.carousel-track');
   const leftBtn = wrapper.querySelector('.arrow.left');
@@ -403,9 +328,6 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
   if (leftBtn) leftBtn.addEventListener('click', ()=>{ if (index>0) { index--; update(); }});
   if (rightBtn) rightBtn.addEventListener('click', ()=>{ if (index < imgs.length - 1) { index++; update(); }});
   
-  // !!! The image click to slide the carousel has been REMOVED here 
-  // and MOVED to the lightbox script block below to handle the modal.
-
   // keyboard support when wrapper is focused
   wrapper.setAttribute('tabindex', '0');
   wrapper.addEventListener('keydown', (e)=>{
@@ -433,30 +355,93 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
 });
 
 
-// NEW: Lightbox Modal Functionality
+/* --- 🔎 NEW: Lightbox Modal and Magnifier Functionality --- */
 const modal = document.getElementById('image-modal');
 const modalImg = document.getElementById('modal-image');
 const modalCaption = document.getElementById('modal-caption');
 const closeModal = document.querySelector('.modal-close');
 
+// Magnifier DOM elements
+const magContainer = document.getElementById('magnifier-container');
+const magLens = document.getElementById('magnifier-lens');
+
+// Define constants
+const zoomFactor = 2.5; 
+// Get current lens width/2. We read the style to be dynamic.
+const lensRadius = parseFloat(getComputedStyle(magLens).width) / 2; 
+
 function openModal(imgElement) {
     modal.style.display = "flex"; 
+    
+    // 1. Setup the main image in the modal
     modalImg.src = imgElement.src;
     modalImg.alt = imgElement.alt;
     modalCaption.textContent = imgElement.alt;
     document.body.style.overflow = "hidden";
+
+    // 2. Setup Magnifier Lens properties
+    // Set the large image as the background of the lens
+    magLens.style.backgroundImage = `url('${imgElement.src}')`;
+    
+    // Attach listener for the zoom effect
+    magContainer.addEventListener('mousemove', handleMagnify);
+    
+    // Attach a load listener to set the correct size once the image is loaded
+    modalImg.onload = updateMagnifierSize;
+    // Also attach a resize listener for responsiveness
+    window.addEventListener('resize', updateMagnifierSize);
+    
+    // Handle case where image is already cached/loaded
+    if (modalImg.complete) {
+        updateMagnifierSize();
+    }
+}
+
+function updateMagnifierSize() {
+    // Calculates the required background size for the lens based on zoomFactor
+    const largeSizeX = modalImg.clientWidth * zoomFactor;
+    const largeSizeY = modalImg.clientHeight * zoomFactor;
+    magLens.style.backgroundSize = `${largeSizeX}px ${largeSizeY}px`;
+}
+
+function handleMagnify(e) {
+    // Get mouse position relative to the image container
+    const rect = magContainer.getBoundingClientRect();
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
+
+    // Boundary check (optional, but ensures the lens doesn't jump wildly)
+    if (x < 0) x = 0; if (x > rect.width) x = rect.width;
+    if (y < 0) y = 0; if (y > rect.height) y = rect.height;
+
+    // 1. Position the lens: Center it over the cursor
+    let lensX = x - lensRadius;
+    let lensY = y - lensRadius;
+
+    // 2. Position the background: Scale the coordinate and subtract lens radius
+    // This moves the magnified image in the *opposite* direction of the cursor movement.
+    let backgroundX = (x * zoomFactor) - lensRadius; 
+    let backgroundY = (y * zoomFactor) - lensRadius;
+
+    magLens.style.transform = `translate(${lensX}px, ${lensY}px)`;
+    magLens.style.backgroundPosition = `-${backgroundX}px -${backgroundY}px`;
 }
 
 function closeLightbox() {
     modal.style.display = "none";
     document.body.style.overflow = "auto";
+    
+    // Remove listeners when closing to save resources
+    magContainer.removeEventListener('mousemove', handleMagnify);
+    window.removeEventListener('resize', updateMagnifierSize);
+    
+    // Hide the lens when closing
+    magLens.style.opacity = 0;
 }
 
-// 1. Attach click handler to every image
+// 1. Attach click handler to every carousel image to open the modal
 document.querySelectorAll('.carousel-track img').forEach(img => {
-    // Add new click listener to open the lightbox
     img.addEventListener('click', (e) => {
-        // Stop any unwanted side effects when clicking to enlarge
         e.stopPropagation(); 
         openModal(img);
     });
@@ -470,7 +455,7 @@ closeModal.addEventListener('keydown', (e) => {
     }
 });
 
-// Close when clicking outside the image content (on the overlay)
+// Close when clicking outside the image content (on the dark overlay)
 modal.addEventListener('click', (e) => {
     if (e.target.id === 'image-modal') {
         closeLightbox();
