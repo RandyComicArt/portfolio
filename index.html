@@ -176,8 +176,6 @@ footer { padding: 0 20px 40px; margin-top: 40px; text-align: center; }
     z-index: 10;
 }
 
-/* **NOTE:** The previous CSS :hover rule is removed, replaced by JavaScript's showLens/hideLens functions. */
-
 /* Responsive adjustments */
 @media (max-width: 600px) {
   .carousel-track { gap: 18px; }
@@ -424,7 +422,7 @@ function handleMagnify(e) {
     let x = e.clientX - rect.left;
     let y = e.clientY - rect.top;
 
-    // Boundary check 
+    // Boundary check for cursor position (optional, but good practice)
     if (x < 0) x = 0; if (x > rect.width) x = rect.width;
     if (y < 0) y = 0; if (y > rect.height) y = rect.height;
 
@@ -438,6 +436,24 @@ function handleMagnify(e) {
     // 2. Position the background: Core magnification logic
     let backgroundX = x * zoomFactor - lensRadius; 
     let backgroundY = y * zoomFactor - lensRadius;
+
+    // 3. 💥 NEW BOUNDARY CLIPPING LOGIC 💥
+    const containerWidth = modalImg.clientWidth;
+    const containerHeight = modalImg.clientHeight;
+    
+    // Calculate the maximum allowed NEGATIVE background position (the right/bottom boundaries)
+    // (Total magnified size) - (Container size)
+    const maxX = (containerWidth * zoomFactor) - containerWidth;
+    const maxY = (containerHeight * zoomFactor) - containerHeight;
+    
+    // Use Math.max(0, ...) to clip the left/top edges (position cannot be < 0)
+    backgroundX = Math.max(0, backgroundX);
+    backgroundY = Math.max(0, backgroundY);
+    
+    // Use Math.min(maxY, ...) to clip the right/bottom edges (position cannot be > max offset)
+    backgroundX = Math.min(maxX, backgroundX);
+    backgroundY = Math.min(maxY, backgroundY);
+
 
     magLens.style.backgroundPosition = `-${backgroundX}px -${backgroundY}px`;
 }
