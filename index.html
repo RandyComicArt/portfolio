@@ -5,74 +5,111 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Randy Comic Art</title>
 <style>
-/* remove the body margin and move spacing to .site-root so the viewport edges aren't involved */
+/* Base */
+* { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  margin: 0; /* << remove browser-edge margin to avoid square flashes */
   font-family: Arial, sans-serif;
   line-height: 1.6;
   background: linear-gradient(135deg,#0c0c0c 0%,#1a1a2e 15%,#16213e 35%,#0f3460 50%,#533a7d 70%,#8b5a8c 85%,#a0616a 100%);
   color: #fff;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /* ensure background is fixed so repaints are simpler */
-  background-attachment: fixed;
+  margin: 40px;        /* <— adds top/side breathing room */
 }
 
-/* site root holds the outer margin and the rounded clipping */
-.site-root {
-  margin: 40px;                     /* breathing room like you had */
-  border-radius: 28px;              /* smooth big rounded corners */
-  overflow: hidden;                 /* clip everything to a smooth rounded shape */
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  transform: translateZ(0);         /* force a composited layer (helps with flicker) */
-  will-change: transform;           /* hint to browser */
-  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-}
-
-/* small screens: keep the root margin smaller */
+/* On very small screens, reduce that margin a bit */
 @media (max-width: 700px) {
-  .site-root { margin: 20px; border-radius: 20px; }
+  body { margin: 20px; }
 }
 
-/* Keep header/footer & sections visually inside .site-root */
-header, footer, section { 
-  margin: 0;                         /* no extra outer margin (site-root provides it) */
-  border-radius: 0;                  /* avoid nested clipping that confuses paint */
+/* Make sure header and footer inherit the rounded edge feel */
+header, footer {
+  border-radius: 20px;
+  overflow: hidden;    /* keeps inner blur smooth inside rounded corners */
 }
-
-/* keep .glass the same but make paint smoother */
 .glass {
   background: rgba(255,255,255,0.05);
   backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);  /* Safari */
   border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.15);
   box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-  transition: background 220ms ease, box-shadow 220ms ease, transform 220ms ease;
-  -webkit-transform: translateZ(0);     /* force hardware compositing for glass elements */
 }
 
-/* soften outside arrow shells (avoid sharp square look at edges) */
+/* Header */
+header {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  text-align: center;
+  padding: 20px;
+}
+header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+nav { display:flex; justify-content:center; gap:15px; flex-wrap:wrap; }
+nav a {
+  color:#fff; text-decoration:none; font-weight:bold;
+  padding:8px 15px; border-radius:10px; transition:all .3s;
+}
+nav a:hover, nav a.active {
+  background:rgba(255,255,255,0.1); text-shadow:0 0 10px rgba(255,255,255,0.5);
+}
+
+/* Sections */
+section { padding:40px 20px; max-width:1200px; margin:40px auto; }
+h2 { text-align:center; margin-bottom:20px; font-size:2rem; }
+
+/* Carousel layout */
+.carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  overflow: hidden;
+}
+.carousel-track {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  transition: transform 450ms cubic-bezier(.2,.8,.2,1);
+  will-change: transform;
+  padding: 20px 10px;
+}
+
+/* Images */
+.carousel-track img {
+  width: 300px;
+  flex: 0 0 auto;
+  border-radius: 20px;
+  border: 2px solid rgba(255,255,255,0.12);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  transition: transform 300ms, opacity 300ms;
+  cursor: pointer;
+  user-select: none;
+}
+.carousel-track img.center { transform: scale(1.08); z-index: 2; }
+.carousel-track img.side { transform: scale(0.9); opacity: 0.85; z-index: 1; }
+
+/* NEW: Arrow shell (outer panel) */
 .arrow-shell {
-  /* keep it absolute as before */
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 92px;     /* slightly larger shell so negative overlap looks softer */
-  height: 92px;
+  width: 72px;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 60;
-  pointer-events: none;
-  border-radius: 18px;    /* round the shell itself */
-  background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(255,255,255,0.02));
-  box-shadow: 0 8px 28px rgba(0,0,0,0.45);
-  -webkit-transform: translateZ(0);    /* help compositor */
+  pointer-events: none; /* container doesn't intercept - button does */
 }
 
-/* keep buttons interactive, but visually softened */
+/* left/right shell positions (outside the carousel) */
+.arrow-shell.left { left: -112px; }
+.arrow-shell.right { right: -112px; }
+
+/* the actual button inside shell */
 .arrow {
   pointer-events: auto;
   width: 64px;
@@ -80,7 +117,7 @@ header, footer, section {
   border-radius: 50%;
   border: 1px solid rgba(255,255,255,0.45);
   background: linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0.22));
-  color: rgba(12,12,12,0.95);
+  color: rgba(12,12,12,0.95); /* dark icon color for contrast */
   font-size: 1.8rem;
   display: inline-flex;
   align-items: center;
@@ -93,25 +130,50 @@ header, footer, section {
   outline: none;
 }
 
-/* when arrows sit outside viewport, allow them to overlap but look rounded */
-.arrow-shell.left { left: calc(-1 * (92px - 32px)); }   /* keep overlap but smaller negative */
-.arrow-shell.right { right: calc(-1 * (92px - 32px)); }
+/* visible hover + focus */
+.arrow:hover:not(:disabled), .arrow:focus:not(:disabled) {
+  transform: scale(1.08);
+  background: linear-gradient(180deg, rgba(255,255,255,0.46), rgba(255,255,255,0.28));
+  box-shadow:
+    inset 0 3px 6px rgba(255,255,255,0.6),
+    0 12px 30px rgba(0,0,0,0.5);
+}
 
-/* responsive adjustments keep relative offset smaller */
+/* disabled look */
+.arrow:disabled {
+  opacity: 0.28;
+  cursor: default;
+  transform: none;
+}
+
+/* Responsive adjustments for shells */
 @media (max-width: 1200px) {
-  .arrow-shell.left { left: calc(-1 * (76px - 26px)); }
-  .arrow-shell.right { right: calc(-1 * (76px - 26px)); }
+  .arrow-shell.left { left: -90px; }
+  .arrow-shell.right { right: -90px; }
 }
 @media (max-width: 900px) {
-  .arrow-shell.left { left: calc(-1 * (62px - 20px)); }
-  .arrow-shell.right { right: calc(-1 * (62px - 20px)); }
+  .carousel-track img { width: 220px; }
+  .arrow-shell.left { left: -70px; }
+  .arrow-shell.right { right: -70px; }
+}
+@media (max-width: 600px) {
+  .carousel-track { gap: 18px; }
+  .carousel-track img { width: 200px; }
+  .arrow-shell { top: auto; bottom: -70px; transform: none; width: auto; height: auto; }
+  .arrow-shell.left { left: 25%; }
+  .arrow-shell.right { right: 25%; }
+  .arrow { width: 56px; height: 56px; font-size: 1.6rem; }
 }
 
-/* small perf/hardening improvements so you don't see transient rectangles */
-* {
-  -webkit-transform: translateZ(0);   /* can be heavy, but helps with compositing artifacts */
+/* Footer */
+footer {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+  border-top: 1px solid rgba(255,255,255,0.2);
 }
-
 </style>
 </head>
 <body>
