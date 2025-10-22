@@ -9,7 +9,7 @@
    Base / Reset
    ---------------------- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html,body { height: 100%; }
+html, body { height: 100%; overflow-x: hidden; } /* prevent horizontal scroll */
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
@@ -23,8 +23,8 @@ body {
    Layout: Fixed Sidebar + Scrollable Main
    ---------------------- */
 :root {
-  --sidebar-width: 25%;
-  --sidebar-min: 240px;
+  --sidebar-pct: 20%;   /* responsive width */
+  --sidebar-min: 220px; /* minimum pixel width */
   --content-padding: 40px;
 }
 
@@ -34,9 +34,9 @@ body {
   left: 0;
   top: 0;
   bottom: 0;
-  width: var(--sidebar-width);
+  width: var(--sidebar-pct);
   min-width: var(--sidebar-min);
-  padding: 34px 26px;
+  padding: 34px 22px;
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -52,7 +52,7 @@ body {
   width: 100%;
   display:flex;
   flex-direction:column;
-  gap:10px;
+  gap:8px;
   align-items:flex-start;
 }
 .brand h1 {
@@ -66,8 +66,9 @@ body {
 .sidebar nav {
   display:flex;
   flex-direction:column;
-  gap:10px;
+  gap:8px;
   width:100%;
+  margin-top: 6px;
 }
 .sidebar nav a {
   color:#fff;
@@ -97,12 +98,15 @@ body {
 /* ----------------------
    Main content (right)
    ---------------------- */
+/* Use percentage margin-left so main sits to right of sidebar.
+   Min-width on sidebar prevents it from getting too narrow. */
 .main {
-  margin-left: var(--sidebar-width);
+  margin-left: var(--sidebar-pct);
   min-height: 100vh;
   padding: var(--content-padding);
   padding-top: 32px;
   transition: margin-left 200ms;
+  overflow-x: hidden; /* additional safety */
 }
 
 /* A lightweight glass panel class reused */
@@ -144,27 +148,41 @@ body {
 .carousel-track img.center { transform: scale(1.08); z-index: 2; }
 .carousel-track img.side { transform: scale(0.9); opacity: 0.85; z-index: 1; }
 
-/* Carousel arrows */
+/* Arrow shells now positioned inside the carousel container
+   at the TOP-LEFT and TOP-RIGHT corners of each carousel */
 .arrow-shell {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; z-index: 60; pointer-events: none;
+  position: absolute;
+  top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+  pointer-events: none;
+  width: auto;
+  height: auto;
+  padding: 0 6px;
 }
-.arrow-shell.left { left: -112px; }
-.arrow-shell.right { right: -112px; }
+.arrow-shell.left { left: 12px; }
+.arrow-shell.right { right: 12px; }
+
+/* Arrow button */
 .arrow, .modal-nav-button {
-  pointer-events: auto; width: 64px; height: 64px; border-radius: 50%;
+  pointer-events: auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
   border: 1px solid rgba(255,255,255,0.45);
   background: linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0.22));
-  color: rgba(12,12,12,0.95); font-size: 1.8rem;
+  color: rgba(12,12,12,0.95);
+  font-size: 1.4rem;
   display: inline-flex; align-items: center; justify-content: center;
   cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
   box-shadow: inset 0 2px 4px rgba(255,255,255,0.55), 0 10px 24px rgba(0,0,0,0.45);
   outline: none; font-weight: bold;
 }
 .arrow:hover:not(:disabled), .modal-nav-button:hover:not(:disabled) {
-  transform: scale(1.08);
+  transform: scale(1.06);
   background: linear-gradient(180deg, rgba(255,255,255,0.46), rgba(255,255,255,0.28));
-  box-shadow: inset 0 3px 6px rgba(255,255,255,0.6), 0 12px 30px rgba(0,0,0,0.5);
 }
 .arrow:disabled, .modal-nav-button:disabled { opacity: 0.28; cursor: default; transform: none; }
 
@@ -266,14 +284,13 @@ body {
 <aside class="sidebar" aria-label="Main Sidebar">
   <div class="brand" role="banner">
     <h1>Randy Mattoka</h1>
-    <small>Digital Artist — Character & Concept</small>
+    <small>Digital Illustrator & Concept Artist</small>
   </div>
 
   <nav role="navigation" aria-label="Primary">
     <a href="#completed">Completed Artwork</a>
     <a href="#nightwatch">Nightwatch</a>
     <a href="#process">Process / Sketches</a>
-    <a href="#contact">Contact</a>
   </nav>
 
   <div class="meta" aria-hidden="false">
@@ -293,8 +310,10 @@ body {
   <section id="completed" class="glass" aria-labelledby="completed-heading">
     <div class="header-inline"><h2 id="completed-heading">Completed Artwork</h2></div>
     <div class="carousel-wrapper" data-section="completed">
-      <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
+      <!-- arrows positioned INSIDE carousel-container (top corners) -->
       <div class="carousel-container">
+        <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
+        <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
         <div class="carousel-track">
           <!-- Keep your images & data-* attributes as-is -->
           <img src="images/fanart1.png" alt="Artwork 1 - Sandman X Metallica" loading="lazy" data-index="0" data-desc="This is a piece I made of the comic book character Dream, otherwise know as The Sandmam. He is depicted shredding on an electric guitar, giving a nod to Metallica's timeless hit &quot;Enter Sandman.&quot;" data-date="October 2nd, 2025">
@@ -314,15 +333,15 @@ body {
           <img src="images/fanart15.png" alt="Artwork 15" loading="lazy" data-index="14" data-desc="" data-date="">
         </div>
       </div>
-      <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
     </div>
   </section>
 
   <section id="nightwatch" class="glass" aria-labelledby="nightwatch-heading">
     <h2 id="nightwatch-heading">Nightwatch</h2>
     <div class="carousel-wrapper" data-section="nightwatch">
-      <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
       <div class="carousel-container">
+        <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
+        <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
         <div class="carousel-track">
           <img src="images/nightwatch1.png" alt="Nightwatch 1" data-index="0" data-desc="" data-date="">
           <img src="images/nightwatch2.png" alt="Nightwatch 2" data-index="1" data-desc="" data-date="">
@@ -330,15 +349,15 @@ body {
           <img src="images/nightwatch4.png" alt="Nightwatch 4" data-index="3" data-desc="" data-date="">
         </div>
       </div>
-      <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
     </div>
   </section>
 
   <section id="process" class="glass" aria-labelledby="process-heading">
     <h2 id="process-heading">Process / Sketches</h2>
     <div class="carousel-wrapper" data-section="process">
-      <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
       <div class="carousel-container">
+        <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
+        <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
         <div class="carousel-track">
           <img src="images/process1.png" alt="Process 1" data-index="0" data-desc="" data-date="">
           <img src="images/process2.png" alt="Process 2" data-index="1" data-desc="" data-date="">
@@ -353,13 +372,7 @@ body {
           <img src="images/process11.png" alt="Process 11" data-index="10" data-desc="" data-date="">
         </div>
       </div>
-      <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
     </div>
-  </section>
-
-  <section id="contact" class="glass" aria-labelledby="contact-heading">
-    <h2 id="contact-heading">Contact</h2>
-    <p style="text-align:center;">Email: <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a></p>
   </section>
 
 </main>
@@ -390,7 +403,7 @@ body {
 </div>
 
 <!-- -----------------------
-     JavaScript (mostly your existing logic, adapted for the new layout)
+     JavaScript (keeps original logic; arrows now live inside carousel-container)
      ----------------------- -->
 <script>
 /* --- Carousel Script --- */
@@ -651,7 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Highlight nav links while scrolling (basic)
     const navLinks = document.querySelectorAll('.sidebar nav a');
-    const sections = Array.from(navLinks).map(a => document.querySelector(a.getAttribute('href')));
+    const sections = Array.from(navLinks).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
