@@ -134,79 +134,74 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 22px;
   text-align: center;
 }
 
-/* Signature image */
+/* Make signature larger and more prominent */
 .about-signature {
-  width: 260px;
-  max-width: 90%;
+  width: 360px;        /* increased size */
+  max-width: 92%;
   height: auto;
-  opacity: 0.95;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+  opacity: 0.98;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,0.45));
   animation: float 6s ease-in-out infinite;
+  transition: transform 220ms ease;
 }
+.about-signature:hover { transform: translateY(-4px) scale(1.02); }
 
+/* gentle floating animation */
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
 }
 
-/* Heading */
+/* Heading: make 'About' gradient and 'Me' solid white for clarity */
 .about-text h2 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-  letter-spacing: 0.5px;
-  font-weight: 700;
-  background: linear-gradient(90deg, #a0616a, #8b5a8c, #0f3460);
+  font-size: 2.1rem;
+  margin-bottom: 8px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  line-height: 1.05;
+}
+
+/* gradient applied only to .intro-accent ("About") */
+.intro-accent {
+  display: inline-block;
+  background: linear-gradient(90deg, #a0616a 10%, #8b5a8c 50%, #0f3460 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.about-text .intro-accent {
-  color: #fff;
-  -webkit-text-fill-color: #fff;
+
+/* solid white for the "Me" part */
+.me-accent {
+  display: inline-block;
+  color: #ffffff;
+  margin-left: 8px;
 }
 
-/* Paragraphs */
+/* Paragraphs & lead */
 .about-text p {
-  max-width: 680px;
+  max-width: 720px;
   line-height: 1.7;
   font-size: 1.05rem;
-  opacity: 0.92;
-  margin-bottom: 10px;
+  opacity: 0.94;
+  margin: 6px 0;
 }
-
 .about-text .lead {
-  font-size: 1.15rem;
-  font-weight: 500;
+  font-size: 1.17rem;
+  font-weight: 600;
   opacity: 1;
 }
 
-/* Button */
-.about-btn {
-  display: inline-block;
-  margin-top: 14px;
-  padding: 10px 22px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.3);
-  color: #fff;
-  text-decoration: none;
-  font-weight: 600;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(6px);
-  transition: all 0.25s ease;
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .about-signature { width: 300px; }
+  .about-text h2 { font-size: 1.9rem; }
 }
-.about-btn:hover {
-  background: rgba(255,255,255,0.18);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-}
-
-/* Fade-up animation */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(25px); }
-  to { opacity: 1; transform: translateY(0); }
+@media (max-width: 520px) {
+  .about-signature { width: 220px; }
+  .about-text h2 { font-size: 1.6rem; }
 }
 
 /* Header inside main (kept but simplified) */
@@ -415,11 +410,13 @@ body {
     <img src="images/signature.png" alt="Signature of Randy Mattoka" class="about-signature" loading="lazy">
     <div class="about-text">
       <h2 id="about-heading">
-        <span class="intro-accent">About</span> Me
+        <span class="intro-accent">About</span>
+        <span class="me-accent">Me</span>
       </h2>
+
       <p class="lead">I'm <strong>Randy Mattoka</strong> — a digital illustrator and concept artist who fuses bold line art with modern color and form.</p>
-      <p>My work explores comic styled artw through shape, lighting, and atmosphere — blending traditional influences with digital precision to create expressive, cinematic designs.</p>
-      <a href="#completed" class="about-btn">View My Work ↓</a>
+
+      <p>My work explores comic style art through shape, lighting, and atmosphere — blending traditional influences with digital precision to create expressive, cinematic worlds.</p>
     </div>
   </div>
 </section>
