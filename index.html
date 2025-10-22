@@ -125,83 +125,81 @@ body {
    About Section Enhancements
    -------------------------- */
 .about-section {
-  overflow: hidden;
-  animation: fadeUp 0.9s ease-out both;
-  background: radial-gradient(circle at top left, rgba(255,255,255,0.06), rgba(255,255,255,0.02) 70%);
+  padding: 28px;
+  background: rgba(255,255,255,0.03); /* subtle glass, no gradient */
 }
 
-.about-content {
-  display: flex;
-  flex-direction: column;
+/* Grid: signature on left, text on right */
+.about-inner {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 28px;
   align-items: center;
-  gap: 22px;
-  text-align: center;
+  align-content: start;
 }
 
-/* Make signature larger and more prominent */
+/* Left column (signature) */
+.about-left { display: flex; align-items: center; justify-content: flex-start; }
 .about-signature {
-  width: 360px;        /* increased size */
-  max-width: 92%;
+  width: 240px;        /* signature size - tweak as desired */
+  max-width: 100%;
   height: auto;
-  opacity: 0.98;
-  filter: drop-shadow(0 6px 20px rgba(0,0,0,0.45));
-  animation: float 6s ease-in-out infinite;
-  transition: transform 220ms ease;
-}
-.about-signature:hover { transform: translateY(-4px) scale(1.02); }
-
-/* gentle floating animation */
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  display: block;
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.45));
+  transform: none;     /* no animation */
 }
 
-/* Heading: make 'About' gradient and 'Me' solid white for clarity */
-.about-text h2 {
-  font-size: 2.1rem;
-  margin-bottom: 8px;
+/* Right column (heading + lead) */
+.about-right { text-align: left; }
+.about-text h2, #about-heading {
+  font-size: 2.0rem;
+  margin: 0 0 10px 0;
   font-weight: 800;
-  letter-spacing: 0.3px;
-  line-height: 1.05;
+  line-height: 1.02;
 }
 
-/* gradient applied only to .intro-accent ("About") */
-.intro-accent {
-  display: inline-block;
-  background: linear-gradient(90deg, #a0616a 10%, #8b5a8c 50%, #0f3460 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+/* Plain coloring: 'About' normal weight, 'Me' white for contrast */
+.intro-accent { color: #d9dbe0; /* subtle light */ display:inline-block; }
+.me-accent { color: #ffffff; display:inline-block; margin-left: 8px; }
 
-/* solid white for the "Me" part */
-.me-accent {
-  display: inline-block;
-  color: #ffffff;
-  margin-left: 8px;
-}
-
-/* Paragraphs & lead */
-.about-text p {
-  max-width: 720px;
-  line-height: 1.7;
-  font-size: 1.05rem;
-  opacity: 0.94;
-  margin: 6px 0;
-}
-.about-text .lead {
-  font-size: 1.17rem;
+/* Lead paragraph next to signature */
+.lead {
+  font-size: 1.08rem;
   font-weight: 600;
-  opacity: 1;
+  margin: 0;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.95);
 }
 
-/* Responsive adjustments */
-@media (max-width: 900px) {
-  .about-signature { width: 300px; }
-  .about-text h2 { font-size: 1.9rem; }
+/* Centered paragraph below the grid */
+.about-center {
+  margin-top: 20px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-size: 1.03rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.92);
+  opacity: 0.96;
 }
-@media (max-width: 520px) {
+
+/* Responsive: stack on small screens */
+@media (max-width: 860px) {
+  .about-inner { grid-template-columns: 1fr; gap: 18px; }
+  .about-left { justify-content: center; }
+  .about-right { text-align: center; }
+  .intro-accent, .me-accent { display:inline-block; }
+  .lead { text-align: center; }
+  .about-center { padding: 0 14px; }
   .about-signature { width: 220px; }
-  .about-text h2 { font-size: 1.6rem; }
+}
+
+@media (max-width: 520px) {
+  .about-signature { width: 180px; }
+  #about-heading { font-size: 1.5rem; }
+  .lead { font-size: 1rem; }
+  .about-center { font-size: 0.98rem; padding: 0 12px; }
 }
 
 /* Header inside main (kept but simplified) */
@@ -406,19 +404,24 @@ body {
 <main class="main" id="main-content" tabindex="-1">
 
   <section id="about" class="glass about-section" aria-labelledby="about-heading">
-  <div class="about-content">
-    <img src="images/signature.png" alt="Signature of Randy Mattoka" class="about-signature" loading="lazy">
-    <div class="about-text">
+  <div class="about-inner">
+    <div class="about-left">
+      <img src="images/signature.png" alt="Signature of Randy Mattoka" class="about-signature" loading="lazy">
+    </div>
+
+    <div class="about-right">
       <h2 id="about-heading">
         <span class="intro-accent">About</span>
         <span class="me-accent">Me</span>
       </h2>
 
       <p class="lead">I'm <strong>Randy Mattoka</strong> — a digital illustrator and concept artist who fuses bold line art with modern color and form.</p>
-
-      <p>My work explores comic style art through shape, lighting, and atmosphere — blending traditional influences with digital precision to create expressive, cinematic worlds.</p>
     </div>
   </div>
+
+  <p class="about-center">
+    My work explores comic art through shape, lighting, and atmosphere — blending traditional influences with digital precision to create expressive, cinematic worlds.
+  </p>
 </section>
 
   <section id="completed" class="glass" aria-labelledby="completed-heading">
