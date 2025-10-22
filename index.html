@@ -120,15 +120,34 @@ body {
   margin-bottom: 30px;
 }
 
-/* Header inside main (kept but simplified) */
+/* --- Centered section titles & aligned arrows --- */
 .header-inline {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap: 12px;
-  margin-bottom: 12px;
+  position: relative;
+  text-align: center;
+  margin-bottom: 16px;
 }
-.header-inline h2 { font-size: 1.25rem; margin: 0; }
+.header-inline h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.header-inline h2::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 2px;
+  background: rgba(255,255,255,0.25);
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+/* Reposition arrows to align horizontally with the title */
+.carousel-container .arrow-shell {
+  top: -52px; /* raise arrows to align with title row */
+  transform: none;
+}
+.carousel-container .arrow-shell.left { left: 16px; }
+.carousel-container .arrow-shell.right { right: 16px; }
 
 /* --- Carousel Styles (mostly unchanged) --- */
 .carousel-wrapper { position: relative; display: flex; align-items: center; justify-content: center; }
