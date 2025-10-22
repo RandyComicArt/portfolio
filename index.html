@@ -173,9 +173,9 @@ body {
 .glass .arrow-shell.right { right: 14px; }
 .glass .arrow-shell.left  { right: 76px; }
 
-/* reveal when hovering or keyboard-focus inside the glass card */
+/* reveal when hovering or when .show-arrows is present (keyboard focus) */
 .glass:hover .arrow-shell,
-.glass:focus-within .arrow-shell {
+.glass.show-arrows .arrow-shell {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto; /* enable interaction when visible */
@@ -710,6 +710,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
+
+<script>
+/* Only reveal arrows on keyboard focus (Tab) — mouse clicks won't "stick" them visible */
+(function() {
+  let lastInteraction = 'mouse';
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') lastInteraction = 'keyboard';
+  }, { capture: true });
+
+  document.addEventListener('mousedown', () => { lastInteraction = 'mouse'; }, { capture: true });
+  document.addEventListener('touchstart', () => { lastInteraction = 'mouse'; }, { capture: true });
+
+  // Toggle .show-arrows on keyboard focusin/focusout
+  document.querySelectorAll('.glass').forEach(glass => {
+    glass.addEventListener('focusin', () => {
+      if (lastInteraction === 'keyboard') glass.classList.add('show-arrows');
+    });
+
+    glass.addEventListener('focusout', () => {
+      // allow focus to move to child elements (buttons) before removing
+      setTimeout(() => {
+        if (!glass.contains(document.activeElement)) glass.classList.remove('show-arrows');
+      }, 0);
+    });
+  });
+})();
+</script>
+
 
 </body>
 </html>
