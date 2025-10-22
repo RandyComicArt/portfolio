@@ -121,6 +121,94 @@ body {
   margin-bottom: 30px;
 }
 
+/* --------------------------
+   About Section Enhancements
+   -------------------------- */
+.about-section {
+  overflow: hidden;
+  animation: fadeUp 0.9s ease-out both;
+  background: radial-gradient(circle at top left, rgba(255,255,255,0.06), rgba(255,255,255,0.02) 70%);
+}
+
+.about-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+}
+
+/* Signature image */
+.about-signature {
+  width: 260px;
+  max-width: 90%;
+  height: auto;
+  opacity: 0.95;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Heading */
+.about-text h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #a0616a, #8b5a8c, #0f3460);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.about-text .intro-accent {
+  color: #fff;
+  -webkit-text-fill-color: #fff;
+}
+
+/* Paragraphs */
+.about-text p {
+  max-width: 680px;
+  line-height: 1.7;
+  font-size: 1.05rem;
+  opacity: 0.92;
+  margin-bottom: 10px;
+}
+
+.about-text .lead {
+  font-size: 1.15rem;
+  font-weight: 500;
+  opacity: 1;
+}
+
+/* Button */
+.about-btn {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 10px 22px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(6px);
+  transition: all 0.25s ease;
+}
+.about-btn:hover {
+  background: rgba(255,255,255,0.18);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+/* Fade-up animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* Header inside main (kept but simplified) */
 .header-inline {
   display:flex;
@@ -324,11 +412,14 @@ body {
 
   <section id="about" class="glass about-section" aria-labelledby="about-heading">
   <div class="about-content">
-    <img src="images/signature.png" alt="Image of my signature" class="about-photo" loading="lazy">
+    <img src="images/signature.png" alt="Signature of Randy Mattoka" class="about-signature" loading="lazy">
     <div class="about-text">
-      <h2 id="about-heading">About <span>Me</span></h2>
-      <p>Hello! I'm <strong>Randy Mattoka</strong> — a digital illustrator and concept artist focusing on character design, stylized line art, and vivid storytelling through color and form.</p>
-      <p>My work blends traditional influences with modern digital techniques to create expressive, cinematic visuals that connect emotion and narrative.</p>
+      <h2 id="about-heading">
+        <span class="intro-accent">About</span> Me
+      </h2>
+      <p class="lead">I'm <strong>Randy Mattoka</strong> — a digital illustrator and concept artist who fuses bold line art with modern color and form.</p>
+      <p>My work explores comic styled artw through shape, lighting, and atmosphere — blending traditional influences with digital precision to create expressive, cinematic designs.</p>
+      <a href="#completed" class="about-btn">View My Work ↓</a>
     </div>
   </div>
 </section>
