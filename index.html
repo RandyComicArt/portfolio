@@ -111,6 +111,7 @@ body {
 
 /* A lightweight glass panel class reused */
 .glass {
+  position: relative; /* Make each glass a positioning context for arrows */
   background: rgba(255,255,255,0.05);
   backdrop-filter: blur(15px);
   border-radius: 14px;
@@ -131,7 +132,9 @@ body {
 .header-inline h2 { font-size: 1.25rem; margin: 0; }
 
 /* --- Carousel Styles (mostly unchanged) --- */
-.carousel-wrapper { position: relative; display: flex; align-items: center; justify-content: center; }
+/* NOTE: carousel-wrapper intentionally left without position:relative so
+   arrow-shells (absolute) will use .glass as positioning context. */
+.carousel-wrapper { display: flex; align-items: center; justify-content: center; }
 .carousel-container { position: relative; width: 100%; max-width: 1200px; overflow: hidden; }
 .carousel-track {
   display: flex; gap: 30px; align-items: center;
@@ -148,22 +151,42 @@ body {
 .carousel-track img.center { transform: scale(1.08); z-index: 2; }
 .carousel-track img.side { transform: scale(0.9); opacity: 0.85; z-index: 1; }
 
-/* Arrow shells now positioned inside the carousel container
-   at the TOP-LEFT and TOP-RIGHT corners of each carousel */
-.arrow-shell {
+/* ----------------------
+   Arrow shells positioned at the TOP-RIGHT of the .glass panel
+   with a hover/focus reveal effect
+   ---------------------- */
+.glass .arrow-shell {
   position: absolute;
-  top: 12px;
+  top: 14px;
+  z-index: 60;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 60;
-  pointer-events: none;
-  width: auto;
-  height: auto;
   padding: 0 6px;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity .16s ease, transform .16s ease;
+  pointer-events: none; /* disabled until visible */
 }
-.arrow-shell.left { left: 12px; }
-.arrow-shell.right { right: 12px; }
+
+/* pin the Next button to the far right, Prev sits slightly left */
+.glass .arrow-shell.right { right: 14px; }
+.glass .arrow-shell.left  { right: 76px; }
+
+/* reveal when hovering or keyboard-focus inside the glass card */
+.glass:hover .arrow-shell,
+.glass:focus-within .arrow-shell {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto; /* enable interaction when visible */
+}
+
+/* on small screens, keep arrows visible (more usable) */
+@media (max-width: 1000px) {
+  .glass .arrow-shell { opacity: 1; transform: none; pointer-events: auto; }
+  .glass .arrow-shell.right { right: 8px; }
+  .glass .arrow-shell.left { right: 64px; }
+}
 
 /* Arrow button */
 .arrow, .modal-nav-button {
@@ -266,11 +289,8 @@ body {
   }
   .sidebar .meta { display:none; }
   .main { margin-left: 0; padding-top: 18px; }
-  .arrow-shell.left { left: 8px; }
-  .arrow-shell.right { right: 8px; }
 }
 
-/* smaller phones */
 @media (max-width: 520px) {
   .carousel-track img { width: 220px; }
   .modal-content { height: 92vh; }
@@ -309,11 +329,14 @@ body {
 
   <section id="completed" class="glass" aria-labelledby="completed-heading">
     <div class="header-inline"><h2 id="completed-heading">Completed Artwork</h2></div>
+
     <div class="carousel-wrapper" data-section="completed">
-      <!-- arrows positioned INSIDE carousel-container (top corners) -->
+      <!-- arrows live inside the wrapper so JS can find them,
+           but absolute positioning is relative to the .glass panel -->
+      <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
+      <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
+
       <div class="carousel-container">
-        <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
-        <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
         <div class="carousel-track">
           <!-- Keep your images & data-* attributes as-is -->
           <img src="images/fanart1.png" alt="Artwork 1 - Sandman X Metallica" loading="lazy" data-index="0" data-desc="This is a piece I made of the comic book character Dream, otherwise know as The Sandmam. He is depicted shredding on an electric guitar, giving a nod to Metallica's timeless hit &quot;Enter Sandman.&quot;" data-date="October 2nd, 2025">
@@ -339,9 +362,10 @@ body {
   <section id="nightwatch" class="glass" aria-labelledby="nightwatch-heading">
     <h2 id="nightwatch-heading">Nightwatch</h2>
     <div class="carousel-wrapper" data-section="nightwatch">
+      <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
+      <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
+
       <div class="carousel-container">
-        <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
-        <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
         <div class="carousel-track">
           <img src="images/nightwatch1.png" alt="Nightwatch 1" data-index="0" data-desc="" data-date="">
           <img src="images/nightwatch2.png" alt="Nightwatch 2" data-index="1" data-desc="" data-date="">
@@ -355,9 +379,10 @@ body {
   <section id="process" class="glass" aria-labelledby="process-heading">
     <h2 id="process-heading">Process / Sketches</h2>
     <div class="carousel-wrapper" data-section="process">
+      <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
+      <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
+
       <div class="carousel-container">
-        <div class="arrow-shell left"><button class="arrow left" aria-label="Previous">&#10094;</button></div>
-        <div class="arrow-shell right"><button class="arrow right" aria-label="Next">&#10095;</button></div>
         <div class="carousel-track">
           <img src="images/process1.png" alt="Process 1" data-index="0" data-desc="" data-date="">
           <img src="images/process2.png" alt="Process 2" data-index="1" data-desc="" data-date="">
@@ -403,7 +428,7 @@ body {
 </div>
 
 <!-- -----------------------
-     JavaScript (keeps original logic; arrows now live inside carousel-container)
+     JavaScript (keeps original logic; arrows now live inside carousel-wrapper)
      ----------------------- -->
 <script>
 /* --- Carousel Script --- */
