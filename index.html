@@ -497,6 +497,47 @@ body {
   image-rendering: pixelated; /* if you want that retro pixel look */
 }
 
+/* Instagram icon container in sidebar */
+.sidebar-social {
+  position: absolute;
+  bottom: 102px; /* Match the Mario GIF's bottom position */
+  left: 100px;   /* Position to the right of Mario (30px for Mario + 60px width + 10px gap) */
+  width: 60px;
+  height: auto;
+  z-index: 130;  /* Same z-index as Mario to sit above sidebar background */
+}
+
+/* Instagram icon styles */
+.social-icon {
+  width: 60px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+/* Hover effect for interactivity */
+.sidebar-social a:hover .social-icon {
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+}
+
+/* Responsive adjustments: stack icons vertically on smaller screens */
+@media (max-width: 1000px) {
+  .sidebar-mario,
+  .sidebar-social {
+    position: static; /* Remove absolute positioning in top-bar mode */
+    display: inline-block; /* Allow them to sit side-by-side in the top bar */
+  }
+  .sidebar-mario { margin-left: 10px; } /* Small offset from nav links */
+  .sidebar-social { margin-left: 10px; }
+}
+
+/* Further adjust for very small screens */
+@media (max-width: 520px) {
+  .mario-gif, .social-icon { width: 48px; } /* Slightly smaller icons */
+}
+
 @media (max-width: 520px) {
   .carousel-track img { width: 220px; }
   .modal-content { height: 92vh; }
@@ -524,6 +565,12 @@ body {
    <div class="sidebar-mario">
      <img src="gifs/mario.gif" alt="Running Mario" class="mario-gif">
    </div>
+
+<div class="sidebar-social">
+  <a href="https://www.instagram.com/randycomicart/" target="_blank" rel="noopener" aria-label="Visit Randy Mattoka's Instagram">
+    <img src="socials/instagram.png" alt="Instagram Icon" class="social-icon">
+  </a>
+</div>
    
 <hr class="sidebar-separator">
    
