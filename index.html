@@ -225,7 +225,6 @@ body {
   opacity: 0.96;
 }
 
-/* divider between about me and paragraph */
 .about-divider {
   width: 900px;
   max-width: 90%;
@@ -234,21 +233,22 @@ body {
   border-radius: 3px;
   margin: 24px auto 32px auto;
 
-  /* gradient now starts pink on the left → dark blue on the right */
+  /* Pink → Purple → Blue gradient */
   background: linear-gradient(
     90deg,
     #a0616a 0%,
     #8b5a8c 25%,
-    #533a7d 50%,
+    #533a7d 55%,
     #0f3460 100%
   );
 
-  /* soft glow for depth */
+  /* Multi-color glow that shifts from pink to blue */
   box-shadow:
-    0 0 8px 2px rgba(160, 97, 106, 0.6),
-    0 0 18px 6px rgba(83, 58, 125, 0.3);
+    0 0 10px 2px rgba(160, 97, 106, 0.7),
+    10px 0 20px 4px rgba(83, 58, 125, 0.5),
+    20px 0 25px 6px rgba(15, 52, 96, 0.45);
 
-  transition: background 0.4s ease, transform 0.3s ease, box-shadow 0.4s ease;
+  transition: all 0.4s ease;
 }
 
 /* -------------------------
