@@ -234,21 +234,20 @@ body {
   border-radius: 3px;
   margin: 24px auto 32px auto;
 
-  /* New blue gradient core */
+  /* gradient now starts pink on the left → dark blue on the right */
   background: linear-gradient(
     90deg,
-    #0f3460 0%,
-    #16213e 35%,
-    #1a1a2e 70%,
-    #8b5a8c 100%
+    #a0616a 0%,
+    #8b5a8c 25%,
+    #533a7d 50%,
+    #0f3460 100%
   );
 
-  /* Soft glow around the divider */
+  /* soft glow for depth */
   box-shadow:
-    0 0 8px 2px rgba(15, 52, 96, 0.6),
+    0 0 8px 2px rgba(160, 97, 106, 0.6),
     0 0 18px 6px rgba(83, 58, 125, 0.3);
 
-  /* Slight animation to make the glow feel alive */
   transition: background 0.4s ease, transform 0.3s ease, box-shadow 0.4s ease;
 }
 
