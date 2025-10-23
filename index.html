@@ -10,27 +10,50 @@
    ---------------------- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow-x: hidden; } /* prevent horizontal scroll */
+/* --- Background: Dark base with purple/pink spotlight cone --- */
 body {
+  position: relative;
+  background: #0b0b12; /* deep neutral base */
   font-family: Arial, sans-serif;
   line-height: 1.6;
   color: #fff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
 
-  background:
-    conic-gradient(
-      from 220deg at 0% 0%,            /* origin and angle of the beam */
-      rgba(255,130,90,0.25) 0deg,      /* bright orange/pink start */
-      rgba(139,90,140,0.15) 30deg,     /* purple mid fade */
-      rgba(15,20,30,0.98) 120deg,      /* fades to darkness */
-      rgba(5,5,10,1) 360deg
-    ),
-    radial-gradient(
-      circle at 50% 120%,              /* faint ambient glow near bottom */
-      rgba(255,255,255,0.02),
-      rgba(0,0,0,0.95) 80%
-    );
-  background-blend-mode: overlay;
+/* Spotlight cone overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 65%;          /* how wide the cone spreads */
+  height: 100%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(165,97,106,0.32),   /* soft pink top light */
+    rgba(139,90,140,0.24) 40%, /* purple midtone */
+    rgba(20,20,40,0) 85%       /* fade to transparent */
+  );
+  clip-path: polygon(0 0, 100% 0, 0 100%); /* triangular cone shape */
+  filter: blur(100px);  /* softens the edges for that glow */
+  pointer-events: none;
+  z-index: -1;
+  mix-blend-mode: screen; /* gives it that luminous look */
+}
+
+/* Optional: dark vignette to add contrast */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    circle at 70% 60%,
+    rgba(0,0,0,0) 40%,
+    rgba(0,0,0,0.6) 100%
+  );
+  pointer-events: none;
+  z-index: -2;
 }
 
 /* ----------------------
