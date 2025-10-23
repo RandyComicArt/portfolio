@@ -14,35 +14,16 @@ html, body { height: 100%; overflow-x: hidden; } /* prevent horizontal scroll */
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
-
-  /* text & smoothing — ensure these are present so text stays visible */
-  color: #ffffff;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  /* --- SOFT-EDGED CONIC GRADIENT (anchored bottom-right) --- */
-  background-color: #000; /* ensures unlit areas are solid black */
-  background-image: conic-gradient(
-    from 180deg at 100% 100%,
-    /* Black margin (bottom edge) */
-    #000000 0deg,
-    #000000 70deg,
-    /* Soft fade-in */
-    rgba(83, 58, 125, 0.5) 75deg,
-    /* Core beam */
-    #533a7d 80deg,
-    #8b5a8c 120deg,
-    #a0616a 150deg,
-    /* Soft fade-out */
-    rgba(83, 58, 125, 0.5) 175deg,
-    /* Black margin (right edge) */
-    #000000 180deg,
-    #000000 360deg
+  background: conic-gradient(
+    from 180deg at 100% 100%,  /* cone originates from bottom right */
+    #0c0c0c 0%,
+    #1a1a2e 15%,
+    #16213e 35%,
+    #0f3460 50%,
+    #533a7d 70%,
+    #8b5a8c 85%,
+    #a0616a 100%
   );
-  background-attachment: fixed;
-  background-size: 200% 200%;
-  background-position: bottom right;
-}
 
   color: #fff;
   -webkit-font-smoothing: antialiased;
