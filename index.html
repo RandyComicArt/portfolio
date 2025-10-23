@@ -409,6 +409,16 @@ body {
   image-rendering: pixelated; /* if you want that retro pixel look */
 }
 
+.sidebar-separator-top {
+  width: 90%;                         /* a touch longer than the bottom one */
+  height: 1px;
+  border: none;
+  background: rgba(255,255,255,0.25);
+  box-shadow: 0 0 8px rgba(255,255,255,0.1);
+  margin: 16px auto 18px auto;        /* spacing under your title */
+  border-radius: 1px;
+}
+
 @media (max-width: 520px) {
   .carousel-track img { width: 220px; }
   .modal-content { height: 92vh; }
@@ -425,7 +435,7 @@ body {
     <small>Digital Illustrator & Concept Artist</small>
   </div>
 
-<hr class="sidebar-separator">
+<hr class="sidebar-separator-top">
 
   <nav role="navigation" aria-label="Primary">
     <a href="#completed">Completed Artwork</a>
