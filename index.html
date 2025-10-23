@@ -18,29 +18,30 @@ body {
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  background-color: #000;
+  display: block;
+  background-color: #000; /* fallback */
 
-  /* FLASHLIGHT ORIGIN: top-left with extended dark region */
+  /* FLASHLIGHT: origin moved to top-left */
   background-image: conic-gradient(
-    from -90deg at 0% 0%,   /* rotate so the cone points diagonally down-right */
+    from 0deg at 0% 0%,
 
-    /* 1. Deep black top + left area */
+    /* black margin (top-left) */
     #000000 0deg,
-    #000000 90deg,
+    #000000 70deg,
 
-    /* 2. Soft fade-in into the beam */
-    rgba(83, 58, 125, 0.55) 100deg,
+    /* soft fade into beam */
+    rgba(83, 58, 125, 0.55) 75deg,
 
-    /* 3. Bright beam core */
-    #533a7d 120deg,
-    #8b5a8c 160deg,
-    #a0616a 200deg,
+    /* beam core colors */
+    #533a7d 80deg,
+    #8b5a8c 120deg,
+    #a0616a 150deg,
 
-    /* 4. Soft fade-out */
-    rgba(83, 58, 125, 0.45) 240deg,
+    /* soft fade out */
+    rgba(83, 58, 125, 0.45) 175deg,
 
-    /* 5. Back to darkness (bottom/right edges) */
-    #000000 300deg,
+    /* black margin (opposite side) */
+    #000000 180deg,
     #000000 360deg
   );
 
@@ -51,6 +52,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 
 
 /* ----------------------
