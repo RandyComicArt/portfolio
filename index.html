@@ -12,21 +12,43 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow-x: hidden; } /* prevent horizontal scroll */
 body {
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
-  background: conic-gradient(
-    from 180deg at 100% 100%,  /* cone originates from bottom right */
-    #0c0c0c 0%,
-    #1a1a2e 15%,
-    #16213e 35%,
-    #0f3460 50%,
-    #533a7d 70%,
-    #8b5a8c 85%,
-    #a0616a 100%
-  );
-  color: #fff;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+    /* --- NEW SOFT-EDGED GRADIENT APPLIED HERE --- */
+    background-color: #000; /* Ensures unlit areas are solid black */
+    background-image: conic-gradient(
+        from 180deg at 100% 100%,
+        
+        /* 1. Black Margin (Bottom edge) */
+        #000000 0deg,
+        #000000 70deg,
+        
+        /* 2. Soft Fade-In (The transition to light) */
+        rgba(83, 58, 125, 0.5) 75deg, 
+        
+        /* 3. The Core Colors of the light beam */
+        #533a7d 80deg,
+        #8b5a8c 120deg,
+        #a0616a 150deg,
+        
+        /* 4. Soft Fade-Out (The transition back to black) */
+        rgba(83, 58, 125, 0.5) 175deg, 
+
+        /* 5. Black Margin (Right edge) */
+        #000000 180deg,
+        #000000 360deg 
+    );
+
+    /* Positioning to ensure the beam is always anchored at the bottom-right */
+    background-attachment: fixed;
+    background-size: 200% 200%;
+    background-position: bottom right;
+    
+    /* End of Gradient Changes */
+
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ----------------------
