@@ -10,62 +10,13 @@
    ---------------------- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow-x: hidden; } /* prevent horizontal scroll */
-/* --- Background: Dark base with purple/pink spotlight cone --- */
-/* cone spotlight — purple/pink, subtle animation, mobile fallback */
 body {
-  position: relative;
-  background: #0b0b12;
-}
-
-/* cone */
-body::before{
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 6%;              /* small nudge so it doesn't sit on the absolute-left UI */
-  width: 52%;            /* tighter beam */
-  height: 100%;
-  background: linear-gradient(
-    to bottom right,
-    rgba(139,90,140,0.36),  /* purple */
-    rgba(165,97,106,0.24) 40%, /* pink tint */
-    rgba(20,20,40,0) 78%
-  );
-  clip-path: polygon(0 0, 100% 0, 0 100%);
-  filter: blur(120px);
-  pointer-events: none;
-  z-index: -1;
-  mix-blend-mode: screen;
-  transform-origin: 0 0;
-  animation: cone-breathe 36s ease-in-out infinite;
-  will-change: transform;
-}
-
-/* slow breathing */
-@keyframes cone-breathe {
-  0%   { transform: translateY(0) rotate(-2deg) scale(1); }
-  50%  { transform: translateY(6px) rotate(2deg)  scale(1.02); }
-  100% { transform: translateY(0) rotate(-2deg) scale(1); }
-}
-
-/* darker glass so panels stay readable */
-.glass {
-  background: rgba(8,10,14,0.40);
-  backdrop-filter: blur(8px) saturate(1.05);
-  border: 1px solid rgba(255,255,255,0.04);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.02);
-  position: relative;
-  z-index: 0;
-}
-
-/* respect reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  body::before { animation: none; }
-}
-
-/* mobile: remove heavy cone for perf & readability */
-@media (max-width: 860px) {
-  body::before { display: none; }
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background: linear-gradient(135deg,#0c0c0c 0%,#1a1a2e 15%,#16213e 35%,#0f3460 50%,#533a7d 70%,#8b5a8c 85%,#a0616a 100%);
+  color: #fff;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
 
 /* ----------------------
