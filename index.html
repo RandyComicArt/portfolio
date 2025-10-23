@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,84 +11,22 @@
    ---------------------- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow-x: hidden; } /* prevent horizontal scroll */
-/* Body base: keep content above pseudo layers */
 body {
-  position: relative;
-  z-index: 0;
   font-family: Arial, sans-serif;
   line-height: 1.6;
+  background: conic-gradient(
+    from 180deg at 100% 100%,  /* cone originates from bottom right */
+    #0c0c0c 0%,
+    #1a1a2e 15%,
+    #16213e 35%,
+    #0f3460 50%,
+    #533a7d 70%,
+    #8b5a8c 85%,
+    #a0616a 100%
+  );
   color: #fff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* remove previous background here: we'll build it via ::before and ::after */
-  background: transparent;
-}
-
-/* Layer 1: conic gradient cone (origin bottom-right). Put behind everything. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-  /* cone starts at bottom-right, from 240deg to rotate the color sweep */
-  background: conic-gradient(
-    from 240deg at 100% 100%,
-    #0c0c0c 0%,
-    #121322 8%,
-    #16213e 28%,
-    #0f3460 48%,
-    #533a7d 68%,
-    #8b5a8c 82%,
-    #a0616a 100%
-  );
-  transform-origin: 100% 100%;
-  /* subtle animate for life (very slow) */
-  animation: cone-rotate 40s linear infinite;
-  will-change: transform;
-  opacity: 1;
-}
-
-/* Layer 2: radial spotlight / warm rim to emphasize bottom-right */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  /* radial spotlight slightly left/up from the bottom-right corner */
-  background:
-    radial-gradient(
-      circle at 88% 88%,
-      rgba(255,180,140,0.08) 0%,
-      rgba(255,140,110,0.06) 6%,
-      rgba(0,0,0,0) 18%
-    ),
-    /* vignette to darken outer edges and increase contrast */
-    radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.35) 100%);
-  mix-blend-mode: multiply;
-}
-
-/* Subtle rotation keyframes for the cone (very slow) */
-@keyframes cone-rotate {
-  from { transform: rotate(0.0deg); }
-  to   { transform: rotate(0.6deg); } /* tiny rotation over 40s */
-}
-
-/* Add a subtle noise texture overlay (data URI). This prevents banding and feels more tactile. */
-/* You can reduce opacity if it feels too grainy. */
-.noise-overlay {
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: 9999999; /* placed above body backgrounds but below content if needed */
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml;utf8,\
-    <svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'>\
-      <filter id='g'><feTurbulence baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter>\
-      <rect width='100%' height='100%' filter='url(%23g)' opacity='0.6'/>\
-    </svg>");
-  mix-blend-mode: overlay;
 }
 
 /* ----------------------
@@ -521,8 +460,6 @@ body::after {
 </style>
 </head>
 <body>
-
-<div class="noise-overlay" aria-hidden="true"></div>
 
 <!-- Fixed Left Sidebar -->
 <aside class="sidebar" aria-label="Main Sidebar">
