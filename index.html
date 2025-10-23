@@ -228,53 +228,27 @@ body {
 .about-divider {
   width: 900px;
   max-width: 90%;
-  height: 2px; /* slightly thinner line */
+  height: 3px;
   border: none;
-  border-radius: 2px;
+  border-radius: 3px;
   margin: 24px auto 32px auto;
 
-  /* base gradient */
+  /* New blue gradient core */
   background: linear-gradient(
     90deg,
-    #a0616a 0%,
-    #8b5a8c 25%,
-    #533a7d 55%,
-    #0f3460 100%
+    #0f3460 0%,
+    #16213e 35%,
+    #1a1a2e 70%,
+    #8b5a8c 100%
   );
 
-  /* strong but contained glow */
+  /* Soft glow around the divider */
   box-shadow:
-    0 0 8px 1px rgba(160, 97, 106, 0.8),
-    10px 0 18px 3px rgba(83, 58, 125, 0.6),
-    20px 0 22px 5px rgba(15, 52, 96, 0.5);
+    0 0 8px 2px rgba(15, 52, 96, 0.6),
+    0 0 18px 6px rgba(83, 58, 125, 0.3);
 
-  animation: colorShift 6s ease-in-out infinite;
-  transition: all 0.3s ease;
-}
-
-/* refined colorShift animation */
-@keyframes colorShift {
-  0% {
-    background: linear-gradient(90deg, #a0616a, #8b5a8c, #533a7d, #0f3460);
-    box-shadow:
-      0 0 8px 1px rgba(160, 97, 106, 0.8),
-      10px 0 18px 3px rgba(83, 58, 125, 0.6),
-      20px 0 22px 5px rgba(15, 52, 96, 0.5);
-  }
-  50% {
-    background: linear-gradient(90deg, #0f3460, #533a7d, #8b5a8c, #a0616a);
-    box-shadow:
-      0 0 5px 1px rgba(160, 97, 106, 1),   /* glow tightens and brightens */
-      8px 0 14px 3px rgba(83, 58, 125, 0.8),
-      18px 0 18px 4px rgba(15, 52, 96, 0.7);
-  }
-  100% {
-    background: linear-gradient(90deg, #a0616a, #8b5a8c, #533a7d, #0f3460);
-    box-shadow:
-      0 0 8px 1px rgba(160, 97, 106, 0.8),
-      10px 0 18px 3px rgba(83, 58, 125, 0.6),
-      20px 0 22px 5px rgba(15, 52, 96, 0.5);
-  }
+  /* Slight animation to make the glow feel alive */
+  transition: background 0.4s ease, transform 0.3s ease, box-shadow 0.4s ease;
 }
 
 
