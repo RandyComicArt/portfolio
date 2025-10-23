@@ -876,14 +876,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sections.forEach(s => { if (s) observer.observe(s); });
 
-    // smooth scroll for nav links
-    navLinks.forEach(a => {
-      a.addEventListener('click', (e) => {
-        e.preventDefault();
-        const target = document.querySelector(a.getAttribute('href'));
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    });
+    // smooth scroll for nav links (center sections on screen)
+navLinks.forEach(a => {
+  a.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (!target) return;
+
+    // scroll smoothly and center the section
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // optional: move keyboard focus for accessibility
+    setTimeout(() => {
+      target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+    }, 400);
+  });
+});
 });
 </script>
 
