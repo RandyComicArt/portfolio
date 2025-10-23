@@ -184,6 +184,22 @@ body {
   opacity: 0.96;
 }
 
+.about-divider-text {
+  text-align: center;
+  font-size: 1.2rem;
+  letter-spacing: 0.5em;
+  color: rgba(255,255,255,0.65);
+  opacity: 0.8;
+  margin: 16px 0;
+  user-select: none;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.about-section:hover .about-divider-text {
+  opacity: 1;
+}
+
 /* Responsive: stack on small screens */
 @media (max-width: 860px) {
   .about-inner { grid-template-columns: 1fr; gap: 18px; }
@@ -418,6 +434,8 @@ body {
       <p class="lead">Hello! I'm <strong>Randy Mattoka</strong>, a digital illustrator and concept artist who fuses bold line art with modern color and form.</p>
     </div>
   </div>
+
+   <div class="about-divider-text">✦ ✦ ✦</div>
 
   <p class="about-center">
     My work explores comic art through shape, lighting, and atmosphere — blending traditional influences with digital precision to create expressive, cinematic worlds. Below you will also find concept art and designs from <i>Nightwatch</i>, a video game my friend and I are currently hard at work on! 
