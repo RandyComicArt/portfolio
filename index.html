@@ -184,20 +184,19 @@ body {
   opacity: 0.96;
 }
 
-.about-divider-text {
-  text-align: center;
-  font-size: 1.2rem;
-  letter-spacing: 0.5em;
-  color: rgba(255,255,255,0.65);
-  opacity: 0.8;
-  margin: 16px 0;
-  user-select: none;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
+.about-divider {
+  width: 120px;                      /* length of the line */
+  height: 2px;
+  border: none;
+  background: rgba(255,255,255,0.25); /* soft translucent white */
+  margin: 20px auto;                 /* centered with spacing */
+  border-radius: 2px;
+  transition: background 0.3s ease, transform 0.3s ease;
 }
 
-.about-section:hover .about-divider-text {
-  opacity: 1;
+.about-divider:hover {
+  background: rgba(255,255,255,0.45);
+  transform: scaleX(1.1);
 }
 
 /* Responsive: stack on small screens */
@@ -435,10 +434,10 @@ body {
     </div>
   </div>
 
-   <div class="about-divider-text">✦ ✦ ✦</div>
+  <hr class="about-divider">
 
   <p class="about-center">
-    My work explores comic art through shape, lighting, and atmosphere — blending traditional influences with digital precision to create expressive, cinematic worlds. Below you will also find concept art and designs from <i>Nightwatch</i>, a video game my friend and I are currently hard at work on! 
+    My work explores comic art through shape, lighting, and atmosphere — blending traditional influences with digital precision to create expressive, cinematic worlds. Below you will also find concept art and designs from <i>Nightwatch</i>, a video game my friend and I are currently hard at work on!
   </p>
 </section>
 
