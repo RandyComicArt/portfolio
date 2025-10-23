@@ -17,15 +17,15 @@ body {
   color: #fff;
   min-height: 100vh;
   margin: 0;
-  padding: 0; /* main layout already uses padding in .main */
+  padding: 0;
   display: block;
-  background-color: #000; /* fallback for very old browsers */
+  background-color: #000; /* fallback */
 
-  /* REFINED CONICAL "FLASHLIGHT" GRADIENT */
+  /* FLASHLIGHT: origin moved to top-left */
   background-image: conic-gradient(
-    from 180deg at 100% 100%,
+    from 0deg at 0% 0%,
 
-    /* black margin (bottom-right) */
+    /* black margin (top-left) */
     #000000 0deg,
     #000000 70deg,
 
@@ -40,15 +40,14 @@ body {
     /* soft fade out */
     rgba(83, 58, 125, 0.45) 175deg,
 
-    /* black margin (right/top) */
+    /* black margin (opposite side) */
     #000000 180deg,
     #000000 360deg
   );
 
-  /* ensures the cone stays positioned where you expect */
   background-attachment: fixed;
   background-size: 200% 200%;
-  background-position: bottom right;
+  background-position: top left;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
