@@ -225,31 +225,34 @@ body {
   opacity: 0.96;
 }
 
-.about-divider {
-  width: 900px;
-  max-width: 90%;
-  height: 3px;
-  border: none;
-  border-radius: 3px;
-  margin: 24px auto 32px auto;
-
-  /* Pink → Purple → Blue gradient */
-  background: linear-gradient(
-    90deg,
-    #a0616a 0%,
-    #8b5a8c 25%,
-    #533a7d 55%,
-    #0f3460 100%
-  );
-
-  /* Multi-color glow that shifts from pink to blue */
-  box-shadow:
-    0 0 10px 2px rgba(160, 97, 106, 0.7),
-    10px 0 20px 4px rgba(83, 58, 125, 0.5),
-    20px 0 25px 6px rgba(15, 52, 96, 0.45);
-
-  transition: all 0.4s ease;
+@keyframes colorShift {
+  0% {
+    background: linear-gradient(90deg, #a0616a, #8b5a8c, #533a7d, #0f3460);
+    box-shadow:
+      0 0 10px 2px rgba(160, 97, 106, 0.7),
+      10px 0 20px 4px rgba(83, 58, 125, 0.5),
+      20px 0 25px 6px rgba(15, 52, 96, 0.45);
+  }
+  50% {
+    background: linear-gradient(90deg, #0f3460, #533a7d, #8b5a8c, #a0616a);
+    box-shadow:
+      0 0 10px 2px rgba(15, 52, 96, 0.7),
+      10px 0 20px 4px rgba(83, 58, 125, 0.5),
+      20px 0 25px 6px rgba(160, 97, 106, 0.45);
+  }
+  100% {
+    background: linear-gradient(90deg, #a0616a, #8b5a8c, #533a7d, #0f3460);
+    box-shadow:
+      0 0 10px 2px rgba(160, 97, 106, 0.7),
+      10px 0 20px 4px rgba(83, 58, 125, 0.5),
+      20px 0 25px 6px rgba(15, 52, 96, 0.45);
+  }
 }
+
+.about-divider {
+  animation: colorShift 6s ease-in-out infinite;
+}
+
 
 /* -------------------------
    Sidebar separators (fixed-position, non-layout)
