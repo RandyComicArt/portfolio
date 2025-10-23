@@ -184,8 +184,10 @@ body {
   opacity: 0.96;
 }
 
+/* make the about-divider responsive and not a huge fixed width */
 .about-divider {
-  width:  900px;                      /* length of the line */
+  width: 120px;
+  max-width: 90%;
   height: 3px;
   border: none;
   background: linear-gradient(to right, #a0616a, #8b5a8c, #0f3460);
@@ -194,14 +196,39 @@ body {
   transition: background 0.3s ease, transform 0.3s ease;
 }
 
-.sidebar-separator {
-  width: 90%;
+/* -------------------------
+   Sidebar separators (fixed-position, non-layout)
+   ------------------------- */
+
+/* Top separator (already absolute) */
+.sidebar-separator-top {
+  position: absolute;
+  top: 115px; /* adjust this to place it exactly under your name/title */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
   height: 1px;
-  border: none;
   background: rgba(255,255,255,0.25);
   box-shadow: 0 0 8px rgba(255,255,255,0.1);
-  margin: 430px auto 12px auto;
+  border: none;
   border-radius: 1px;
+  pointer-events: none; /* prevent it from blocking clicks */
+}
+
+/* Bottom separator: absolutely positioned so it doesn't shift layout.
+   Tweak `bottom` to move it up/down (higher value = further from bottom). */
+.sidebar-separator {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 80px; /* <-- adjust this to place the separator above email/meta */
+  width: 90%;
+  height: 1px;
+  background: rgba(255,255,255,0.25);
+  box-shadow: 0 0 8px rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 1px;
+  pointer-events: none;
 }
 
 /* Responsive: stack on small screens */
@@ -213,6 +240,12 @@ body {
   .lead { text-align: center; }
   .about-center { padding: 0 14px; }
   .about-signature { width: 220px; }
+
+  /* on smaller screens the sidebar switches to top bar - hide absolute separators there */
+  .sidebar-separator,
+  .sidebar-separator-top {
+    display: none;
+  }
 }
 
 @media (max-width: 520px) {
@@ -407,20 +440,6 @@ body {
   height: auto;
   display: block;
   image-rendering: pixelated; /* if you want that retro pixel look */
-}
-
-.sidebar-separator-top {
-  position: absolute;
-  top: 115px; /* adjust this to place it exactly under your name/title */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 85%;
-  height: 1px;
-  background: rgba(255,255,255,0.25);
-  box-shadow: 0 0 8px rgba(255,255,255,0.1);
-  border: none;
-  border-radius: 1px;
-  pointer-events: none; /* prevent it from blocking clicks */
 }
 
 @media (max-width: 520px) {
