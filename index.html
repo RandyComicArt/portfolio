@@ -13,7 +13,14 @@ html, body { height: 100%; overflow-x: hidden; } /* prevent horizontal scroll */
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
-  background: linear-gradient(135deg,#0c0c0c 0%,#1a1a2e 15%,#16213e 35%,#0f3460 50%,#533a7d 70%,#8b5a8c 85%,#a0616a 100%);
+  background:
+  radial-gradient(
+    circle at 50% 30%,           /* 50% horizontal, 30% vertical = slightly above center */
+    rgba(165,97,106,0.25) 0%,    /* warm light pink glow */
+    rgba(139,90,140,0.15) 25%,   /* subtle purple transition */
+    rgba(15,52,96,0.1) 45%,      /* deep navy around midpoint */
+    rgba(10,10,20,0.95) 100%     /* near-black at edges */
+  );
   color: #fff;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
