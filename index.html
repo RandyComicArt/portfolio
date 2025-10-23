@@ -410,13 +410,17 @@ body {
 }
 
 .sidebar-separator-top {
-  width: 90%;                         /* a touch longer than the bottom one */
+  position: absolute;
+  top: 115px; /* adjust this to place it exactly under your name/title */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
   height: 1px;
-  border: none;
   background: rgba(255,255,255,0.25);
   box-shadow: 0 0 8px rgba(255,255,255,0.1);
-  margin: 16px auto 18px auto;        /* spacing under your title */
+  border: none;
   border-radius: 1px;
+  pointer-events: none; /* prevent it from blocking clicks */
 }
 
 @media (max-width: 520px) {
