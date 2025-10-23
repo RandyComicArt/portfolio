@@ -194,6 +194,16 @@ body {
   transition: background 0.3s ease, transform 0.3s ease;
 }
 
+.sidebar-separator {
+  width: 80%;
+  height: 1px;
+  border: none;
+  background: rgba(255,255,255,0.25);
+  box-shadow: 0 0 8px rgba(255,255,255,0.1);
+  margin: 18px auto 12px auto;
+  border-radius: 1px;
+}
+
 /* Responsive: stack on small screens */
 @media (max-width: 860px) {
   .about-inner { grid-template-columns: 1fr; gap: 18px; }
@@ -424,7 +434,9 @@ body {
    <div class="sidebar-mario">
      <img src="gifs/mario.gif" alt="Running Mario" class="mario-gif">
    </div>
-
+   
+<hr class="sidebar-separator">
+   
   <div class="meta" aria-hidden="false">
     <div>Email: <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a></div>
     <div style="opacity:0.9;font-size:0.9rem;">&copy; 2025 Randy Mattoka</div>
