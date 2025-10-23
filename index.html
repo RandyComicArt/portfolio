@@ -382,6 +382,23 @@ body {
   .main { margin-left: 0; padding-top: 18px; }
 }
 
+.sidebar-mario {
+  position: absolute;
+  bottom: 80px;  /* adjust to sit above your email/meta */
+  left: 20px;
+  width: 60px;
+  height: auto;
+  z-index: 130; /* slightly above sidebar background */
+  pointer-events: none; /* prevent blocking clicks */
+}
+
+.mario-gif {
+  width: 60px;
+  height: auto;
+  display: block;
+  image-rendering: pixelated; /* if you want that retro pixel look */
+}
+
 @media (max-width: 520px) {
   .carousel-track img { width: 220px; }
   .modal-content { height: 92vh; }
@@ -403,6 +420,10 @@ body {
     <a href="#nightwatch">Nightwatch</a>
     <a href="#process">Process / Sketches</a>
   </nav>
+
+   <div class="sidebar-mario">
+     <img src="gifs/mario.gif" alt="Running Mario" class="mario-gif">
+   </div>
 
   <div class="meta" aria-hidden="false">
     <div>Email: <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a></div>
