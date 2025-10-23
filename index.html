@@ -500,16 +500,16 @@ body {
 /* Instagram icon container in sidebar */
 .sidebar-social {
   position: absolute;
-  bottom: 102px; /* Match the Mario GIF's bottom position */
-  left: 100px;   /* Position to the right of Mario (30px for Mario + 60px width + 10px gap) */
-  width: 60px;
+  bottom: 108px; /* Slightly higher to align with Mario GIF visually */
+  left: 92px;   /* Adjusted: 30px (Mario left) + 60px (Mario width) + 2px gap */
+  width: 48px;  /* Smaller container size */
   height: auto;
-  z-index: 130;  /* Same z-index as Mario to sit above sidebar background */
+  z-index: 130; /* Same z-index as Mario */
 }
 
 /* Instagram icon styles */
 .social-icon {
-  width: 60px;
+  width: 48px;  /* Smaller icon size */
   height: auto;
   display: block;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
@@ -527,15 +527,16 @@ body {
   .sidebar-mario,
   .sidebar-social {
     position: static; /* Remove absolute positioning in top-bar mode */
-    display: inline-block; /* Allow them to sit side-by-side in the top bar */
+    display: inline-block; /* Sit side-by-side in top bar */
   }
-  .sidebar-mario { margin-left: 10px; } /* Small offset from nav links */
-  .sidebar-social { margin-left: 10px; }
+  .sidebar-mario { margin-left: 10px; }
+  .sidebar-social { margin-left: 8px; } /* Slightly tighter gap */
 }
 
 /* Further adjust for very small screens */
 @media (max-width: 520px) {
-  .mario-gif, .social-icon { width: 48px; } /* Slightly smaller icons */
+  .mario-gif { width: 48px; } /* Optionally scale Mario down too */
+  .social-icon { width: 40px; } /* Even smaller for tiny screens */
 }
 
 @media (max-width: 520px) {
