@@ -15,12 +15,14 @@ body {
   line-height: 1.6;
   background:
   radial-gradient(
-    circle at 50% 30%,           /* 50% horizontal, 30% vertical = slightly above center */
-    rgba(165,97,106,0.25) 0%,    /* warm light pink glow */
-    rgba(139,90,140,0.15) 25%,   /* subtle purple transition */
-    rgba(15,52,96,0.1) 45%,      /* deep navy around midpoint */
-    rgba(10,10,20,0.95) 100%     /* near-black at edges */
-  );
+    circle at 20% 0%,            /* light source: top-left corner */
+    rgba(255,255,255,0.18) 0%,   /* bright top glow */
+    rgba(180,120,130,0.1) 20%,   /* soft color tone */
+    rgba(15,20,30,0.9) 80%,      /* dark fade */
+    rgba(5,5,10,1) 100%          /* almost black edges */
+  ),
+  linear-gradient(180deg, #0c0c0c 0%, #0b0b18 100%);
+  background-blend-mode: overlay;
   color: #fff;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
