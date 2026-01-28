@@ -65,8 +65,7 @@
 
 /* Search filtering effect */
 .search-dim {
-  opacity: 0.10;
-  filter: grayscale(100%) saturate(0.2) contrast(0.9);
+  filter: grayscale(100%) saturate(0.2) contrast(0.9) opacity(0.10);
   pointer-events: none;
 
   transition:
