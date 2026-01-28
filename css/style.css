@@ -378,6 +378,7 @@ body {
   box-shadow: inset 0 2px 4px rgba(105, 171, 253, 0.55), 0 10px 24px rgba(0, 0, 0, 0.55);
   outline: none; font-weight: bold;
 }
+
 .arrow:hover:not(:disabled), .modal-nav-button:hover:not(:disabled) {
   transform: scale(1.06);
   background: linear-gradient(180deg, rgb(90, 146, 223), rgba(0, 109, 241, 0.55));
