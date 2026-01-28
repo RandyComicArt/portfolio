@@ -47,6 +47,17 @@
 <!-- Scrollable Main Area -->
 <main class="main" id="main-content" tabindex="-1">
 
+  
+  <!-- SEARCH BAR -->
+  <section id="search" class="glass search-bar" aria-label="Search Artwork" role="search">
+    <div class="search-inner">
+      <label for="site-search" class="visually-hidden">Search artwork</label>
+      <input id="site-search" type="search" placeholder="Search artworks, titles, descriptions..." aria-label="Search artworks" />
+      <button id="search-clear" class="search-clear" aria-label="Clear search" title="Clear search">&times;</button>
+      <div id="search-stats" class="search-stats" aria-live="polite"></div>
+    </div>
+  </section>
+
   <section id="about" class="glass about-section" aria-labelledby="about-heading">
   <div class="about-inner">
     <div class="about-left">
@@ -178,6 +189,7 @@
 
 
 
+  <script src="js/search.js" defer></script>
   <script src="js/script.js" defer></script>
 </body>
 </html>
