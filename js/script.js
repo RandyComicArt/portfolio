@@ -1,59 +1,102 @@
-/* --- Carousel Script --- */
+/* --- Carousel Script (modified to support external reorders) --- */
 document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
-  const track = wrapper.querySelector('.carousel-track');
-  const leftBtn = wrapper.querySelector('.arrow.left');
-  const rightBtn = wrapper.querySelector('.arrow.right');
-  const imgs = Array.from(track.querySelectorAll('img'));
+    const track = wrapper.querySelector('.carousel-track');
+    const leftBtn = wrapper.querySelector('.arrow.left');
+    const rightBtn = wrapper.querySelector('.arrow.right');
 
-  imgs.forEach((img, i) => { img.setAttribute('data-index', i); });
+    // make imgs mutable so we can rebuild when search.js reorders the DOM
+    let imgs = Array.from(track.querySelectorAll('img'));
 
-  if (!track || imgs.length === 0) return;
+    imgs.forEach((img, i) => { img.setAttribute('data-index', i); });
 
-  let index = 0;
+    if (!track || imgs.length === 0) return;
 
-  function slideSize(){
-    const gap = parseFloat(getComputedStyle(track).gap) || 30;
-    return imgs[0].getBoundingClientRect().width + gap;
-  }
+    let index = 0;
 
-  function update(){
-    const s = slideSize();
-    const containerWidth = wrapper.querySelector('.carousel-container').getBoundingClientRect().width;
-    const offset = (containerWidth / 2) - (imgs[index].getBoundingClientRect().width / 2);
-    track.style.transform = `translateX(${-(index * s) + offset}px)`;
-    imgs.forEach((im,i)=>{
-      im.classList.remove('center','side');
-      if (i === index) im.classList.add('center'); else im.classList.add('side');
-    });
-    if (leftBtn) leftBtn.disabled = (index === 0);
-    if (rightBtn) rightBtn.disabled = (index === imgs.length - 1);
-  }
-
-  if (leftBtn) leftBtn.addEventListener('click', ()=>{ if (index>0) { index--; update(); }});
-  if (rightBtn) rightBtn.addEventListener('click', ()=>{ if (index < imgs.length - 1) { index++; update(); }});
-
-  wrapper.setAttribute('tabindex', '0');
-  wrapper.addEventListener('keydown', (e)=>{
-    if (e.key === 'ArrowLeft' && index > 0) { index--; update(); }
-    if (e.key === 'ArrowRight' && index < imgs.length - 1) { index++; update(); }
-  });
-
-  let startX = null;
-  wrapper.addEventListener('touchstart', e => startX = e.touches[0].clientX);
-  wrapper.addEventListener('touchend', e => {
-    if (startX === null) return;
-    const dx = e.changedTouches[0].clientX - startX;
-    if (Math.abs(dx) > 50) {
-      if (dx > 0 && index > 0) index--;
-      else if (dx < 0 && index < imgs.length - 1) index++;
-      update();
+    function slideSize(){
+        const gap = parseFloat(getComputedStyle(track).gap) || 30;
+        // fallback if no images
+        if (!imgs[0]) return 0;
+        return imgs[0].getBoundingClientRect().width + gap;
     }
-    startX = null;
-  });
 
-  window.addEventListener('resize', ()=>setTimeout(update, 90));
-  setTimeout(update, 60);
+    function update(){
+        // ensure imgs is up-to-date (in case DOM changed)
+        imgs = Array.from(track.querySelectorAll('img'));
+        imgs.forEach((img, i) => { img.setAttribute('data-index', i); });
+
+        const s = slideSize();
+        const containerWidth = wrapper.querySelector('.carousel-container').getBoundingClientRect().width;
+        // clamp index within bounds after reorder
+        if (index > imgs.length - 1) index = imgs.length - 1;
+        if (index < 0) index = 0;
+
+        const offset = (containerWidth / 2) - (imgs[index] ? imgs[index].getBoundingClientRect().width / 2 : 0);
+        track.style.transform = `translateX(${-(index * s) + offset}px)`;
+
+        imgs.forEach((im,i)=>{
+            im.classList.remove('center','side');
+            if (i === index) im.classList.add('center'); else im.classList.add('side');
+        });
+        if (leftBtn) leftBtn.disabled = (index === 0);
+        if (rightBtn) rightBtn.disabled = (index === imgs.length - 1);
+    }
+
+    // Listen for carousel:reorder events and refresh this wrapper when its track was reordered.
+    window.addEventListener('carousel:reorder', (e) => {
+        try {
+            if (!e || !e.detail) {
+                // generic refresh
+                imgs = Array.from(track.querySelectorAll('img'));
+                update();
+                return;
+            }
+            if (e.detail.track) {
+                // If the event included a specific track, only refresh if it matches our track
+                if (e.detail.track === track) {
+                    imgs = Array.from(track.querySelectorAll('img'));
+                    // Optionally set index to 0 so front is visible after reorder
+                    // but we DO NOT auto-scroll while typing — only do this on explicit scroll events.
+                    update();
+                }
+            } else {
+                // no specific track—generic refresh
+                imgs = Array.from(track.querySelectorAll('img'));
+                update();
+            }
+        } catch (err) {
+            // safe fallback: rebuild imgs and update
+            imgs = Array.from(track.querySelectorAll('img'));
+            update();
+        }
+    });
+
+    if (leftBtn) leftBtn.addEventListener('click', ()=>{ if (index>0) { index--; update(); }});
+    if (rightBtn) rightBtn.addEventListener('click', ()=>{ if (index < imgs.length - 1) { index++; update(); }});
+
+    wrapper.setAttribute('tabindex', '0');
+    wrapper.addEventListener('keydown', (e)=>{
+        if (e.key === 'ArrowLeft' && index > 0) { index--; update(); }
+        if (e.key === 'ArrowRight' && index < imgs.length - 1) { index++; update(); }
+    });
+
+    let startX = null;
+    wrapper.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+    wrapper.addEventListener('touchend', e => {
+        if (startX === null) return;
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 50) {
+            if (dx > 0 && index > 0) index--;
+            else if (dx < 0 && index < imgs.length - 1) index++;
+            update();
+        }
+        startX = null;
+    });
+
+    window.addEventListener('resize', ()=>setTimeout(update, 90));
+    setTimeout(update, 60);
 });
+
 
 /* --- Lightbox / Magnifier --- */
 const modal = document.getElementById('image-modal');
