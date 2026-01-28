@@ -369,8 +369,8 @@ body {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 1px solid rgba(59, 130, 236, 0.81);
-  background: linear-gradient(180deg, rgba(90, 146, 223, 0.63), rgba(90, 146, 223, 0.67));
+  border: 1px solid rgba(0, 0, 0, 0.81);
+  background: linear-gradient(180deg, rgba(154, 169, 198, 0.63), rgba(92, 101, 113, 0.67));
   color: rgba(6, 27, 57, 0.84);
   font-size: 1.4rem;
   display: inline-flex; align-items: center; justify-content: center;
