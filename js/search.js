@@ -15,7 +15,6 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('site-search');
-    const clearBtn = document.getElementById('search-clear');
     const stats = document.getElementById('search-stats');
 
     // Collect all images from carousel tracks
@@ -86,11 +85,6 @@
 
     input.addEventListener('input', debounced);
     input.addEventListener('search', (e) => performSearch(e.target.value));
-    clearBtn.addEventListener('click', () => {
-      input.value = '';
-      input.focus();
-      performSearch('');
-    });
 
     // Allow Enter to focus first result in active carousel
     input.addEventListener('keydown', (e) => {
