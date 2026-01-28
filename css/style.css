@@ -614,7 +614,7 @@ body {
 
 /* Subtle 'dim' effect for items that don't match when there are results */
 .search-dim {
-  opacity: 0.12;
+  opacity: 0.25;
   pointer-events: none;
 }
 
