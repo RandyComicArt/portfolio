@@ -14,7 +14,7 @@ body {
   display: block;
 
   /* base color (visible during bounce / overscroll) */
-  background-color: #0f2b4a; /* deep blue base similar to your old palette */
+  background-color: #195baf; /* deep blue base similar to your old palette */
 
   /* conic flashlight gradient on top of the base color */
   background-image:
@@ -25,19 +25,13 @@ body {
       #000000 0deg,
       #000000 85deg,
 
-      /* soft transition into the blue beam */
-      rgba(15, 52, 96, 0.55) 95deg,
+      /* soft transition into the blue beam */ rgba(0, 109, 241, 0.55) 95deg,
 
-      /* beam core colors (blue-first palette) */
-      #0f3460 115deg,  /* strong blue */
-      #16213e 150deg,  /* dark navy */
-      #1a1a2e 185deg,  /* near-black navy */
+      /* beam core colors (blue-first palette) */ #345bb8 115deg,  /* strong blue */ #000000 150deg,  /* dark navy */ #0c0c13 185deg,  /* near-black navy */
 
-      /* gentle fade to darkness */
-      rgba(15, 52, 96, 0.35) 230deg,
+      /* gentle fade to darkness */ rgba(0, 0, 0, 0.52) 230deg,
 
-      /* return to dark margins (bottom/right) */
-      #000000 300deg,
+      /* return to dark margins (bottom/right) */ #000000 300deg,
       #000000 360deg
     );
 
@@ -375,18 +369,18 @@ body {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.45);
-  background: linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0.22));
-  color: rgba(12,12,12,0.95);
+  border: 1px solid rgba(59, 130, 236, 0.81);
+  background: linear-gradient(180deg, rgba(90, 146, 223, 0.63), rgba(90, 146, 223, 0.67));
+  color: rgba(6, 27, 57, 0.84);
   font-size: 1.4rem;
   display: inline-flex; align-items: center; justify-content: center;
   cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
-  box-shadow: inset 0 2px 4px rgba(255,255,255,0.55), 0 10px 24px rgba(0,0,0,0.45);
+  box-shadow: inset 0 2px 4px rgba(105, 171, 253, 0.55), 0 10px 24px rgba(0, 0, 0, 0.55);
   outline: none; font-weight: bold;
 }
 .arrow:hover:not(:disabled), .modal-nav-button:hover:not(:disabled) {
   transform: scale(1.06);
-  background: linear-gradient(180deg, rgba(255,255,255,0.46), rgba(255,255,255,0.28));
+  background: linear-gradient(180deg, rgb(90, 146, 223), rgba(0, 109, 241, 0.55));
 }
 .arrow:disabled, .modal-nav-button:disabled { opacity: 0.28; cursor: default; transform: none; }
 
