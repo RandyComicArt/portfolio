@@ -11,6 +11,7 @@
    ---------------------- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow-x: hidden; } /* prevent horizontal scroll */
+/* blue-toned flashlight (origin: top-left) with matching bounce background */
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
@@ -19,32 +20,36 @@ body {
   margin: 0;
   padding: 0;
   display: block;
-  background-color: #4b2c4d; /* fallback */
 
-  /* FLASHLIGHT: origin moved to top-left */
-  background-image: conic-gradient(
-    from 0deg at 0% 0%,
+  /* base color (visible during bounce / overscroll) */
+  background-color: #0f2b4a; /* deep blue base similar to your old palette */
 
-    /* black margin (top-left) */
-    #000000 0deg,
-    #000000 70deg,
+  /* conic flashlight gradient on top of the base color */
+  background-image:
+    conic-gradient(
+      from -90deg at 0% 0%,
 
-    /* soft fade into beam */
-    rgba(83, 58, 125, 0.55) 75deg,
+      /* deep black top + left edge (shadowed corner) */
+      #000000 0deg,
+      #000000 85deg,
 
-    /* beam core colors */
-    #533a7d 80deg,
-    #8b5a8c 120deg,
-    #a0616a 150deg,
+      /* soft transition into the blue beam */
+      rgba(15, 52, 96, 0.55) 95deg,
 
-    /* soft fade out */
-    rgba(83, 58, 125, 0.45) 175deg,
+      /* beam core colors (blue-first palette) */
+      #0f3460 115deg,  /* strong blue */
+      #16213e 150deg,  /* dark navy */
+      #1a1a2e 185deg,  /* near-black navy */
 
-    /* black margin (opposite side) */
-    #000000 180deg,
-    #000000 360deg
-  );
+      /* gentle fade to darkness */
+      rgba(15, 52, 96, 0.35) 230deg,
 
+      /* return to dark margins (bottom/right) */
+      #000000 300deg,
+      #000000 360deg
+    );
+
+  /* subtle extra depth so the gradient feels continuous on large screens */
   background-attachment: fixed;
   background-size: 200% 200%;
   background-position: top left;
@@ -220,17 +225,31 @@ body {
   opacity: 0.96;
 }
 
-/* make the about-divider responsive and not a huge fixed width */
 .about-divider {
   width: 900px;
   max-width: 90%;
   height: 3px;
   border: none;
-  background: linear-gradient(to right, #a0616a, #8b5a8c, #0f3460);
-  margin: 20px auto 28px auto;
-  border-radius: 2px;
-  transition: background 0.3s ease, transform 0.3s ease;
+  border-radius: 3px;
+  margin: 24px auto 32px auto;
+
+  /* New blue gradient core */
+  background: linear-gradient(
+    90deg,
+    #205072 0%,
+    #1a1a2e 35%
+  );
+
+  /* Soft glow around the divider */
+  box-shadow:
+    0 0 8px 2px rgba(15, 52, 96, 0.6),
+    0 0 18px 6px rgba(83, 58, 125, 0.3);
+
+  /* Slight animation to make the glow feel alive */
+  transition: background 0.4s ease, transform 0.3s ease, box-shadow 0.4s ease;
 }
+
+
 
 /* -------------------------
    Sidebar separators (fixed-position, non-layout)
@@ -478,6 +497,48 @@ body {
   image-rendering: pixelated; /* if you want that retro pixel look */
 }
 
+/* Instagram icon container in sidebar */
+.sidebar-social {
+  position: absolute;
+  bottom: 108px; /* Slightly higher to align with Mario GIF visually */
+  left: 92px;   /* Adjusted: 30px (Mario left) + 60px (Mario width) + 2px gap */
+  width: 48px;  /* Smaller container size */
+  height: auto;
+  z-index: 130; /* Same z-index as Mario */
+}
+
+/* Instagram icon styles */
+.social-icon {
+  width: 48px;  /* Smaller icon size */
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+/* Hover effect for interactivity */
+.sidebar-social a:hover .social-icon {
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+}
+
+/* Responsive adjustments: stack icons vertically on smaller screens */
+@media (max-width: 1000px) {
+  .sidebar-mario,
+  .sidebar-social {
+    position: static; /* Remove absolute positioning in top-bar mode */
+    display: inline-block; /* Sit side-by-side in top bar */
+  }
+  .sidebar-mario { margin-left: 10px; }
+  .sidebar-social { margin-left: 8px; } /* Slightly tighter gap */
+}
+
+/* Further adjust for very small screens */
+@media (max-width: 520px) {
+  .mario-gif { width: 48px; } /* Optionally scale Mario down too */
+  .social-icon { width: 40px; } /* Even smaller for tiny screens */
+}
+
 @media (max-width: 520px) {
   .carousel-track img { width: 220px; }
   .modal-content { height: 92vh; }
@@ -505,6 +566,12 @@ body {
    <div class="sidebar-mario">
      <img src="gifs/mario.gif" alt="Running Mario" class="mario-gif">
    </div>
+
+<div class="sidebar-social">
+  <a href="https://www.instagram.com/randycomicart/" target="_blank" rel="noopener" aria-label="Visit Randy Mattoka's Instagram">
+    <img src="socials/instagram.png" alt="Instagram Icon" class="social-icon">
+  </a>
+</div>
    
 <hr class="sidebar-separator">
    
@@ -557,9 +624,9 @@ body {
           <img src="images/fanart4.png" alt="Artwork 4 - Super Buu" loading="lazy" data-index="3" data-desc="Buu is an iconic villain from the acclaimed anime series Dragon Ball Z. This drawing utlizes multiple shades of pink to portray the lighting on Buu's skin, with his magical power orbs in his hands being the main light source of this piece." data-date="August 21st, 2024">
           <img src="images/fanart5.png" alt="Artwork 5 - Deadpool" loading="lazy" data-index="4" data-desc="This drawing of the comic book character Deadpool uses black and whites as well as screentones for shading. This allows for the green portions to really pop and draw the audience's attention to these critical parts, which allows the viewer's eye to follow the piece in a natural, streamlined manner." data-date="June 16th, 2024">
           <img src="images/fanart6.png" alt="Artwork 6 - Wolverine" loading="lazy" data-index="5" data-desc="A drawing of the iconic X-Men character, Wolverine. Apart from black and white, this piece utilizes 4 colors, one of which is the blood on wolverine's claws. Although a more violent piece, it is able to captivate the audience by drawing their eye to the critical portions, his claws, muscles, and eventually his cowl." data-date="September 14th, 2025">
-          <img src="images/fanart7.png" alt="Artwork 7" loading="lazy" data-index="6" data-desc="" data-date="">
-          <img src="images/fanart8.png" alt="Artwork 8" loading="lazy" data-index="7" data-desc="" data-date="">
-          <img src="images/fanart9.png" alt="Artwork 9" loading="lazy" data-index="8" data-desc="" data-date="">
+          <img src="images/fanart7.png" alt="Artwork 7 - Godrick the Grafted" loading="lazy" data-index="6" data-desc="This is a digital piece of a popular antagonist from the video game Elden Ring, produced by Fromsoftware." data-date="March 15th, 2024">
+          <img src="images/fanart8.png" alt="Artwork 8 - Sekiro, the Great Serpent" loading="lazy" data-index="7" data-desc="Sekiro is another popular video game created by Fromsoftware. The game features a mythical, feudal Japanese setting with monstrous characters and enemies. This piece highlights the great serpent that is present throughout the game in the mountains, with the protagonist, Sekiro, in the foreground" data-date="June 3rd, 2024">
+          <img src="images/fanart9.png" alt="Artwork 9 - Batman Beyond" loading="lazy" data-index="8" data-desc="" data-date="">
           <img src="images/fanart10.png" alt="Artwork 10" loading="lazy" data-index="9" data-desc="" data-date="">
           <img src="images/fanart11.png" alt="Artwork 11" loading="lazy" data-index="10" data-desc="" data-date="">
           <img src="images/fanart12.png" alt="Artwork 12" loading="lazy" data-index="11" data-desc="" data-date="">
@@ -583,6 +650,7 @@ body {
           <img src="images/nightwatch2.png" alt="Nightwatch 2" data-index="1" data-desc="" data-date="">
           <img src="images/nightwatch3.png" alt="Nightwatch 3" data-index="2" data-desc="" data-date="">
           <img src="images/nightwatch4.png" alt="Nightwatch 4" data-index="3" data-desc="" data-date="">
+          <img src="images/nightwatch5.png" alt="Nightwatch 5" data-index="4" data-desc="" data-date="">
         </div>
       </div>
     </div>
