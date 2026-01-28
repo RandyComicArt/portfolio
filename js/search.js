@@ -58,7 +58,7 @@
           entry.img.classList.remove('search-dim');
           matches++;
         } else {
-          entry.img.classList.add('search-hidden');
+          entry.img.classList.add('search-dim');
         }
       });
 
