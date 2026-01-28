@@ -599,9 +599,15 @@ body {
 
 /* Subtle 'dim' effect for items that don't match when there are results */
 .search-dim {
-  opacity: 0.25;
+  opacity: 0.22;
+  filter: grayscale(100%) saturate(0.2) contrast(0.9);
   pointer-events: none;
+  transition: 
+    opacity 0.25s ease,
+    filter 0.25s ease,
+    transform 0.25s ease;
 }
+
 
 /* Accessibility helper (visually hidden) */
 .visually-hidden {
