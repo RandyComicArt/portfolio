@@ -30,7 +30,14 @@
       if (stats) stats.textContent = '';
     };
 
-    const performSearch = (q) => {
+    /**
+     * performSearch(q, {scroll = false})
+     * - scroll: whether to automatically scroll the first match into view.
+     *
+     * We'll avoid scrolling while the user types (scroll=false).
+     * We'll only scroll when Enter is pressed or when the input dispatches a 'search' event.
+     */
+    const performSearch = (q, { scroll = false } = {}) => {
       const query = normalize(q).trim();
       if (!query) { reset(); return; }
       const terms = query.split(/\s+/).filter(Boolean);
@@ -41,7 +48,9 @@
         else { entry.img.classList.add('search-dim'); }
       });
       if (stats) stats.textContent = matches === 0 ? 'No results' : `${matches} result${matches !== 1 ? 's' : ''}`;
-      if (matches > 0) {
+
+      // Only scroll into view if explicitly requested (Enter/search)
+      if (scroll && matches > 0) {
         const first = index.find(e => !e.img.classList.contains('search-dim'));
         if (first && first.img) {
           const parentGlass = first.img.closest('.glass');
@@ -51,19 +60,35 @@
       }
     };
 
-    const debounced = debounce((e) => performSearch(e.target.value), 180);
+    // Debounced input: do NOT scroll while typing
+    const debounced = debounce((e) => performSearch(e.target.value, { scroll: false }), 180);
     input.addEventListener('input', debounced);
-    input.addEventListener('search', (e) => performSearch(e.target.value));
 
+    // Browser "search" event (e.g. clear button in some UIs) - treat as explicit search and allow scroll
+    input.addEventListener('search', (e) => performSearch(e.target.value, { scroll: true }));
+
+    // Key handling:
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        const first = Array.from(document.querySelectorAll('.carousel-track img')).find(img => !img.classList.contains('search-dim'));
-        if (first) first.click();
+        // Trigger search and scroll to first match
+        performSearch(input.value, { scroll: true });
+
+        // Keep focus on the input so user can continue typing if they want
+        input.focus();
       }
       if (e.key === 'Escape') {
         input.value = '';
         reset();
+
+        // Keep focus and select the input text (good UX)
+        input.focus();
+        if (typeof input.select === 'function') input.select();
       }
     });
+
+    // Optional: clicking a result still works as before
+    // document.querySelectorAll('.carousel-track img').forEach(img => {
+    //   img.addEventListener('click', () => { /* your existing click behaviour */ });
+    // });
   });
 })();
