@@ -286,8 +286,6 @@ navLinks.forEach(a => {
 });
 });
 
-
-
 /* Only reveal arrows on keyboard focus (Tab) — mouse clicks won't "stick" them visible */
 (function() {
   let lastInteraction = 'mouse';
