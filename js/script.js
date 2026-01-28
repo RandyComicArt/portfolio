@@ -1,208 +1,315 @@
-/* js/script.js
-   Extracted from index.html
-   Handles: carousels, modal/lightbox, magnifier, keyboard navigation,
-   arrow visibility, and sidebar nav highlighting
-*/
+/* --- Carousel Script --- */
+document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
+  const track = wrapper.querySelector('.carousel-track');
+  const leftBtn = wrapper.querySelector('.arrow.left');
+  const rightBtn = wrapper.querySelector('.arrow.right');
+  const imgs = Array.from(track.querySelectorAll('img'));
 
-(() => {
-  const zoomFactor = 2.5;
-  const lensRadius = 90;
+  imgs.forEach((img, i) => { img.setAttribute('data-index', i); });
 
-  let currentSectionImages = [];
-  let currentImageIndex = 0;
+  if (!track || imgs.length === 0) return;
 
-  let modal, modalImg, descriptionTitle, descriptionText, descriptionMeta;
-  let closeModal, magContainer, magLens, modalPrevBtn, modalNextBtn;
+  let index = 0;
 
-  /* ---------- Magnifier helpers ---------- */
-  const showLens = () => magLens.style.opacity = 1;
-  const hideLens = () => magLens.style.opacity = 0;
-
-  function updateMagnifierSize() {
-    magLens.style.backgroundSize =
-      `${modalImg.clientWidth * zoomFactor}px ${modalImg.clientHeight * zoomFactor}px`;
-    magLens.style.opacity = 0;
+  function slideSize(){
+    const gap = parseFloat(getComputedStyle(track).gap) || 30;
+    return imgs[0].getBoundingClientRect().width + gap;
   }
 
-  function handleMagnify(e) {
-    const rect = magContainer.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    magLens.style.left = `${x}px`;
-    magLens.style.top = `${y}px`;
-    magLens.style.transform = `translate(-${lensRadius}px, -${lensRadius}px)`;
-
-    magLens.style.backgroundPosition =
-      `-${x * zoomFactor - lensRadius}px -${y * zoomFactor - lensRadius}px`;
+  function update(){
+    const s = slideSize();
+    const containerWidth = wrapper.querySelector('.carousel-container').getBoundingClientRect().width;
+    const offset = (containerWidth / 2) - (imgs[index].getBoundingClientRect().width / 2);
+    track.style.transform = `translateX(${-(index * s) + offset}px)`;
+    imgs.forEach((im,i)=>{
+      im.classList.remove('center','side');
+      if (i === index) im.classList.add('center'); else im.classList.add('side');
+    });
+    if (leftBtn) leftBtn.disabled = (index === 0);
+    if (rightBtn) rightBtn.disabled = (index === imgs.length - 1);
   }
 
-  /* ---------- Modal logic ---------- */
-  function preloadImage(i) {
-    if (i >= 0 && i < currentSectionImages.length) {
-      const img = new Image();
-      img.src = currentSectionImages[i].src;
+  if (leftBtn) leftBtn.addEventListener('click', ()=>{ if (index>0) { index--; update(); }});
+  if (rightBtn) rightBtn.addEventListener('click', ()=>{ if (index < imgs.length - 1) { index++; update(); }});
+
+  wrapper.setAttribute('tabindex', '0');
+  wrapper.addEventListener('keydown', (e)=>{
+    if (e.key === 'ArrowLeft' && index > 0) { index--; update(); }
+    if (e.key === 'ArrowRight' && index < imgs.length - 1) { index++; update(); }
+  });
+
+  let startX = null;
+  wrapper.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+  wrapper.addEventListener('touchend', e => {
+    if (startX === null) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 50) {
+      if (dx > 0 && index > 0) index--;
+      else if (dx < 0 && index < imgs.length - 1) index++;
+      update();
     }
-  }
+    startX = null;
+  });
 
-  function performImageTransition(img, dir) {
-    const slideOut = dir === 'next' ? '-100%' : '100%';
-    const resetPos = dir === 'next' ? '100%' : '-100%';
+  window.addEventListener('resize', ()=>setTimeout(update, 90));
+  setTimeout(update, 60);
+});
 
-    modalImg.style.left = slideOut;
+/* --- Lightbox / Magnifier --- */
+const modal = document.getElementById('image-modal');
+const modalImg = document.getElementById('modal-image');
+const descriptionTitle = document.getElementById('description-title');
+const descriptionText = document.getElementById('description-text');
+const descriptionMeta = document.getElementById('description-meta');
+const closeModal = document.getElementById('modal-close-btn');
+
+const magContainer = document.getElementById('magnifier-container');
+const magLens = document.getElementById('magnifier-lens');
+
+const modalPrevBtn = document.getElementById('modal-prev-btn');
+const modalNextBtn = document.getElementById('modal-next-btn');
+
+let currentSectionImages = [];
+let currentImageIndex = 0;
+
+const zoomFactor = 2.5;
+const lensRadius = 90;
+
+function showLens() { magLens.style.opacity = 1; }
+function hideLens() { magLens.style.opacity = 0; }
+
+function preloadImage(index) {
+    if (index >= 0 && index < currentSectionImages.length) {
+        const imgElement = currentSectionImages[index];
+        const tempImg = new Image();
+        tempImg.src = imgElement.src;
+    }
+}
+
+function performImageTransition(newImageElement, direction) {
+    let slideDistance, resetDistance;
+
+    if (direction === 'next') {
+        slideDistance = '-100%';
+        resetDistance = '100%';
+    } else {
+        slideDistance = '100%';
+        resetDistance = '-100%';
+    }
+
+    modalImg.style.left = slideDistance;
     modalImg.style.opacity = 0;
 
     setTimeout(() => {
-      modalImg.style.transition = 'none';
-      modalImg.style.left = resetPos;
+        modalImg.style.transition = 'none';
+        modalImg.style.left = resetDistance;
 
-      modalImg.src = img.src;
-      modalImg.alt = img.alt;
-      magLens.style.backgroundImage = `url('${img.src}')`;
-      descriptionTitle.textContent = img.alt;
-      descriptionText.textContent =
-        img.dataset.desc || "No detailed description available.";
-      descriptionMeta.innerHTML = `Date: ${img.dataset.date || "N/A"}`;
+        modalImg.src = newImageElement.src;
+        modalImg.alt = newImageElement.alt;
+        magLens.style.backgroundImage = `url('${newImageElement.src}')`;
+        descriptionTitle.textContent = newImageElement.alt;
 
-      requestAnimationFrame(() => {
-        modalImg.style.transition = 'left 300ms ease-out, opacity 100ms';
-        modalImg.style.left = '0';
-        modalImg.style.opacity = 1;
-        setTimeout(updateMagnifierSize, 50);
-      });
+        const descText = newImageElement.getAttribute('data-desc') || "No detailed description available for this piece.";
+        descriptionText.textContent = descText;
+
+        const artworkDate = newImageElement.getAttribute('data-date') || "N/A";
+        descriptionMeta.innerHTML = `Date: ${artworkDate}`;
+
+        requestAnimationFrame(() => {
+            modalImg.style.transition = 'left 300ms ease-out, opacity 100ms';
+            modalImg.style.left = '0';
+            modalImg.style.opacity = 1;
+
+            if (modalImg.complete) {
+                setTimeout(updateMagnifierSize, 50);
+            }
+        });
     }, 300);
-  }
+}
 
-  function openModal(img) {
-    const track = img.closest('.carousel-track');
-    currentSectionImages = track ? [...track.querySelectorAll('img')] : [img];
-    currentImageIndex = +img.dataset.index || 0;
+function updateModalContent(imgElement, direction) {
+    performImageTransition(imgElement, direction);
+    modalPrevBtn.disabled = (currentImageIndex === 0);
+    modalNextBtn.disabled = (currentImageIndex === currentSectionImages.length - 1);
+    preloadImage(currentImageIndex + 1);
+    preloadImage(currentImageIndex - 1);
+}
 
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
+function openModal(imgElement) {
+    const sectionWrapper = imgElement.closest('.carousel-wrapper');
+    const track = sectionWrapper ? sectionWrapper.querySelector('.carousel-track') : null;
+    currentSectionImages = track ? Array.from(track.querySelectorAll('img')) : [imgElement];
 
-    modalImg.src = img.src;
-    modalImg.alt = img.alt;
-    magLens.style.backgroundImage = `url('${img.src}')`;
+    currentImageIndex = parseInt(imgElement.getAttribute('data-index')) || 0;
 
-    descriptionTitle.textContent = img.alt;
-    descriptionText.textContent = img.dataset.desc || "No detailed description available.";
-    descriptionMeta.innerHTML = `Date: ${img.dataset.date || "N/A"}`;
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
 
-    modalPrevBtn.disabled = currentImageIndex === 0;
-    modalNextBtn.disabled = currentImageIndex === currentSectionImages.length - 1;
+    modalImg.src = imgElement.src;
+    modalImg.alt = imgElement.alt;
+    magLens.style.backgroundImage = `url('${imgElement.src}')`;
+    modalImg.style.left = '0';
+    modalImg.style.opacity = 1;
+
+    descriptionTitle.textContent = imgElement.alt;
+    const descText = imgElement.getAttribute('data-desc') || "No detailed description available for this piece.";
+    descriptionText.textContent = descText;
+
+    const artworkDate = imgElement.getAttribute('data-date') || "N/A";
+    descriptionMeta.innerHTML = `Date: ${artworkDate}`;
+
+    modalPrevBtn.disabled = (currentImageIndex === 0);
+    modalNextBtn.disabled = (currentImageIndex === currentSectionImages.length - 1);
 
     magContainer.addEventListener('mouseenter', showLens);
     magContainer.addEventListener('mouseleave', hideLens);
     magContainer.addEventListener('mousemove', handleMagnify);
     window.addEventListener('resize', updateMagnifierSize);
 
-    document.addEventListener('keydown', handleKeyNav);
+    modalPrevBtn.addEventListener('click', showPrev);
+    modalNextBtn.addEventListener('click', showNext);
+    document.addEventListener('keydown', handleKeyNavigation);
+
+    if (modalImg.complete) {
+        setTimeout(updateMagnifierSize, 50);
+    }
+
     preloadImage(currentImageIndex + 1);
     preloadImage(currentImageIndex - 1);
-  }
+}
 
-  function closeLightbox() {
-    modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
+function showPrev() {
+    if (currentImageIndex > 0) {
+        currentImageIndex--;
+        updateModalContent(currentSectionImages[currentImageIndex], 'prev');
+    }
+}
+
+function showNext() {
+    if (currentImageIndex < currentSectionImages.length - 1) {
+        currentImageIndex++;
+        updateModalContent(currentSectionImages[currentImageIndex], 'next');
+    }
+}
+
+function handleKeyNavigation(e) {
+    if (modal.style.display === 'flex') {
+        if (e.key === 'ArrowLeft') showPrev();
+        if (e.key === 'ArrowRight') showNext();
+        if (e.key === 'Escape') closeLightbox();
+    }
+}
+
+function updateMagnifierSize() {
+    const largeSizeX = modalImg.clientWidth * zoomFactor;
+    const largeSizeY = modalImg.clientHeight * zoomFactor;
+    magLens.style.backgroundSize = `${largeSizeX}px ${largeSizeY}px`;
+    magLens.style.opacity = 0;
+}
+
+function handleMagnify(e) {
+    const rect = magContainer.getBoundingClientRect();
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
+
+    magLens.style.left = `${x}px`;
+    magLens.style.top = `${y}px`;
+    magLens.style.transform = `translate(-${lensRadius}px, -${lensRadius}px)`;
+
+    let backgroundX = x * zoomFactor - lensRadius;
+    let backgroundY = y * zoomFactor - lensRadius;
+
+    magLens.style.backgroundPosition = `-${backgroundX}px -${backgroundY}px`;
+}
+
+function closeLightbox() {
+    modal.style.display = "none";
+    document.body.style.overflow = "auto";
 
     magContainer.removeEventListener('mouseenter', showLens);
     magContainer.removeEventListener('mouseleave', hideLens);
     magContainer.removeEventListener('mousemove', handleMagnify);
     window.removeEventListener('resize', updateMagnifierSize);
-    document.removeEventListener('keydown', handleKeyNav);
-  }
+    modalPrevBtn.removeEventListener('click', showPrev);
+    modalNextBtn.removeEventListener('click', showNext);
+    document.removeEventListener('keydown', handleKeyNavigation);
 
-  function handleKeyNav(e) {
-    if (modal.style.display !== 'flex') return;
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft' && currentImageIndex > 0)
-      performImageTransition(currentSectionImages[--currentImageIndex], 'prev');
-    if (e.key === 'ArrowRight' && currentImageIndex < currentSectionImages.length - 1)
-      performImageTransition(currentSectionImages[++currentImageIndex], 'next');
-  }
+    magLens.style.opacity = 0;
+}
 
-  /* ---------- Carousel logic ---------- */
-  function initCarousels() {
-    document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
-      const track = wrapper.querySelector('.carousel-track');
-      const imgs = [...track.querySelectorAll('img')];
-      const left = wrapper.querySelector('.arrow.left');
-      const right = wrapper.querySelector('.arrow.right');
-
-      imgs.forEach((img, i) => img.dataset.index = i);
-      let index = 0;
-
-      const slideSize = () =>
-        imgs[0].getBoundingClientRect().width +
-        (parseFloat(getComputedStyle(track).gap) || 30);
-
-      const update = () => {
-        const offset =
-          wrapper.querySelector('.carousel-container').offsetWidth / 2 -
-          imgs[index].offsetWidth / 2;
-
-        track.style.transform = `translateX(${-(index * slideSize()) + offset}px)`;
-        imgs.forEach((img, i) =>
-          img.classList.toggle('center', i === index)
-        );
-        if (left) left.disabled = index === 0;
-        if (right) right.disabled = index === imgs.length - 1;
-      };
-
-      left?.addEventListener('click', () => index > 0 && (index--, update()));
-      right?.addEventListener('click', () => index < imgs.length - 1 && (index++, update()));
-
-      imgs.forEach(img =>
-        img.addEventListener('click', e => {
-          e.stopPropagation();
-          openModal(img);
-        })
-      );
-
-      window.addEventListener('resize', () => setTimeout(update, 80));
-      setTimeout(update, 60);
+/* Attach handlers when DOM is ready */
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.carousel-track img').forEach(img => {
+        img.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openModal(img);
+        });
     });
-  }
 
-  /* ---------- Arrow visibility (keyboard focus) ---------- */
-  function initArrowVisibility() {
-    let last = 'mouse';
+    // close handlers
+    closeModal.addEventListener('click', closeLightbox);
+    modal.addEventListener('click', (e) => {
+        if (e.target.id === 'image-modal') {
+            closeLightbox();
+        }
+    });
 
-    document.addEventListener('keydown', e => e.key === 'Tab' && (last = 'keyboard'), true);
-    document.addEventListener('mousedown', () => last = 'mouse', true);
-    document.addEventListener('touchstart', () => last = 'mouse', true);
-
-    document.querySelectorAll('.glass').forEach(glass => {
-      glass.addEventListener('focusin', () => {
-        if (last === 'keyboard') glass.classList.add('show-arrows');
+    // Highlight nav links while scrolling (basic)
+    const navLinks = document.querySelectorAll('.sidebar nav a');
+    const sections = Array.from(navLinks).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(n => n.classList.toggle('active', n.getAttribute('href') === '#' + entry.target.id));
+        }
       });
-      glass.addEventListener('focusout', () =>
-        setTimeout(() => !glass.contains(document.activeElement) &&
-          glass.classList.remove('show-arrows'), 0)
-      );
+    }, { root: null, rootMargin: '0px 0px -60% 0px', threshold: 0 });
+
+    sections.forEach(s => { if (s) observer.observe(s); });
+
+    // smooth scroll for nav links (center sections on screen)
+navLinks.forEach(a => {
+  a.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (!target) return;
+
+    // scroll smoothly and center the section
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // optional: move keyboard focus for accessibility
+    setTimeout(() => {
+      target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+    }, 400);
+  });
+});
+});
+
+
+
+/* Only reveal arrows on keyboard focus (Tab) — mouse clicks won't "stick" them visible */
+(function() {
+  let lastInteraction = 'mouse';
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') lastInteraction = 'keyboard';
+  }, { capture: true });
+
+  document.addEventListener('mousedown', () => { lastInteraction = 'mouse'; }, { capture: true });
+  document.addEventListener('touchstart', () => { lastInteraction = 'mouse'; }, { capture: true });
+
+  // Toggle .show-arrows on keyboard focusin/focusout
+  document.querySelectorAll('.glass').forEach(glass => {
+    glass.addEventListener('focusin', () => {
+      if (lastInteraction === 'keyboard') glass.classList.add('show-arrows');
     });
-  }
 
-  /* ---------- Init ---------- */
-  document.addEventListener('DOMContentLoaded', () => {
-    modal = document.getElementById('image-modal');
-    modalImg = document.getElementById('modal-image');
-    descriptionTitle = document.getElementById('description-title');
-    descriptionText = document.getElementById('description-text');
-    descriptionMeta = document.getElementById('description-meta');
-    closeModal = document.getElementById('modal-close-btn');
-    magContainer = document.getElementById('magnifier-container');
-    magLens = document.getElementById('magnifier-lens');
-    modalPrevBtn = document.getElementById('modal-prev-btn');
-    modalNextBtn = document.getElementById('modal-next-btn');
-
-    initCarousels();
-    initArrowVisibility();
-
-    closeModal?.addEventListener('click', closeLightbox);
-    modal?.addEventListener('click', e =>
-      e.target.id === 'image-modal' && closeLightbox()
-    );
+    glass.addEventListener('focusout', () => {
+      // allow focus to move to child elements (buttons) before removing
+      setTimeout(() => {
+        if (!glass.contains(document.activeElement)) glass.classList.remove('show-arrows');
+      }, 0);
+    });
   });
 })();
