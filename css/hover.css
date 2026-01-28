@@ -1,0 +1,44 @@
+/* ==========================
+   Interactive artwork hover
+   ========================== */
+
+/* Base transition for artworks */
+.carousel-track img {
+    transition:
+            transform 360ms cubic-bezier(.2,.9,.25,1),
+            box-shadow 360ms cubic-bezier(.2,.9,.25,1);
+    will-change: transform;
+    transform-origin: center center;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Lifted state (added by JS) */
+.img-hover-lift {
+    box-shadow: 0 18px 40px rgba(6, 18, 40, 0.35);
+    z-index: 10;
+    transform: translateZ(0) scale(1.06);
+}
+
+/* Active tracking state (slightly snappier response) */
+.img-hover-active {
+    transition-duration: 160ms;
+}
+
+/* Fallback for simple hover (no JS, still feels alive) */
+@media (hover: hover) and (pointer: fine) {
+    .carousel-track img:hover {
+        transform: scale(1.04);
+    }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .carousel-track img,
+    .img-hover-lift,
+    .img-hover-active {
+        transition: none !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+}
