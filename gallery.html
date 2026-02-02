@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gallery — Randy Mattoka</title>
+
+  <!-- Global styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Gallery-only styles (loaded only on this page) -->
+  <link rel="stylesheet" href="css/gallery.css">
+</head>
+<body>
+
+<!-- ===========================
+     Sidebar (same markup as on your main page)
+     =========================== -->
+<aside class="sidebar" aria-label="Main Sidebar">
+  <div class="brand" role="banner">
+    <h1>Randy Mattoka</h1>
+    <small>Digital Illustrator & Concept Artist</small>
+  </div>
+
+  <hr class="sidebar-separator-top">
+
+  <nav role="navigation" aria-label="Primary">
+    <a href="index.html">Home</a>
+    <a href="gallery.html" class="active" aria-current="page">Gallery</a>
+  </nav>
+
+  <div class="sidebar-mario">
+    <img src="gifs/mario.gif" alt="Running Mario" class="mario-gif">
+  </div>
+
+  <div class="sidebar-social">
+    <a href="https://www.instagram.com/randycomicart/" target="_blank" rel="noopener" aria-label="Visit Randy Mattoka's Instagram">
+      <img src="socials/instagram.png" alt="Instagram Icon" class="social-icon">
+    </a>
+  </div>
+
+  <hr class="sidebar-separator">
+
+  <div class="meta" aria-hidden="false">
+    <div>Email: <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a></div>
+    <div style="opacity:0.9;font-size:0.9rem;">&copy; 2025 Randy Mattoka</div>
+  </div>
+</aside>
+
+<!-- ===========================
+     Main (gallery)
+     =========================== -->
+<main id="gallery-main" class="main" tabindex="-1">
+  <section class="glass" aria-labelledby="gallery-heading">
+    <div class="header-inline">
+      <h2 id="gallery-heading">Gallery</h2>
+    </div>
+
+    <!-- Controls: filters + search -->
+    <div id="gallery-controls" class="controls" role="region" aria-label="Gallery controls">
+      <div class="gallery-filters" role="tablist" aria-label="Filter artworks">
+        <button class="active" data-filter="all" role="tab" aria-selected="true">All</button>
+        <button data-filter="completed" role="tab">Completed</button>
+        <button data-filter="nightwatch" role="tab">Nightwatch</button>
+        <button data-filter="process" role="tab">Process</button>
+      </div>
+
+      <input id="gallery-search" type="search" placeholder="Search titles, descriptions..." aria-label="Search gallery" />
+    </div>
+
+    <!-- Grid: thumbnails injected by js/gallery.js -->
+    <section id="gallery-grid" aria-live="polite" aria-label="Gallery grid"></section>
+
+    <!-- Load more / pagination -->
+    <div id="load-more-wrap">
+      <button id="load-more" type="button">Load more</button>
+    </div>
+  </section>
+</main>
+
+<!-- ===========================
+     Modal / Lightbox (reused from index.html; IDs match gallery.js)
+     =========================== -->
+<div id="image-modal" class="modal-overlay" style="display: none;">
+  <div id="modal-content-area" class="modal-content" role="dialog" aria-modal="true" aria-labelledby="description-title" tabindex="-1">
+    <div class="image-column">
+      <div id="magnifier-container">
+        <img id="modal-image" class="mag-image" src="" alt="">
+        <div id="magnifier-lens" class="mag-lens" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div class="description-column" style="position: relative;">
+      <h3 id="description-title">Title Placeholder</h3>
+      <p id="description-text">Sample description text will go here.</p>
+      <p id="description-meta">Date: 2024</p>
+
+      <div class="modal-nav-panel" role="toolbar" aria-label="Image navigation">
+        <button id="modal-close-btn" class="modal-nav-button" aria-label="Close Image">&times;</button>
+        <button id="modal-prev-btn" class="modal-nav-button" aria-label="Previous Image">&#10094;</button>
+        <button id="modal-next-btn" class="modal-nav-button" aria-label="Next Image">&#10095;</button>
+      </div>
+    </div>
+  </div>
+  <p id="modal-caption"></p>
+</div>
+
+<!-- ===========================
+     Scripts
+     - gallery.js will build the grid and wire the modal.
+     - If you later choose to use gallery.json, replace scanning DOM logic with a fetch.
+     =========================== -->
+<script src="js/gallery.js" defer></script>
+</body>
+</html>

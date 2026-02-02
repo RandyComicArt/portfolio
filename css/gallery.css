@@ -1,0 +1,239 @@
+/* ==========================================================================
+   gallery.css
+   - Scoped to the gallery page only
+   - Designed to be loaded AFTER style.css so rules override where needed
+   ========================================================================== */
+
+/* -----------------------------
+   Layout / Controls
+   ----------------------------- */
+#gallery-main {
+    margin-left: var(--sidebar-pct); /* keeps main layout consistent with site */
+    padding-top: 22px;
+    min-height: 80vh;
+}
+@media (max-width: 1000px) { /* top-bar mode on narrow screens */
+    #gallery-main { margin-left: 0; }
+}
+
+/* Controls container (filters + search) */
+#gallery-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+/* Filter buttons */
+.gallery-filters {
+    display: flex;
+    gap: 8px;
+}
+.gallery-filters button {
+    appearance: none;
+    -webkit-appearance: none;
+    background: rgba(255,255,255,0.03);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform .12s ease, background .12s ease, box-shadow .12s ease;
+}
+.gallery-filters button:hover { transform: translateY(-2px); background: rgba(255,255,255,0.06); }
+.gallery-filters button.active {
+    background: linear-gradient(180deg, rgba(154,169,198,0.12), rgba(92,101,113,0.08));
+    box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+}
+
+/* Search input (aligned to right on large screens) */
+#gallery-search {
+    margin-left: auto;
+    min-width: 220px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(0,0,0,0.12);
+    color: #fff;
+    font-size: 0.95rem;
+}
+#gallery-search::placeholder { color: rgba(255,255,255,0.5); }
+
+/* Stack on very small screens */
+@media (max-width: 520px) {
+    #gallery-controls { gap: 10px; }
+    .gallery-filters { order: 2; width: 100%; justify-content: center; }
+    #gallery-search { order: 1; width: 100%; margin-left: 0; }
+}
+
+/* -----------------------------
+   Gallery grid
+   ----------------------------- */
+#gallery-grid {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    align-items: start;
+    margin-top: 12px;
+    width: 100%;
+}
+
+/* Thumbnail card */
+.gallery-thumb {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform .16s ease, box-shadow .16s ease, opacity .12s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.gallery-thumb:focus-within,
+.gallery-thumb:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 48px rgba(0,0,0,0.55);
+}
+
+/* clickable area fills card */
+.gallery-thumb button.thumb-btn {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    text-align: left;
+}
+
+/* maintain consistent aspect ratio for thumbs (3:2) */
+.gallery-thumb img.thumb-img {
+    width: 100%;
+    height: 0;
+    padding-bottom: 66.6667%; /* 3:2 ratio */
+    object-fit: cover;
+    display: block;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: transform .18s ease, opacity .12s ease;
+}
+
+/* hover zoom on thumb */
+.gallery-thumb:hover img.thumb-img { transform: scale(1.03); }
+
+/* meta area below thumbnail */
+.thumb-meta {
+    padding: 10px 12px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    color: rgba(255,255,255,0.95);
+    font-size: 0.92rem;
+}
+.thumb-meta h4 { margin: 0; font-weight: 700; font-size: 0.96rem; }
+.thumb-meta time { opacity: 0.86; font-size: 0.86rem; }
+
+/* small note for empty dates */
+.thumb-meta time:empty { display: none; }
+
+/* visually-hidden helper (reuse if needed) */
+.visually-hidden {
+    position: absolute !important;
+    height: 1px; width: 1px;
+    overflow: hidden; clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap;
+}
+
+/* -----------------------------
+   Load more / Pagination
+   ----------------------------- */
+#load-more-wrap { display: flex; justify-content: center; margin-top: 18px; }
+#load-more {
+    padding: 10px 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: linear-gradient(180deg, rgba(154,169,198,0.06), rgba(92,101,113,0.04));
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform .12s ease, opacity .12s ease;
+}
+#load-more:hover:not(:disabled) { transform: translateY(-2px); }
+#load-more:disabled { opacity: 0.45; cursor: default; transform: none; }
+
+/* -----------------------------
+   Focus styles for keyboard users
+   ----------------------------- */
+button:focus { outline: none; }
+button:focus-visible, .gallery-thumb:focus-within {
+    box-shadow: 0 0 0 4px rgba(128,160,255,0.12), 0 8px 26px rgba(0,0,0,0.5);
+    border-color: rgba(140,170,255,0.22);
+}
+
+/* -----------------------------
+   Lightbox compatibility hints (we reuse your modal from style.css)
+   - Keep modal styles in style.css; these rules only make sure the
+     gallery's grid/modal interaction looks correct.
+   ----------------------------- */
+
+/* ensure modal sits above everything on gallery page */
+.modal-overlay { z-index: 1400; } /* already in style.css but safe here */
+
+/* make sure modal image max size plays nicely with grid */
+.modal-content .image-column { padding: 18px; }
+.modal-content .image-column .mag-image {
+    width: 100%;
+    height: auto;
+    max-height: 78vh;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+/* description column tweaks (if modal reused) */
+.description-column { padding: 22px; }
+
+/* -----------------------------
+   Empty / fallback state
+   ----------------------------- */
+#gallery-grid:empty::before {
+    content: "No artworks found.";
+    display: block;
+    color: rgba(255,255,255,0.9);
+    padding: 30px;
+    text-align: center;
+    font-weight: 700;
+}
+
+/* -----------------------------
+   Responsive tweaks
+   ----------------------------- */
+@media (max-width: 860px) {
+    #gallery-grid { gap: 14px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+    .gallery-thumb img.thumb-img { padding-bottom: 70%; } /* slightly taller on small screens */
+}
+
+@media (max-width: 520px) {
+    #gallery-grid { gap: 10px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+    .gallery-thumb img.thumb-img { padding-bottom: 100%; } /* square thumbs on tiny phones */
+    .thumb-meta { padding: 8px; font-size: 0.86rem; }
+    #gallery-search { min-width: 0; width: 100%; }
+}
+
+/* -----------------------------
+   Small micro-animations (subtle)
+   ----------------------------- */
+.gallery-thumb { will-change: transform, opacity; }
+.gallery-thumb .thumb-img { will-change: transform; transition-timing-function: cubic-bezier(.2,.9,.2,1); }
+
+/* -----------------------------
+   Notes:
+   - Keep all heavy modal / magnifier CSS inside style.css (already present).
+   - Use small thumbnail files (300–600px wide) for .thumb-img sources; keep large "full"
+     images for the modal to avoid loading heavy files in the grid.
+   - This file is intentionally scoped; avoid adding global element selectors here.
+   ----------------------------- */
