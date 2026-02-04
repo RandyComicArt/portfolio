@@ -43,29 +43,30 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
     }
 
     // Listen for carousel:reorder events and refresh this wrapper when its track was reordered.
+    // Listen for carousel:reorder events
     window.addEventListener('carousel:reorder', (e) => {
         try {
+            // Check if we should snap back to the first image
+            if (e.detail && e.detail.resetIndex) {
+                index = 0;
+            }
+
             if (!e || !e.detail) {
-                // generic refresh
                 imgs = Array.from(track.querySelectorAll('img'));
                 update();
                 return;
             }
+
             if (e.detail.track) {
-                // If the event included a specific track, only refresh if it matches our track
                 if (e.detail.track === track) {
                     imgs = Array.from(track.querySelectorAll('img'));
-                    // Optionally set index to 0 so front is visible after reorder
-                    // but we DO NOT auto-scroll while typing — only do this on explicit scroll events.
                     update();
                 }
             } else {
-                // no specific track—generic refresh
                 imgs = Array.from(track.querySelectorAll('img'));
                 update();
             }
         } catch (err) {
-            // safe fallback: rebuild imgs and update
             imgs = Array.from(track.querySelectorAll('img'));
             update();
         }
