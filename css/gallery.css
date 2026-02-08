@@ -230,6 +230,13 @@ button:focus-visible, .gallery-thumb:focus-within {
 .gallery-thumb { will-change: transform, opacity; }
 .gallery-thumb .thumb-img { will-change: transform; transition-timing-function: cubic-bezier(.2,.9,.2,1); }
 
+.gallery-thumb img.thumb-img.lazy {
+    opacity: 0;
+}
+.gallery-thumb img.thumb-img.loaded {
+    opacity: 1;
+    transition: opacity 240ms ease;
+}
 /* -----------------------------
    Notes:
    - Keep all heavy modal / magnifier CSS inside style.css (already present).
