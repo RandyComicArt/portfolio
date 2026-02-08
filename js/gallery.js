@@ -321,24 +321,41 @@ document.addEventListener('DOMContentLoaded', () => {
         const it = filtered[currentIndex];
         if (!it) return;
         lastFocusedElement = document.activeElement;
-        // open modal
+
         if (modal) {
             modal.style.display = 'flex';
             modal.setAttribute('aria-hidden', 'false');
-            // set image
-            modalImg.src = ''; // clear first to avoid flash of previous large image
+
+            modalImg.src = it.full || it.thumb || '';
             modalImg.alt = it.title || '';
 
-            // set large image only when opening (avoid double downloads for grid thumbs)
-            modalImg.src = it.full || it.thumb || '';
-
-            // set metadata
             modalTitle.textContent = it.title || '';
             modalText.textContent = it.desc || '';
             modalMeta.textContent = it.date ? `Date: ${it.date}` : '';
-            // focus on close button for keyboard users
+
+            // --- ADD THIS SECTION FOR THE MAGNIFIER ---
+            if (typeof updateMagnifierSize === 'function') {
+                // Set the lens background to the current image
+                const magLens = document.getElementById('magnifier-lens');
+                const magContainer = document.getElementById('magnifier-container');
+
+                if (magLens) magLens.style.backgroundImage = `url('${modalImg.src}')`;
+
+                // Wait for image to load to calculate zoom boundaries
+                modalImg.onload = () => {
+                    updateMagnifierSize();
+                };
+
+                // Attach the movement logic from script.js
+                if (magContainer) {
+                    magContainer.addEventListener('mouseenter', showLens);
+                    magContainer.addEventListener('mouseleave', hideLens);
+                    magContainer.addEventListener('mousemove', handleMagnify);
+                }
+            }
+            // ------------------------------------------
+
             if (modalClose) modalClose.focus();
-            // update hash
             if (it.id) {
                 history.replaceState(null, '', `#${encodeURIComponent(it.id)}`);
             }
@@ -350,6 +367,16 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.display = 'none';
         modal.setAttribute('aria-hidden', 'true');
         modalImg.src = '';
+
+        // --- Remove Magnifier Listeners ---
+        if (magContainer) {
+            magContainer.removeEventListener('mouseenter', showLens);
+            magContainer.removeEventListener('mouseleave', hideLens);
+            magContainer.removeEventListener('mousemove', handleMagnify);
+        }
+        if (magLens) magLens.style.opacity = 0;
+        // ---------------------------------------
+
         // restore focus
         if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
             lastFocusedElement.focus();
