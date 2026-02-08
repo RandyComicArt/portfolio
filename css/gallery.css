@@ -237,6 +237,28 @@ button:focus-visible, .gallery-thumb:focus-within {
     opacity: 1;
     transition: opacity 240ms ease;
 }
+
+/* -------------------------------------
+    search bar override for gallery page
+    ------------------------------------ */
+#search-stats {
+    display: none !important;
+}
+
+/* This controls the overall width of the search area */
+.search-inner {
+    display: flex;
+    justify-content: flex-start; /* Keeps it aligned to the left */
+    width: 100%;
+    max-width: 1010px; /* Adjust this number to match the Home page width */
+}
+
+#site-search {
+    width: 100%;
+    /* Remove that extra padding we added earlier since the stats are gone */
+    padding-right: 15px !important;
+    box-sizing: border-box;
+}
 /* -----------------------------
    Notes:
    - Keep all heavy modal / magnifier CSS inside style.css (already present).
