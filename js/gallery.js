@@ -1,12 +1,14 @@
-/* js/gallery.js */
-
 document.addEventListener('DOMContentLoaded', () => {
     const THUMBS_PER_PAGE = 24;
 
     // UI elements
     const grid = document.getElementById('gallery-grid');
     const loadMoreBtn = document.getElementById('load-more');
-    const searchInput = document.getElementById('gallery-search');
+
+    // CHANGED THIS: Pointing to site-search to match the home-page CSS
+    const searchInput = document.getElementById('site-search');
+
+    const searchStats = document.getElementById('search-stats'); // For live result counts
     const filterButtons = Array.from(document.querySelectorAll('.gallery-filters button'));
 
     // Modal elements
@@ -26,37 +28,27 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentIndex = -1;
     let lastFocusedElement = null;
 
-    // Lazy-loading observer
     let lazyObserver = null;
 
     function initLazyObserver() {
         if (!('IntersectionObserver' in window)) return;
-
         lazyObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (!entry.isIntersecting) return;
-
                 const img = entry.target;
                 if (!img.dataset || !img.dataset.src) {
                     observer.unobserve(img);
                     return;
                 }
-
-                // Swap placeholder for real image
                 img.src = img.dataset.src;
-
                 img.addEventListener('load', () => {
                     img.classList.add('loaded');
-                    img.removeAttribute('loading'); // Stop browser-level lazy-loading once fetched
+                    img.removeAttribute('loading');
                     try { delete img.dataset.src; } catch (e) { }
                 }, { once: true });
-
                 observer.unobserve(img);
             });
-        }, {
-            rootMargin: '800px 0px', // Larger buffer to prevent "pop-in" while scrolling
-            threshold: 0.01
-        });
+        }, { rootMargin: '800px 0px', threshold: 0.01 });
     }
 
     (async function init() {
@@ -154,8 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
         img.className = 'thumb-img lazy';
         img.decoding = 'async';
         img.alt = item.title || '';
-
-        // Transparent placeholder
         img.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D%22http%3A//www.w3.org/2000/svg%22 width%3D%223%22 height%3D%222%22%3E%3C/svg%3E';
         img.dataset.src = item.thumb || item.full || '';
         img.dataset.full = item.full || '';
@@ -178,21 +168,24 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             img.src = img.dataset.src;
         }
-
         return article;
     }
 
     function bindControls() {
         filterButtons.forEach(btn => {
             btn.addEventListener('click', () => {
-                filterButtons.forEach(b => b.classList.remove('active'));
+                filterButtons.forEach(b => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-selected', 'false');
+                });
                 btn.classList.add('active');
+                btn.setAttribute('aria-selected', 'true');
                 applyFilters();
             });
         });
 
         if (searchInput) {
-            searchInput.addEventListener('input', debounce(() => applyFilters(), 170));
+            searchInput.addEventListener('input', debounce(() => applyFilters(), 100));
         }
 
         if (loadMoreBtn) {
@@ -223,9 +216,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         filtered = allItems.filter(it => {
             const matchesFilter = (activeFilter === 'all') || (it.collection === activeFilter);
-            const matchesQuery = !query || it.title.toLowerCase().includes(query) || it.desc.toLowerCase().includes(query);
+            const matchesQuery = !query ||
+                it.title.toLowerCase().includes(query) ||
+                it.desc.toLowerCase().includes(query) ||
+                it.date.toLowerCase().includes(query);
             return matchesFilter && matchesQuery;
         });
+
+        // Update Search Stats (Result count)
+        if (searchStats) {
+            if (query === '') {
+                searchStats.textContent = '';
+            } else {
+                searchStats.textContent = filtered.length === 0
+                    ? 'No results'
+                    : `${filtered.length} result${filtered.length !== 1 ? 's' : ''}`;
+            }
+        }
 
         renderPage(true);
     }
@@ -248,21 +255,18 @@ document.addEventListener('DOMContentLoaded', () => {
         modalText.textContent = it.desc;
         modalMeta.textContent = it.date ? `Date: ${it.date}` : '';
 
-        // Magnifier Integration
-        if (typeof updateMagnifierSize === 'function') {
+        // Magnifier support
+        if (typeof window.updateMagnifierSize === 'function') {
             const magLens = document.getElementById('magnifier-lens');
             const magContainer = document.getElementById('magnifier-container');
             if (magLens) magLens.style.backgroundImage = `url('${modalImg.src}')`;
-
-            modalImg.onload = () => updateMagnifierSize();
-
+            modalImg.onload = () => window.updateMagnifierSize();
             if (magContainer) {
                 magContainer.addEventListener('mouseenter', window.showLens);
                 magContainer.addEventListener('mouseleave', window.hideLens);
                 magContainer.addEventListener('mousemove', window.handleMagnify);
             }
         }
-
         history.replaceState(null, '', `#${encodeURIComponent(it.id)}`);
     }
 
@@ -271,14 +275,12 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.display = 'none';
         modal.setAttribute('aria-hidden', 'true');
         modalImg.src = '';
-
         const magContainer = document.getElementById('magnifier-container');
         if (magContainer) {
             magContainer.removeEventListener('mouseenter', window.showLens);
             magContainer.removeEventListener('mouseleave', window.hideLens);
             magContainer.removeEventListener('mousemove', window.handleMagnify);
         }
-
         if (lastFocusedElement) lastFocusedElement.focus({ preventScroll: true });
         history.replaceState(null, '', window.location.pathname + window.location.search);
         currentIndex = -1;
@@ -297,7 +299,6 @@ document.addEventListener('DOMContentLoaded', () => {
             currentIndex = foundIndex;
             const neededPage = Math.floor(foundIndex / THUMBS_PER_PAGE);
             for (let i = 0; i < neededPage; i++) renderPage(false);
-
             setTimeout(() => {
                 const thumbEl = document.querySelector(`[data-id="${hash}"]`);
                 if (thumbEl) thumbEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
