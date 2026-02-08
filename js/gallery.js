@@ -214,7 +214,18 @@ document.addEventListener('DOMContentLoaded', () => {
             searchStats.textContent = query === '' ? '' :
                 (filtered.length === 0 ? 'No results' : `${filtered.length} result${filtered.length !== 1 ? 's' : ''}`);
         }
+
         renderPage(true);
+
+        // --- NEW: Toggle centering logic ---
+        if (grid) {
+            if (filtered.length === 0) {
+                grid.classList.add('is-empty');
+                grid.innerHTML = `<p class="no-results-msg">No artworks found.</p>`;
+            } else {
+                grid.classList.remove('is-empty');
+            }
+        }
     }
 
     // --- MODAL LOGIC WITH TRANSITIONS ---
