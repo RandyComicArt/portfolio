@@ -146,44 +146,44 @@ function preloadImage(index) {
 }
 
 function performImageTransition(newImageElement, direction) {
-    let slideDistance, resetDistance;
+    // 1. Set the slide distances to match the gallery's "Quick Slide"
+    const slideOut = direction === 'next' ? '-60px' : '60px';
+    const slideInStart = direction === 'next' ? '60px' : '-60px';
 
-    if (direction === 'next') {
-        slideDistance = '-100%';
-        resetDistance = '100%';
-    } else {
-        slideDistance = '100%';
-        resetDistance = '-100%';
-    }
-
-    modalImg.style.left = slideDistance;
-    modalImg.style.opacity = 0;
+    // 2. Phase 1: Slide Out & Fade
+    modalImg.style.transition = 'transform 200ms ease-in, opacity 200ms';
+    modalImg.style.transform = `translateX(${slideOut})`;
+    modalImg.style.opacity = '0';
 
     setTimeout(() => {
+        // 3. Swap Content while the image is invisible
         modalImg.style.transition = 'none';
-        modalImg.style.left = resetDistance;
+        modalImg.style.transform = `translateX(${slideInStart})`;
 
         modalImg.src = newImageElement.src;
         modalImg.alt = newImageElement.alt;
-        magLens.style.backgroundImage = `url('${newImageElement.src}')`;
+
+        // Update text/meta (Home page data-attributes)
         descriptionTitle.textContent = newImageElement.alt;
-
-        const descText = newImageElement.getAttribute('data-desc') || "No detailed description available for this piece.";
+        const descText = newImageElement.getAttribute('data-desc') || "No description available.";
         descriptionText.textContent = descText;
-
         const artworkDate = newImageElement.getAttribute('data-date') || "N/A";
         descriptionMeta.innerHTML = `Date: ${artworkDate}`;
 
+        // Update Magnifier Background
+        if (magLens) magLens.style.backgroundImage = `url('${newImageElement.src}')`;
+
+        // 4. Phase 2: Slide In with the "Snappy" cubic-bezier easing
         requestAnimationFrame(() => {
-            modalImg.style.transition = 'left 300ms ease-out, opacity 100ms';
-            modalImg.style.left = '0';
-            modalImg.style.opacity = 1;
+            modalImg.style.transition = 'transform 250ms cubic-bezier(0.17, 0.67, 0.83, 0.67), opacity 200ms';
+            modalImg.style.transform = 'translateX(0)';
+            modalImg.style.opacity = '1';
 
             if (modalImg.complete) {
                 setTimeout(updateMagnifierSize, 50);
             }
         });
-    }, 300);
+    }, 200); // 200ms matches the Gallery speed
 }
 
 function updateModalContent(imgElement, direction) {
