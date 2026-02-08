@@ -217,18 +217,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderPage(true);
 
-        // --- NEW: Toggle centering logic ---
+        // Center "No results" message without breaking grid logic
         if (grid) {
             if (filtered.length === 0) {
-                grid.classList.add('is-empty');
-                grid.innerHTML = `<p class="no-results-msg">No artworks found.</p>`;
-            } else {
-                grid.classList.remove('is-empty');
+                grid.innerHTML = `<div class="no-results-container"><p class="no-results-msg">No artworks found.</p></div>`;
             }
         }
     }
-
-    // --- MODAL LOGIC WITH TRANSITIONS ---
 
     function openModalForItem(item) {
         currentIndex = filtered.findIndex(it => it.id === item.id);
@@ -244,10 +239,10 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = "hidden";
 
-        // Initial setup without slide for the first click
+        // Reset positions for a clean opening
         modalImg.style.transition = 'none';
-        modalImg.style.left = '0';
-        modalImg.style.opacity = 1;
+        modalImg.style.transform = 'translateX(0)';
+        modalImg.style.opacity = '1';
 
         modalImg.src = it.full || it.thumb;
         modalImg.alt = it.title;
@@ -255,11 +250,19 @@ document.addEventListener('DOMContentLoaded', () => {
         modalText.textContent = it.desc;
         modalMeta.textContent = it.date ? `Date: ${it.date}` : '';
 
-        const magLens = document.getElementById('magnifier-lens');
-        if (magLens) magLens.style.backgroundImage = `url('${modalImg.src}')`;
-
+        // Magnifier support
         if (typeof window.updateMagnifierSize === 'function') {
+            const magLens = document.getElementById('magnifier-lens');
+            const magContainer = document.getElementById('magnifier-container');
+            if (magLens) magLens.style.backgroundImage = `url('${modalImg.src}')`;
+
             modalImg.onload = () => window.updateMagnifierSize();
+
+            if (magContainer) {
+                magContainer.addEventListener('mouseenter', window.showLens);
+                magContainer.addEventListener('mouseleave', window.hideLens);
+                magContainer.addEventListener('mousemove', window.handleMagnify);
+            }
         }
 
         updateNavButtons();
@@ -276,22 +279,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function performGalleryTransition(item, direction) {
-        let slideDistance, resetDistance;
-        if (direction === 'next') {
-            slideDistance = '-100%'; resetDistance = '100%';
-        } else {
-            slideDistance = '100%'; resetDistance = '-100%';
-        }
+        const slideOut = direction === 'next' ? '-60px' : '60px';
+        const slideInStart = direction === 'next' ? '60px' : '-60px';
 
-        // Slide out
-        modalImg.style.left = slideDistance;
-        modalImg.style.opacity = 0;
+        // Slide Out
+        modalImg.style.transition = 'transform 200ms ease-in, opacity 200ms';
+        modalImg.style.transform = `translateX(${slideOut})`;
+        modalImg.style.opacity = '0';
 
         setTimeout(() => {
-            modalImg.style.transition = 'none';
-            modalImg.style.left = resetDistance;
-
             // Swap Content
+            modalImg.style.transition = 'none';
+            modalImg.style.transform = `translateX(${slideInStart})`;
+
             modalImg.src = item.full || item.thumb;
             modalImg.alt = item.title;
             modalTitle.textContent = item.title;
@@ -303,15 +303,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Slide In
             requestAnimationFrame(() => {
-                modalImg.style.transition = 'left 300ms ease-out, opacity 100ms';
-                modalImg.style.left = '0';
-                modalImg.style.opacity = 1;
+                modalImg.style.transition = 'transform 250ms cubic-bezier(0.17, 0.67, 0.83, 0.67), opacity 200ms';
+                modalImg.style.transform = 'translateX(0)';
+                modalImg.style.opacity = '1';
 
                 if (typeof window.updateMagnifierSize === 'function') {
-                    window.updateMagnifierSize();
+                    // Re-sync magnifier once image data is ready
+                    modalImg.onload = () => window.updateMagnifierSize();
                 }
             });
-        }, 300);
+        }, 200);
 
         updateNavButtons();
         history.replaceState(null, '', `#${encodeURIComponent(item.id)}`);
@@ -328,6 +329,14 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = "auto";
         modalImg.src = '';
+
+        const magContainer = document.getElementById('magnifier-container');
+        if (magContainer) {
+            magContainer.removeEventListener('mouseenter', window.showLens);
+            magContainer.removeEventListener('mouseleave', window.hideLens);
+            magContainer.removeEventListener('mousemove', window.handleMagnify);
+        }
+
         if (lastFocusedElement) lastFocusedElement.focus({ preventScroll: true });
         history.replaceState(null, '', window.location.pathname + window.location.search);
         currentIndex = -1;
