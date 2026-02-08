@@ -272,6 +272,15 @@ button:focus-visible, .gallery-thumb:focus-within {
     padding-right: 15px !important;
     box-sizing: border-box;
 }
+
+/* Crucial for the slide animation in the modal */
+#modal-image {
+    position: relative; /* Allows 'left' property to move it */
+    left: 0;
+    transition: left 300ms ease-out, opacity 100ms;
+    will-change: left, opacity;
+}
+
 /* -----------------------------
    Notes:
    - Keep all heavy modal / magnifier CSS inside style.css (already present).
