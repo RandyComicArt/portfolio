@@ -273,35 +273,17 @@ button:focus-visible, .gallery-thumb:focus-within {
     box-sizing: border-box;
 }
 
-/* --------------------------
-    modal sliding animation
-   --------------------------*/
+/* Crucial for the slide animation in the modal */
 #modal-image {
-    position: relative; /* Allows 'left' property to move it */
-    left: 0;
-    transition: left 300ms ease-out, opacity 100ms;
-    will-change: left, opacity;
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+    will-change: transform, opacity; /* Optimizes for the animation */
+    transform: translateX(0);
 }
 
-
-/* --------------------------
-    no artworks found search
-   --------------------------*/
-/* When the grid has no items, center its content */
-#gallery-grid.is-empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 300px; /* Adjust based on how tall you want the empty area to be */
-    width: 100%;
-}
-
-.no-results-msg {
-    font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.6);
-    margin: 0;
-    text-align: center;
-}
 
 /* -----------------------------
    Notes:

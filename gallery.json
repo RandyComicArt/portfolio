@@ -201,7 +201,7 @@
     "id": "process1",
     "thumb": "images/process1.png",
     "full": "images/process1.png",
-    "title": "Process 1",
+    "title": "Process 1: Original Character",
     "desc": "",
     "date": "January 13th, 2025",
     "collection": "process"
@@ -210,7 +210,7 @@
     "id": "process2",
     "thumb": "images/process2.png",
     "full": "images/process2.png",
-    "title": "Process 2",
+    "title": "Process 2: Panelling",
     "desc": "",
     "date": "January 27th, 2025",
     "collection": "process"
@@ -219,7 +219,7 @@
     "id": "process3",
     "thumb": "images/process3.png",
     "full": "images/process3.png",
-    "title": "Process 3",
+    "title": "Process 3: Falling Woman",
     "desc": "",
     "date": "May 3rd, 2024",
     "collection": "process"
@@ -228,7 +228,7 @@
     "id": "process4",
     "thumb": "images/process4.png",
     "full": "images/process4.png",
-    "title": "Process 4",
+    "title": "Process 4: Wolverine",
     "desc": "",
     "date": "October 18th, 2024",
     "collection": "process"
@@ -237,7 +237,7 @@
     "id": "process5",
     "thumb": "images/process5.png",
     "full": "images/process5.png",
-    "title": "Process 5",
+    "title": "Process 5: Punching Pose",
     "desc": "",
     "date": "May 28th, 2024",
     "collection": "process"
@@ -246,7 +246,7 @@
     "id": "process6",
     "thumb": "images/process6.png",
     "full": "images/process6.png",
-    "title": "Process 6",
+    "title": "Process 6: Goku",
     "desc": "",
     "date": "June 13th, 2025",
     "collection": "process"
@@ -255,7 +255,7 @@
     "id": "process7",
     "thumb": "images/process7.png",
     "full": "images/process7.png",
-    "title": "Process 7",
+    "title": "Process 7: Necromorph",
     "desc": "",
     "date": "May 24th, 2024",
     "collection": "process"
@@ -264,7 +264,7 @@
     "id": "process8",
     "thumb": "images/process8.png",
     "full": "images/process8.png",
-    "title": "Process 8",
+    "title": "Process 8: Spiderman",
     "desc": "",
     "date": "September 15th, 2025",
     "collection": "process"
@@ -273,7 +273,7 @@
     "id": "process9",
     "thumb": "images/process9.png",
     "full": "images/process9.png",
-    "title": "Process 9",
+    "title": "Process 9: Wolverine",
     "desc": "",
     "date": "September 13th, 2025",
     "collection": "process"
@@ -282,7 +282,7 @@
     "id": "process10",
     "thumb": "images/process10.png",
     "full": "images/process10.png",
-    "title": "Process 10",
+    "title": "Process 10: Dante",
     "desc": "",
     "date": "February 22nd, 2025",
     "collection": "process"
@@ -291,7 +291,7 @@
     "id": "process11",
     "thumb": "images/process11.png",
     "full": "images/process11.png",
-    "title": "Process 11",
+    "title": "Process 11: Original D&D Character",
     "desc": "",
     "date": "August 7th, 2025",
     "collection": "process"
