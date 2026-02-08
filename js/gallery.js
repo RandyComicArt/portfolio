@@ -1,3 +1,4 @@
+// gallery.js
 document.addEventListener('DOMContentLoaded', () => {
     const THUMBS_PER_PAGE = 24;
 
