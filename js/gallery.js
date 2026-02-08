@@ -34,22 +34,67 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentIndex = -1;  // index in filtered for modal
     let lastFocusedElement = null;
 
+    // Lazy-loading observer (load each thumb once)
+    let lazyObserver = null;
+
+    function initLazyObserver() {
+        if (!('IntersectionObserver' in window)) return;
+        // small helper observer that loads the image once when it becomes near viewport
+        lazyObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const img = entry.target;
+                // If no data-src (already loaded or not using lazy), stop observing
+                if (!img.dataset || !img.dataset.src) {
+                    observer.unobserve(img);
+                    return;
+                }
+
+                // Set the real src only once
+                img.src = img.dataset.src;
+
+                // When loaded, add class and remove dataset marker
+                img.addEventListener('load', () => {
+                    img.classList.add('loaded');
+                    // remove dataset.src to mark "already loaded once"
+                    try { delete img.dataset.src; } catch (e) { /* ignore */ }
+                }, { once: true });
+
+                // stop observing this element
+                observer.unobserve(img);
+            });
+        }, {
+            rootMargin: '300px 0px', // preload a bit before it enters view
+            threshold: 0.01
+        });
+    }
+
     // Entry: try to load gallery.json, otherwise scan DOM
     (async function init() {
+        // Try to fetch gallery.json. If response is not OK or fetch fails, fall back to scanning DOM.
         try {
             const resp = await fetch('gallery.json', { cache: 'no-store' });
-            if (!resp.ok) throw new Error('No gallery.json (status ' + resp.status + ')');
-            const data = await resp.json();
-            allItems = normalizeData(data);
+            if (resp && resp.ok) {
+                const data = await resp.json();
+                allItems = normalizeData(data);
+            } else {
+                // Not OK (404, 500, etc.) — fallback to scanning DOM
+                console.info('gallery.js: gallery.json not found or not OK — falling back to scanning DOM.', resp && resp.status);
+                const domItems = scanCarouselImages();
+                allItems = normalizeData(domItems);
+            }
         } catch (err) {
-            // fallback: scan DOM (.carousel-track img)
-            console.info('gallery.js: gallery.json not found — falling back to scanning DOM (if present).', err);
+            // Network error or other unexpected fetch failure — fallback to scanning DOM
+            console.info('gallery.js: error fetching gallery.json — falling back to scanning DOM.', err);
             const domItems = scanCarouselImages();
             allItems = normalizeData(domItems);
         }
 
         // ensure each item has an id (for deep linking)
         allItems = allItems.map((it, i) => ({ id: it.id || slugify(it.title || `art-${i+1}`), ...it }));
+
+        // Initialize lazy observer before rendering thumbs so images get observed as we create them
+        initLazyObserver();
 
         // initial filter & render
         filtered = allItems.slice();
@@ -96,11 +141,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function slugify(text = '') {
+        // Simplified regexes to avoid redundant escapes and make lint happy
         return text.toString().toLowerCase()
-            .replace(/\s+/g, '-')
-            .replace(/[^\w\-]+/g, '')
-            .replace(/\-\-+/g, '-')
-            .replace(/^-+/, '')
+            .replace(/\s+/g, '-')        // spaces -> dash
+            .replace(/[^\w-]+/g, '')     // remove non-word except dash
+            .replace(/-{2,}/g, '-')      // compress multiple dashes to one
+            .replace(/^-+/, '')          // trim starting dashes
             .replace(/-+$/, '') || `id-${Math.random().toString(36).slice(2,8)}`;
     }
 
@@ -120,14 +166,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // update load more button
         if (page * THUMBS_PER_PAGE >= filtered.length) {
-            loadMoreBtn.disabled = true;
-            loadMoreBtn.textContent = 'No more items';
+            if (loadMoreBtn) {
+                loadMoreBtn.disabled = true;
+                loadMoreBtn.textContent = 'No more items';
+            }
         } else {
-            loadMoreBtn.disabled = false;
-            loadMoreBtn.textContent = 'Load more';
+            if (loadMoreBtn) {
+                loadMoreBtn.disabled = false;
+                loadMoreBtn.textContent = 'Load more';
+            }
         }
     }
 
+    // Updated makeThumb: uses data-src and lazyObserver so thumbs load once
     function makeThumb(item) {
         const article = document.createElement('article');
         article.className = 'gallery-thumb';
@@ -143,11 +194,16 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.setAttribute('aria-label', item.title ? `Open ${item.title}` : 'Open artwork');
 
         const img = document.createElement('img');
-        img.className = 'thumb-img';
+        img.className = 'thumb-img lazy';
         img.loading = 'lazy';
+        img.decoding = 'async';
         img.alt = item.title || '';
-        img.src = item.thumb || item.full || '';
-        // store full url on dataset
+
+        // Minimal placeholder (transparent svg) to reserve space and avoid initial network request.
+        img.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D%22http%3A//www.w3.org/2000/svg%22 width%3D%223%22 height%3D%222%22%3E%3C/svg%3E';
+        img.dataset.src = item.thumb || item.full || '';
+
+        // store full url on dataset for modal
         img.dataset.full = item.full || item.thumb || '';
         // keep id on the element to support deep linking restore focus
         img.dataset.id = item.id || '';
@@ -166,6 +222,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // click opens modal
         btn.addEventListener('click', () => openModalForItem(item));
+
+        // observe image for lazy loading (if observer ready)
+        if (lazyObserver) {
+            lazyObserver.observe(img);
+        } else {
+            // fallback: load immediately
+            if (img.dataset && img.dataset.src) {
+                img.src = img.dataset.src;
+                img.addEventListener('load', () => img.classList.add('loaded'), { once: true });
+                try { delete img.dataset.src; } catch (e) { /* ignore */ }
+            }
+        }
 
         return article;
     }
@@ -258,10 +326,12 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.style.display = 'flex';
             modal.setAttribute('aria-hidden', 'false');
             // set image
-            modalImg.src = ''; // clear first to avoid flash
+            modalImg.src = ''; // clear first to avoid flash of previous large image
             modalImg.alt = it.title || '';
-            // set large image only when opening (avoid double downloads)
+
+            // set large image only when opening (avoid double downloads for grid thumbs)
             modalImg.src = it.full || it.thumb || '';
+
             // set metadata
             modalTitle.textContent = it.title || '';
             modalText.textContent = it.desc || '';
