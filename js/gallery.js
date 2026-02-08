@@ -5,11 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // UI elements
     const grid = document.getElementById('gallery-grid');
     const loadMoreBtn = document.getElementById('load-more');
-
-    // CHANGED THIS: Pointing to site-search to match the home-page CSS
     const searchInput = document.getElementById('site-search');
-
-    const searchStats = document.getElementById('search-stats'); // For live result counts
+    const searchStats = document.getElementById('search-stats');
     const filterButtons = Array.from(document.querySelectorAll('.gallery-filters button'));
 
     // Modal elements
@@ -28,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let page = 0;
     let currentIndex = -1;
     let lastFocusedElement = null;
-
     let lazyObserver = null;
 
     function initLazyObserver() {
@@ -45,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 img.addEventListener('load', () => {
                     img.classList.add('loaded');
                     img.removeAttribute('loading');
-                    try { delete img.dataset.src; } catch (e) { }
                 }, { once: true });
                 observer.unobserve(img);
             });
@@ -59,14 +54,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await resp.json();
                 allItems = normalizeData(data);
             } else {
-                console.info('Falling back to DOM scan.');
-                const domItems = scanCarouselImages();
-                allItems = normalizeData(domItems);
+                allItems = normalizeData(scanCarouselImages());
             }
         } catch (err) {
-            console.info('Error loading JSON, falling back to DOM scan.', err);
-            const domItems = scanCarouselImages();
-            allItems = normalizeData(domItems);
+            allItems = normalizeData(scanCarouselImages());
         }
 
         allItems = allItems.map((it, i) => ({
@@ -164,11 +155,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         btn.addEventListener('click', () => openModalForItem(item));
 
-        if (lazyObserver) {
-            lazyObserver.observe(img);
-        } else {
-            img.src = img.dataset.src;
-        }
+        if (lazyObserver) lazyObserver.observe(img);
+        else img.src = img.dataset.src;
+
         return article;
     }
 
@@ -189,10 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
             searchInput.addEventListener('input', debounce(() => applyFilters(), 100));
         }
 
-        if (loadMoreBtn) {
-            loadMoreBtn.addEventListener('click', () => renderPage(false));
-        }
-
+        if (loadMoreBtn) loadMoreBtn.addEventListener('click', () => renderPage(false));
         if (modalClose) modalClose.addEventListener('click', closeModal);
         if (modalPrev) modalPrev.addEventListener('click', () => showRelative(-1));
         if (modalNext) modalNext.addEventListener('click', () => showRelative(1));
@@ -224,19 +210,14 @@ document.addEventListener('DOMContentLoaded', () => {
             return matchesFilter && matchesQuery;
         });
 
-        // Update Search Stats (Result count)
         if (searchStats) {
-            if (query === '') {
-                searchStats.textContent = '';
-            } else {
-                searchStats.textContent = filtered.length === 0
-                    ? 'No results'
-                    : `${filtered.length} result${filtered.length !== 1 ? 's' : ''}`;
-            }
+            searchStats.textContent = query === '' ? '' :
+                (filtered.length === 0 ? 'No results' : `${filtered.length} result${filtered.length !== 1 ? 's' : ''}`);
         }
-
         renderPage(true);
     }
+
+    // --- MODAL LOGIC WITH TRANSITIONS ---
 
     function openModalForItem(item) {
         currentIndex = filtered.findIndex(it => it.id === item.id);
@@ -250,46 +231,103 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modal.style.display = 'flex';
         modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = "hidden";
+
+        // Initial setup without slide for the first click
+        modalImg.style.transition = 'none';
+        modalImg.style.left = '0';
+        modalImg.style.opacity = 1;
+
         modalImg.src = it.full || it.thumb;
         modalImg.alt = it.title;
         modalTitle.textContent = it.title;
         modalText.textContent = it.desc;
         modalMeta.textContent = it.date ? `Date: ${it.date}` : '';
 
-        // Magnifier support
+        const magLens = document.getElementById('magnifier-lens');
+        if (magLens) magLens.style.backgroundImage = `url('${modalImg.src}')`;
+
         if (typeof window.updateMagnifierSize === 'function') {
-            const magLens = document.getElementById('magnifier-lens');
-            const magContainer = document.getElementById('magnifier-container');
-            if (magLens) magLens.style.backgroundImage = `url('${modalImg.src}')`;
             modalImg.onload = () => window.updateMagnifierSize();
-            if (magContainer) {
-                magContainer.addEventListener('mouseenter', window.showLens);
-                magContainer.addEventListener('mouseleave', window.hideLens);
-                magContainer.addEventListener('mousemove', window.handleMagnify);
-            }
         }
+
+        updateNavButtons();
         history.replaceState(null, '', `#${encodeURIComponent(it.id)}`);
+    }
+
+    function showRelative(offset) {
+        if (currentIndex === -1) return;
+        const direction = offset > 0 ? 'next' : 'prev';
+        currentIndex = (currentIndex + offset + filtered.length) % filtered.length;
+
+        const it = filtered[currentIndex];
+        performGalleryTransition(it, direction);
+    }
+
+    function performGalleryTransition(item, direction) {
+        let slideDistance, resetDistance;
+        if (direction === 'next') {
+            slideDistance = '-100%'; resetDistance = '100%';
+        } else {
+            slideDistance = '100%'; resetDistance = '-100%';
+        }
+
+        // Slide out
+        modalImg.style.left = slideDistance;
+        modalImg.style.opacity = 0;
+
+        setTimeout(() => {
+            modalImg.style.transition = 'none';
+            modalImg.style.left = resetDistance;
+
+            // Swap Content
+            modalImg.src = item.full || item.thumb;
+            modalImg.alt = item.title;
+            modalTitle.textContent = item.title;
+            modalText.textContent = item.desc;
+            modalMeta.textContent = item.date ? `Date: ${item.date}` : '';
+
+            const magLens = document.getElementById('magnifier-lens');
+            if (magLens) magLens.style.backgroundImage = `url('${modalImg.src}')`;
+
+            // Slide In
+            requestAnimationFrame(() => {
+                modalImg.style.transition = 'left 300ms ease-out, opacity 100ms';
+                modalImg.style.left = '0';
+                modalImg.style.opacity = 1;
+
+                if (typeof window.updateMagnifierSize === 'function') {
+                    window.updateMagnifierSize();
+                }
+            });
+        }, 300);
+
+        updateNavButtons();
+        history.replaceState(null, '', `#${encodeURIComponent(item.id)}`);
+    }
+
+    function updateNavButtons() {
+        if (modalPrev) modalPrev.disabled = (currentIndex === 0);
+        if (modalNext) modalNext.disabled = (currentIndex === filtered.length - 1);
     }
 
     function closeModal() {
         if (!modal) return;
         modal.style.display = 'none';
         modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = "auto";
         modalImg.src = '';
-        const magContainer = document.getElementById('magnifier-container');
-        if (magContainer) {
-            magContainer.removeEventListener('mouseenter', window.showLens);
-            magContainer.removeEventListener('mouseleave', window.hideLens);
-            magContainer.removeEventListener('mousemove', window.handleMagnify);
-        }
         if (lastFocusedElement) lastFocusedElement.focus({ preventScroll: true });
         history.replaceState(null, '', window.location.pathname + window.location.search);
         currentIndex = -1;
     }
 
-    function showRelative(offset) {
-        currentIndex = (currentIndex + offset + filtered.length) % filtered.length;
-        showCurrent();
+    function debounce(fn, wait) {
+        let t;
+        return (...args) => {
+            clearTimeout(t);
+            t = setTimeout(() => fn.apply(this, args), wait);
+        };
     }
 
     function handleInitialHash() {
@@ -306,13 +344,5 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 100);
             showCurrent();
         }
-    }
-
-    function debounce(fn, wait) {
-        let t;
-        return (...args) => {
-            clearTimeout(t);
-            t = setTimeout(() => fn.apply(this, args), wait);
-        };
     }
 });
