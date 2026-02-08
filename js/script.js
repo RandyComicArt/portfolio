@@ -312,22 +312,30 @@ document.addEventListener('DOMContentLoaded', () => {
     sections.forEach(s => { if (s) observer.observe(s); });
 
     // smooth scroll for nav links (center sections on screen)
-navLinks.forEach(a => {
-  a.addEventListener('click', (e) => {
-    e.preventDefault();
-    const target = document.querySelector(a.getAttribute('href'));
-    if (!target) return;
+// Updated smooth scroll for nav links
+    navLinks.forEach(a => {
+        a.addEventListener('click', (e) => {
+            const href = a.getAttribute('href');
 
-    // scroll smoothly and center the section
-    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // If the link is a standard page link (doesn't start with #),
+            // let the browser navigate normally.
+            if (!href.startsWith('#')) {
+                return;
+            }
 
-    // optional: move keyboard focus for accessibility
-    setTimeout(() => {
-      target.setAttribute('tabindex', '-1');
-      target.focus({ preventScroll: true });
-    }, 400);
-  });
-});
+            // Otherwise, it's a scroll link for the current page
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (!target) return;
+
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            setTimeout(() => {
+                target.setAttribute('tabindex', '-1');
+                target.focus({ preventScroll: true });
+            }, 400);
+        });
+    });
 });
 
 /* Only reveal arrows on keyboard focus (Tab) — mouse clicks won't "stick" them visible */
