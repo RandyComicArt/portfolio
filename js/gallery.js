@@ -1,11 +1,10 @@
-/* js/gallery.js
-   - Loads gallery data from gallery.json (recommended) or falls back to scanning
-     .carousel-track img elements on the current page.
-   - Renders a responsive grid, filters, search, "load more", and an accessible modal.
-   - Expects the following DOM IDs/classes (matching gallery.html):
-     #gallery-grid, #load-more, #gallery-search, .gallery-filters button,
-     #image-modal, #modal-image, #description-title, #description-text, #description-meta,
-     #modal-prev-btn, #modal-next-btn, #modal-close-btn
+/* patched js/gallery.js
+   - Reworked modal open/close to use .is-open + aria-hidden
+   - Scoped keyboard handlers + focus trap
+   - DocumentFragment for batch DOM appends
+   - Preload neighboring images
+   - Deterministic id fallback
+   - Defensive checks + aria-selected init
 */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -17,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('gallery-search');
     const filterButtons = Array.from(document.querySelectorAll('.gallery-filters button'));
 
-    // Modal elements (IDs must match markup)
+    // Modal elements
     const modal = document.getElementById('image-modal');
     const modalImg = document.getElementById('modal-image');
     const modalTitle = document.getElementById('description-title');
@@ -28,13 +27,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalClose = document.getElementById('modal-close-btn');
 
     // App state
-    let allItems = [];      // full dataset
-    let filtered = [];      // current filtered set
-    let page = 0;           // pagination page (0-based)
-    let currentIndex = -1;  // index in filtered for modal
+    let allItems = [];
+    let filtered = [];
+    let page = 0;
+    let currentIndex = -1;
     let lastFocusedElement = null;
 
-    // Entry: try to load gallery.json, otherwise scan DOM
+    // Modal helpers state
+    let modalKeyHandler = null;
+    let releaseFocusTrap = null;
+
     (async function init() {
         try {
             const resp = await fetch('gallery.json', { cache: 'no-store' });
@@ -42,20 +44,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await resp.json();
             allItems = normalizeData(data);
         } catch (err) {
-            // fallback: scan DOM (.carousel-track img)
             console.info('gallery.js: gallery.json not found — falling back to scanning DOM (if present).', err);
             const domItems = scanCarouselImages();
             allItems = normalizeData(domItems);
         }
 
-        // ensure each item has an id (for deep linking)
-        allItems = allItems.map((it, i) => ({ id: it.id || slugify(it.title || `art-${i+1}`), ...it }));
+        // ensure each item has a deterministic id (use title-derived or index)
+        allItems = allItems.map((it, i) => {
+            const base = it.id || slugify(it.title || `art-${i + 1}`);
+            // deterministic fallback: art-001 style if empty
+            const safe = base || `art-${String(i + 1).padStart(3, '0')}`;
+            return { id: safe, ...it };
+        });
 
-        // initial filter & render
+        // start with everything visible
         filtered = allItems.slice();
-        renderPage(true);
 
-        // wire UI events
+        // initialize aria-selected on filter buttons to reflect .active
+        filterButtons.forEach(b => b.setAttribute('aria-selected', b.classList.contains('active')));
+
+        renderPage(true);
         bindControls();
         handleInitialHash();
     })();
@@ -64,16 +72,14 @@ document.addEventListener('DOMContentLoaded', () => {
        Data helpers
        ------------------------- */
     function normalizeData(raw) {
-        // raw may be array of objects with keys: thumb, full, title, desc, date, collection, id
-        // or DOM-like objects from scanCarouselImages()
         return (raw || []).map(r => {
             return {
                 thumb: r.thumb || r.thumbUrl || r.thumbSrc || r.src || '',
                 full: r.full || r.fullUrl || r.fullSrc || r.dataset?.full || r.src || '',
-                title: r.title?.trim() || r.name || r.alt || '',
+                title: String(r.title || r.name || r.alt || '').trim(),
                 desc: r.desc || r.description || r.dataset?.desc || '',
                 date: r.date || r.dataset?.date || '',
-                collection: (r.collection || r.dataset?.collection || 'all').toString(),
+                collection: (r.collection || r.dataset?.collection || 'all').toString().toLowerCase(),
                 id: r.id || r.slug || ''
             };
         });
@@ -81,18 +87,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function scanCarouselImages() {
         const imgs = Array.from(document.querySelectorAll('.carousel-track img'));
-        return imgs.map(img => {
-            // Prefer dataset.full for full-size url, fallback to src
-            return {
-                thumb: img.dataset.thumb || img.src,
-                full: img.dataset.full || img.src,
-                title: img.alt || img.getAttribute('title') || '',
-                desc: img.dataset.desc || img.getAttribute('data-desc') || '',
-                date: img.dataset.date || img.getAttribute('data-date') || '',
-                collection: (img.closest('.carousel-wrapper')?.dataset?.section) || (img.dataset.collection) || 'all',
-                id: img.dataset.id || img.id || ''
-            };
-        });
+        return imgs.map(img => ({
+            thumb: img.dataset.thumb || img.src || '',
+            full: img.dataset.full || img.src || '',
+            title: img.alt || img.getAttribute('title') || '',
+            desc: img.dataset.desc || img.getAttribute('data-desc') || '',
+            date: img.dataset.date || img.getAttribute('data-date') || '',
+            collection: (img.closest('.carousel-wrapper')?.dataset?.section) || (img.dataset.collection) || 'all',
+            id: img.dataset.id || img.id || ''
+        }));
     }
 
     function slugify(text = '') {
@@ -101,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/[^\w\-]+/g, '')
             .replace(/\-\-+/g, '-')
             .replace(/^-+/, '')
-            .replace(/-+$/, '') || `id-${Math.random().toString(36).slice(2,8)}`;
+            .replace(/-+$/, '');
     }
 
     /* -------------------------
@@ -115,16 +118,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const start = page * THUMBS_PER_PAGE;
         const slice = filtered.slice(start, start + THUMBS_PER_PAGE);
-        slice.forEach(item => grid.appendChild(makeThumb(item)));
+        const frag = document.createDocumentFragment();
+        slice.forEach(item => frag.appendChild(makeThumb(item)));
+        grid.appendChild(frag);
         page++;
 
-        // update load more button
-        if (page * THUMBS_PER_PAGE >= filtered.length) {
-            loadMoreBtn.disabled = true;
-            loadMoreBtn.textContent = 'No more items';
-        } else {
-            loadMoreBtn.disabled = false;
-            loadMoreBtn.textContent = 'Load more';
+        if (loadMoreBtn) {
+            if (page * THUMBS_PER_PAGE >= filtered.length) {
+                loadMoreBtn.disabled = true;
+                loadMoreBtn.textContent = 'No more items';
+            } else {
+                loadMoreBtn.disabled = false;
+                loadMoreBtn.textContent = 'Load more';
+            }
         }
     }
 
@@ -147,9 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         img.loading = 'lazy';
         img.alt = item.title || '';
         img.src = item.thumb || item.full || '';
-        // store full url on dataset
         img.dataset.full = item.full || item.thumb || '';
-        // keep id on the element to support deep linking restore focus
         img.dataset.id = item.id || '';
 
         btn.appendChild(img);
@@ -164,14 +168,13 @@ document.addEventListener('DOMContentLoaded', () => {
         meta.appendChild(t);
         article.appendChild(meta);
 
-        // click opens modal
         btn.addEventListener('click', () => openModalForItem(item));
 
         return article;
     }
 
     /* -------------------------
-       Controls: filtering, search, load more
+       Controls
        ------------------------- */
     function bindControls() {
         // filters
@@ -179,7 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.addEventListener('click', () => {
                 filterButtons.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                // update aria-selected
                 filterButtons.forEach(b => b.setAttribute('aria-selected', b.classList.contains('active')));
                 applyFilters();
             });
@@ -199,17 +201,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modalClose) modalClose.addEventListener('click', closeModal);
         if (modalPrev) modalPrev.addEventListener('click', () => showRelative(-1));
         if (modalNext) modalNext.addEventListener('click', () => showRelative(1));
-        // click outside to close
-        if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
-        // keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (modal && modal.style.display && modal.style.display !== 'none') {
-                if (e.key === 'Escape') closeModal();
-                if (e.key === 'ArrowRight') showRelative(1);
-                if (e.key === 'ArrowLeft') showRelative(-1);
-            }
-        });
+        // click outside to close (only when using class-based overlay)
+        if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
     }
 
     function applyFilters() {
@@ -218,16 +212,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const activeFilter = activeBtn?.dataset?.filter || 'all';
 
         filtered = allItems.filter(it => {
-            const matchesFilter = (activeFilter === 'all') || (it.collection === activeFilter);
+            const matchesFilter = (activeFilter === 'all') || (String(it.collection || '').toLowerCase() === activeFilter);
             const title = (it.title || '').toLowerCase();
             const desc = (it.desc || '').toLowerCase();
             const matchesQuery = !query || title.includes(query) || desc.includes(query);
             return matchesFilter && matchesQuery;
         });
 
-        // reset grid and render first page
         renderPage(true);
-        // clear possible hash if the filtered set no longer contains the opened id
         updateHashIfNotFound();
     }
 
@@ -235,57 +227,96 @@ document.addEventListener('DOMContentLoaded', () => {
        Modal / Lightbox
        ------------------------- */
     function openModalForItem(item) {
-        // find index of item in filtered
         currentIndex = filtered.findIndex(it => (it.id || '') === (item.id || ''));
         if (currentIndex === -1) {
-            // fallback: try to find by title
             currentIndex = filtered.findIndex(it => it.title === item.title);
         }
+        if (currentIndex === -1) return;
         showCurrent();
-        // deep-link: update hash
-        if (item.id) {
-            history.replaceState(null, '', `#${encodeURIComponent(item.id)}`);
+
+        // deep-link (single write)
+        if (filtered[currentIndex]?.id) {
+            history.replaceState(null, '', `#${encodeURIComponent(filtered[currentIndex].id)}`);
         }
+
+        openModalUI();
     }
 
     function showCurrent() {
         if (currentIndex < 0 || currentIndex >= filtered.length) return;
         const it = filtered[currentIndex];
         if (!it) return;
+
         lastFocusedElement = document.activeElement;
-        // open modal
+
+        // set metadata and image
         if (modal) {
-            modal.style.display = 'flex';
-            modal.setAttribute('aria-hidden', 'false');
-            // set image
-            modalImg.src = ''; // clear first to avoid flash
-            modalImg.alt = it.title || '';
-            // set large image only when opening (avoid double downloads)
-            modalImg.src = it.full || it.thumb || '';
-            // set metadata
-            modalTitle.textContent = it.title || '';
-            modalText.textContent = it.desc || '';
-            modalMeta.textContent = it.date ? `Date: ${it.date}` : '';
-            // focus on close button for keyboard users
-            if (modalClose) modalClose.focus();
-            // update hash
-            if (it.id) {
-                history.replaceState(null, '', `#${encodeURIComponent(it.id)}`);
-            }
+            // clear then set to avoid flicker
+            if (modalImg) modalImg.src = '';
+            if (modalImg) modalImg.alt = it.title || '';
+            if (modalImg) modalImg.src = it.full || it.thumb || '';
+            if (modalTitle) modalTitle.textContent = it.title || '';
+            if (modalText) modalText.textContent = it.desc || '';
+            if (modalMeta) modalMeta.textContent = it.date ? `Date: ${it.date}` : '';
         }
+
+        preloadNearby(currentIndex);
+    }
+
+    function openModalUI() {
+        if (!modal) return;
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+
+        // focus management
+        if (modalClose) modalClose.focus();
+
+        // scoped keyboard handler
+        modalKeyHandler = (e) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                closeModal();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                showRelative(1);
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                showRelative(-1);
+            }
+        };
+        document.addEventListener('keydown', modalKeyHandler);
+
+        // install focus trap
+        releaseFocusTrap = trapFocus(modal);
     }
 
     function closeModal() {
         if (!modal) return;
-        modal.style.display = 'none';
+        modal.classList.remove('is-open');
         modal.setAttribute('aria-hidden', 'true');
-        modalImg.src = '';
+
+        if (modalImg) modalImg.src = '';
+
+        // remove key handler
+        if (modalKeyHandler) {
+            document.removeEventListener('keydown', modalKeyHandler);
+            modalKeyHandler = null;
+        }
+
+        // release focus trap
+        if (typeof releaseFocusTrap === 'function') {
+            releaseFocusTrap();
+            releaseFocusTrap = null;
+        }
+
         // restore focus
         if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
             lastFocusedElement.focus();
         }
-        // remove hash without adding a new history entry
+
+        // remove hash silently
         history.replaceState(null, '', location.pathname + location.search);
+
         currentIndex = -1;
     }
 
@@ -297,6 +328,10 @@ document.addEventListener('DOMContentLoaded', () => {
             currentIndex = (currentIndex + offset + filtered.length) % filtered.length;
         }
         showCurrent();
+        // update hash for new current
+        if (filtered[currentIndex]?.id) {
+            history.replaceState(null, '', `#${encodeURIComponent(filtered[currentIndex].id)}`);
+        }
     }
 
     /* -------------------------
@@ -305,46 +340,44 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleInitialHash() {
         const hash = decodeURIComponent((location.hash || '').replace(/^#/, ''));
         if (!hash) return;
-        // try to open the item with that id after data is ready (items already loaded here)
+
         const foundIndex = filtered.findIndex(it => it.id === hash);
         if (foundIndex !== -1) {
             currentIndex = foundIndex;
-            // If item isn't yet rendered in the first page, render pages until it appears.
             const neededPage = Math.floor(foundIndex / THUMBS_PER_PAGE);
             if (neededPage > 0) {
-                // render required pages
                 grid.innerHTML = '';
                 page = 0;
                 for (let i = 0; i <= neededPage; i++) {
                     renderPage(false);
                 }
             }
-            // scroll to the thumb element to improve context
-            const thumbEl = grid.querySelector(`[data-id="${hash}"], [data-id='${hash}']`) || grid.querySelector(`[data-id="${hash}"]`);
+            const thumbEl = grid.querySelector(`.gallery-thumb[data-id="${hash}"]`);
             if (thumbEl) thumbEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
             showCurrent();
+            openModalUI();
         } else {
-            // If not found in filtered (maybe filters active), reset filters and search then try
+            // If not found, clear search and filters and try again
             if (searchInput && searchInput.value) {
                 searchInput.value = '';
                 applyFilters();
             }
             const activeBtn = filterButtons.find(b => b.classList.contains('active'));
             if (activeBtn && activeBtn.dataset.filter !== 'all') {
-                // set to "all"
                 const allBtn = filterButtons.find(b => b.dataset.filter === 'all');
                 if (allBtn) {
                     filterButtons.forEach(b => b.classList.remove('active'));
                     allBtn.classList.add('active');
+                    filterButtons.forEach(b => b.setAttribute('aria-selected', b.classList.contains('active')));
                 }
                 applyFilters();
             }
-            // Try again once
             const foundIndex2 = filtered.findIndex(it => it.id === hash);
             if (foundIndex2 !== -1) {
                 currentIndex = foundIndex2;
                 renderPage(true);
                 showCurrent();
+                openModalUI();
             }
         }
     }
@@ -354,7 +387,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!hash) return;
         const found = filtered.some(it => it.id === hash);
         if (!found) {
-            // remove the hash silently
             history.replaceState(null, '', location.pathname + location.search);
         }
     }
@@ -368,5 +400,40 @@ document.addEventListener('DOMContentLoaded', () => {
             clearTimeout(t);
             t = setTimeout(() => fn.apply(this, args), wait);
         };
+    }
+
+    function trapFocus(modalEl) {
+        if (!modalEl) return () => {};
+        const focusableSelector = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
+        const nodes = Array.from(modalEl.querySelectorAll(focusableSelector)).filter(n => n.offsetParent !== null);
+        if (!nodes.length) return () => {};
+        const first = nodes[0];
+        const last = nodes[nodes.length - 1];
+
+        function onKey(e) {
+            if (e.key !== 'Tab') return;
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        }
+        document.addEventListener('keydown', onKey);
+        return () => document.removeEventListener('keydown', onKey);
+    }
+
+    function preloadNearby(index) {
+        [-1, 1].forEach(delta => {
+            const i = index + delta;
+            if (i >= 0 && i < filtered.length) {
+                const url = filtered[i].full || filtered[i].thumb;
+                if (url) {
+                    const p = new Image();
+                    p.src = url;
+                }
+            }
+        });
     }
 });
