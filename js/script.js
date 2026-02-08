@@ -20,24 +20,39 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper=>{
         return imgs[0].getBoundingClientRect().width + gap;
     }
 
-    function update(){
-        // ensure imgs is up-to-date (in case DOM changed)
+    function update() {
+        // Refresh the image array in case search.js filtered them
         imgs = Array.from(track.querySelectorAll('img'));
         imgs.forEach((img, i) => { img.setAttribute('data-index', i); });
 
+        if (imgs.length === 0) return;
+
         const s = slideSize();
-        const containerWidth = wrapper.querySelector('.carousel-container').getBoundingClientRect().width;
-        // clamp index within bounds after reorder
+        const container = wrapper.querySelector('.carousel-container');
+        const containerWidth = container.getBoundingClientRect().width;
+
+        // Boundary check
         if (index > imgs.length - 1) index = imgs.length - 1;
         if (index < 0) index = 0;
 
-        const offset = (containerWidth / 2) - (imgs[index] ? imgs[index].getBoundingClientRect().width / 2 : 0);
+        // Calculate center: (Half of container) - (Half of the current image)
+        const currentImgWidth = imgs[index].getBoundingClientRect().width;
+        const offset = (containerWidth / 2) - (currentImgWidth / 2);
+
+        // Apply the translation
         track.style.transform = `translateX(${-(index * s) + offset}px)`;
 
-        imgs.forEach((im,i)=>{
-            im.classList.remove('center','side');
-            if (i === index) im.classList.add('center'); else im.classList.add('side');
+        // Apply classes for scaling effects
+        imgs.forEach((im, i) => {
+            im.classList.remove('center', 'side');
+            if (i === index) {
+                im.classList.add('center');
+            } else {
+                im.classList.add('side');
+            }
         });
+
+        // Button states
         if (leftBtn) leftBtn.disabled = (index === 0);
         if (rightBtn) rightBtn.disabled = (index === imgs.length - 1);
     }
