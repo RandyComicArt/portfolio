@@ -76,7 +76,9 @@
 #gallery-grid {
     display: grid;
     gap: 18px;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    /* Change 'auto-fit' to '4' to force 4 columns */
+    /* Using 1fr ensures they all take up equal width */
+    grid-template-columns: repeat(4, 1fr);
     align-items: start;
     margin-top: 12px;
     width: 100%;
