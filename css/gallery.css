@@ -126,17 +126,28 @@
 .gallery-thumb:hover img.thumb-img { transform: scale(1.03); }
 
 /* meta area below thumbnail */
+/* meta area below thumbnail */
 .thumb-meta {
-    padding: 10px 12px;
+    padding: 12px;
     display: flex;
-    gap: 8px;
-    align-items: center;
-    justify-content: space-between;
-    color: rgba(255,255,255,0.95);
-    font-size: 0.92rem;
+    flex-direction: column; /* Stacks Title on top of Date */
+    align-items: flex-start; /* Aligns both to the left */
+    gap: 4px; /* Creates consistent breathing room between them */
+    color: rgba(255, 255, 255, 0.95);
 }
-.thumb-meta h4 { margin: 0; font-weight: 700; font-size: 0.96rem; }
-.thumb-meta time { opacity: 0.86; font-size: 0.86rem; }
+
+.thumb-meta h4 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 0.96rem;
+    line-height: 1.2; /* Prevents long titles from having weird gaps */
+}
+
+.thumb-meta time {
+    opacity: 0.6; /* Dims the date slightly so the title is the hero */
+    font-size: 0.8rem;
+    font-weight: 400;
+}
 
 /* small note for empty dates */
 .thumb-meta time:empty { display: none; }
