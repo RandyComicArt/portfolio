@@ -18,6 +18,7 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
     }
 
     function update() {
+        // Re-query images because search.js reorders them in the DOM
         imgs = Array.from(track.querySelectorAll('img'));
         if (imgs.length === 0) return;
 
@@ -46,7 +47,6 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
         if (rightBtn) rightBtn.disabled = (index === imgs.length - 1);
     }
 
-    // NEW: Listen for sync events from the Lightbox
     window.addEventListener('carousel:sync', (e) => {
         if (e.detail.track === track) {
             index = e.detail.index;
@@ -111,11 +111,17 @@ const lensRadius = 90;
 function showLens() { magLens.style.opacity = 1; }
 function hideLens() { magLens.style.opacity = 0; }
 
-// NEW: Helper to tell the carousel to move
-function syncCarousel(newIndex, imgElement) {
+// Syncs the background carousel to the image selected in the modal
+function syncCarousel(filteredIndex, imgElement) {
     const track = imgElement.closest('.carousel-track');
+    if (!track) return;
+
+    // We need the index relative to ALL images in the track (including dimmed ones)
+    const allImgsInTrack = Array.from(track.querySelectorAll('img'));
+    const realIndex = allImgsInTrack.indexOf(imgElement);
+
     window.dispatchEvent(new CustomEvent('carousel:sync', {
-        detail: { index: newIndex, track: track }
+        detail: { index: realIndex, track: track }
     }));
 }
 
@@ -156,8 +162,18 @@ function updateModalContent(imgElement, direction) {
 function openModal(imgElement) {
     const sectionWrapper = imgElement.closest('.carousel-wrapper');
     const track = sectionWrapper ? sectionWrapper.querySelector('.carousel-track') : null;
-    currentSectionImages = track ? Array.from(track.querySelectorAll('img')) : [imgElement];
-    currentImageIndex = parseInt(imgElement.getAttribute('data-index')) || 0;
+
+    // FILTER: Only include images that are NOT dimmed by search
+    if (track) {
+        currentSectionImages = Array.from(track.querySelectorAll('img')).filter(img => {
+            return !img.classList.contains('search-dim');
+        });
+    } else {
+        currentSectionImages = [imgElement];
+    }
+
+    currentImageIndex = currentSectionImages.indexOf(imgElement);
+    if (currentImageIndex === -1) currentImageIndex = 0;
 
     modal.style.display = "flex";
     document.body.style.overflow = "hidden";
@@ -242,7 +258,12 @@ function closeLightbox() {
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.carousel-track img').forEach(img => {
-        img.addEventListener('click', (e) => { e.stopPropagation(); openModal(img); });
+        img.addEventListener('click', (e) => {
+            // If the image is dimmed, don't allow opening the modal
+            if (img.classList.contains('search-dim')) return;
+            e.stopPropagation();
+            openModal(img);
+        });
     });
     closeModal.addEventListener('click', closeLightbox);
     modal.addEventListener('click', (e) => { if (e.target.id === 'image-modal') closeLightbox(); });
