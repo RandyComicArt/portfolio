@@ -490,9 +490,12 @@ body {
   position: absolute;
   bottom: 115px;
   left: 30px;
-  width: 48px;  /* Smaller container size */
+  width: auto;
   height: auto;
   z-index: 130;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 /* Instagram icon styles */
@@ -502,6 +505,11 @@ body {
   display: block;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
   transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.sidebar-social a {
+  display: inline-flex;
+  align-items: center;
 }
 
 /* Hover effect for interactivity */
@@ -514,7 +522,7 @@ body {
 @media (max-width: 1000px) {
   .sidebar-social {
     position: static; /* Remove absolute positioning in top-bar mode */
-    display: inline-block;
+    display: flex;
   }
   .sidebar-social { margin-left: 8px; }
 }
