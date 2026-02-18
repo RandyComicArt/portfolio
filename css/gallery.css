@@ -23,7 +23,26 @@
     align-items: center;
     justify-content: flex-start;
     flex-wrap: wrap;
-    margin-bottom: 12px;
+    position: relative;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+#gallery-controls::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        rgba(176, 209, 244, 0) 0%,
+        rgba(176, 209, 244, 0.34) 16%,
+        rgba(176, 209, 244, 0.48) 50%,
+        rgba(176, 209, 244, 0.34) 84%,
+        rgba(176, 209, 244, 0) 100%
+    );
 }
 
 /* Filter buttons */
@@ -140,19 +159,69 @@
 
 /* Thumbnail card */
 .gallery-thumb {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+    isolation: isolate;
+    background:
+        linear-gradient(162deg, rgba(184, 227, 255, 0.16) 0%, rgba(99, 156, 226, 0.10) 48%, rgba(18, 33, 58, 0.36) 100%),
+        rgba(11, 21, 39, 0.48);
+    border: 1px solid rgba(168, 214, 255, 0.26);
     border-radius: 12px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: transform .16s ease, box-shadow .16s ease, opacity .12s ease;
+    transition: transform .22s ease, box-shadow .24s ease, border-color .24s ease, filter .24s ease, opacity .12s ease;
+    box-shadow:
+        0 8px 18px rgba(0,0,0,0.30),
+        inset 0 1px 0 rgba(255,255,255,0.22),
+        inset 0 -8px 12px rgba(8, 18, 34, 0.28);
     -webkit-tap-highlight-color: transparent;
 }
+
+.gallery-thumb::before {
+    content: "";
+    position: absolute;
+    inset: -46% -54%;
+    border-radius: inherit;
+    background: radial-gradient(
+        64% 74% at 50% 50%,
+        rgba(222, 242, 255, 0.34) 0%,
+        rgba(222, 242, 255, 0.12) 38%,
+        rgba(222, 242, 255, 0) 74%
+    );
+    transform: translateX(-76%) scale(1.08);
+    transition: transform 460ms cubic-bezier(.2,.8,.2,1), opacity .24s ease;
+    opacity: 0.46;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.gallery-thumb::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at 50% 120%, rgba(104, 170, 241, 0.18) 0%, rgba(104, 170, 241, 0) 64%);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.52;
+}
+
 .gallery-thumb:focus-within,
 .gallery-thumb:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 22px 48px rgba(0,0,0,0.55);
+    transform: translateY(-8px) scale(1.01);
+    border-color: rgba(202, 234, 255, 0.52);
+    box-shadow:
+        0 14px 30px rgba(0,0,0,0.38),
+        inset 0 1px 0 rgba(255,255,255,0.34),
+        inset 0 -10px 16px rgba(9, 22, 42, 0.34),
+        0 0 18px rgba(123, 188, 255, 0.16);
+    filter: saturate(110%);
+}
+
+.gallery-thumb:focus-within::before,
+.gallery-thumb:hover::before {
+    transform: translateX(76%) scale(1.08);
+    opacity: 0.64;
 }
 
 /* clickable area fills card */
@@ -165,6 +234,8 @@
     display: block;
     width: 100%;
     text-align: left;
+    position: relative;
+    z-index: 1;
 }
 
 /* maintain consistent aspect ratio for thumbs (3:2) */
@@ -184,6 +255,8 @@
 /* meta area below thumbnail */
 /* meta area below thumbnail */
 .thumb-meta {
+    position: relative;
+    z-index: 1;
     padding: 12px;
     display: flex;
     flex-direction: column; /* Stacks Title on top of Date */
