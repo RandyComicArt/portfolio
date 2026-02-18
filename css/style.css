@@ -527,9 +527,52 @@ body {
   position: relative; left: 0; opacity: 1; transition: left 300ms ease-out, opacity 100ms;
 }
 .mag-lens {
-  position: absolute; border: 3px solid rgba(255,255,255,0.8); background-repeat: no-repeat;
-  width: 180px; height: 180px; border-radius: 50%; box-shadow: 0 0 0 1px #000, 0 0 10px rgba(0,0,0,0.6), inset 0 0 20px rgba(255,255,255,0.2);
-  opacity: 0; top: 0; left: 0; pointer-events: none; transition: opacity 0.2s; z-index: 10;
+  --pointer-x: 50%;
+  --pointer-y: 50%;
+  position: absolute;
+  background-repeat: no-repeat;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 230, 255, 0.78);
+  background-color: rgba(95, 158, 227, 0.09);
+  box-shadow:
+    0 14px 28px rgba(0,0,0,0.45),
+    inset 0 0 0 1px rgba(255,255,255,0.24),
+    inset 0 0 20px rgba(176, 220, 255, 0.2);
+  backdrop-filter: blur(1.2px) saturate(130%);
+  opacity: 0;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  transition: opacity 0.16s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+  z-index: 10;
+  overflow: hidden;
+}
+.mag-lens::before,
+.mag-lens::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.mag-lens::before {
+  background:
+    radial-gradient(circle at calc(var(--pointer-x) - 22%) calc(var(--pointer-y) - 16%), rgba(176, 218, 255, 0.16) 0%, rgba(176, 218, 255, 0.08) 18%, rgba(176, 218, 255, 0) 42%),
+    radial-gradient(circle at calc(var(--pointer-x) + 14%) calc(var(--pointer-y) + 12%), rgba(128, 184, 245, 0.08) 0%, rgba(128, 184, 245, 0) 34%);
+  opacity: 0.62;
+}
+.mag-lens::after {
+  background: radial-gradient(circle at center, rgba(0,0,0,0) 56%, rgba(182, 221, 255, 0.2) 74%, rgba(76, 133, 192, 0.42) 88%, rgba(9, 20, 36, 0.62) 100%);
+}
+.mag-lens.active {
+  border-color: rgba(225, 240, 255, 0.95);
+  box-shadow:
+    0 18px 34px rgba(0,0,0,0.52),
+    inset 0 0 0 1px rgba(255,255,255,0.34),
+    inset 0 0 28px rgba(176, 220, 255, 0.28),
+    0 0 24px rgba(142, 204, 255, 0.25);
 }
 
 /* ----------------------

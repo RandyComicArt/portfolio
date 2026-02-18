@@ -125,8 +125,14 @@ const zoomFactor = 2.5;
 const lensRadius = 90;
 const BUTTON_BOUNCE_DURATION_MS = 300;
 
-function showLens() { magLens.style.opacity = 1; }
-function hideLens() { magLens.style.opacity = 0; }
+function showLens() {
+    magLens.style.opacity = 1;
+    magLens.classList.add('active');
+}
+function hideLens() {
+    magLens.style.opacity = 0;
+    magLens.classList.remove('active');
+}
 
 function triggerButtonBounce(button) {
     if (!button) return;
@@ -263,6 +269,13 @@ function handleMagnify(e) {
     const rect = magContainer.getBoundingClientRect();
     let x = e.clientX - rect.left;
     let y = e.clientY - rect.top;
+
+    // Move highlight/refraction layers with cursor position.
+    const px = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    const py = Math.max(0, Math.min(100, (y / rect.height) * 100));
+    magLens.style.setProperty('--pointer-x', `${px.toFixed(2)}%`);
+    magLens.style.setProperty('--pointer-y', `${py.toFixed(2)}%`);
+
     magLens.style.left = `${x}px`;
     magLens.style.top = `${y}px`;
     magLens.style.transform = `translate(-${lensRadius}px, -${lensRadius}px)`;
