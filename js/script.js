@@ -195,7 +195,6 @@ function performImageTransition(newImageElement, direction) {
 
         modalImg.src = newImageElement.src;
         modalImg.alt = newImageElement.alt;
-        magLens.style.backgroundImage = `url('${newImageElement.src}')`;
         descriptionTitle.textContent = newImageElement.alt;
         descriptionText.textContent = newImageElement.getAttribute('data-desc') || "No description available.";
         descriptionMeta.innerHTML = `Date: ${newImageElement.getAttribute('data-date') || "N/A"}`;
@@ -236,7 +235,6 @@ function openModal(imgElement) {
 
     modalImg.src = imgElement.src;
     modalImg.alt = imgElement.alt;
-    magLens.style.backgroundImage = `url('${imgElement.src}')`;
     modalImg.style.transform = 'translateX(0)';
     modalImg.style.opacity = 1;
 
@@ -287,9 +285,7 @@ function handleKeyNavigation(e) {
 }
 
 function updateMagnifierSize() {
-    const largeSizeX = modalImg.clientWidth * zoomFactor;
-    const largeSizeY = modalImg.clientHeight * zoomFactor;
-    magLens.style.backgroundSize = `${largeSizeX}px ${largeSizeY}px`;
+    // Kept for resize hooks; lens rendering is fully canvas-driven.
 }
 
 function handleMagnify(e) {
@@ -342,12 +338,21 @@ function handleMagnify(e) {
     lensCtx.clearRect(0, 0, lensDiameter, lensDiameter);
     lensCtx.imageSmoothingEnabled = true;
 
-    // Fallback "optical glass" backdrop shown when zoomed image goes past its own edges.
+    // Glassy fallback shown in areas where the zoom image has no pixels.
     const bgLinear = lensCtx.createLinearGradient(0, 0, 0, lensDiameter);
-    bgLinear.addColorStop(0, 'rgba(132, 179, 232, 0.24)');
-    bgLinear.addColorStop(0.5, 'rgba(53, 88, 138, 0.2)');
-    bgLinear.addColorStop(1, 'rgba(17, 31, 56, 0.26)');
+    bgLinear.addColorStop(0, 'rgba(231, 244, 255, 0.10)');
+    bgLinear.addColorStop(0.48, 'rgba(107, 152, 200, 0.09)');
+    bgLinear.addColorStop(1, 'rgba(20, 39, 64, 0.14)');
     lensCtx.fillStyle = bgLinear;
+    lensCtx.fillRect(0, 0, lensDiameter, lensDiameter);
+
+    const rimShade = lensCtx.createRadialGradient(
+        lensRadius, lensRadius, lensRadius * 0.64,
+        lensRadius, lensRadius, lensRadius
+    );
+    rimShade.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    rimShade.addColorStop(1, 'rgba(8, 16, 28, 0.16)');
+    lensCtx.fillStyle = rimShade;
     lensCtx.fillRect(0, 0, lensDiameter, lensDiameter);
 
     lensCtx.drawImage(modalImg, drawX, drawY, drawW, drawH);
