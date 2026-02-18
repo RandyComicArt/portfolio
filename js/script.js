@@ -11,28 +11,21 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
 
     let index = 0;
 
-    function slideSize() {
-        const gap = parseFloat(getComputedStyle(track).gap) || 30;
-        if (!imgs[0]) return 0;
-        return imgs[0].getBoundingClientRect().width + gap;
-    }
-
     function update() {
         // Re-query images because search.js reorders them in the DOM
         imgs = Array.from(track.querySelectorAll('img'));
         if (imgs.length === 0) return;
 
-        const s = slideSize();
         const container = wrapper.querySelector('.carousel-container');
         const containerWidth = container.getBoundingClientRect().width;
 
         if (index > imgs.length - 1) index = imgs.length - 1;
         if (index < 0) index = 0;
 
-        const currentImgWidth = imgs[index].getBoundingClientRect().width;
-        const offset = (containerWidth / 2) - (currentImgWidth / 2);
-
-        track.style.transform = `translateX(${-(index * s) + offset}px)`;
+        const activeImg = imgs[index];
+        const activeCenter = activeImg.offsetLeft + (activeImg.offsetWidth / 2);
+        const offset = (containerWidth / 2) - activeCenter;
+        track.style.transform = `translateX(${offset}px)`;
 
         imgs.forEach((im, i) => {
             im.classList.remove('center', 'side');
