@@ -561,3 +561,23 @@ body {
   align-items: center;
 }
 
+/* ----------------------
+   bounce animation on carousel buttons
+   ---------------------- */
+
+/* Define the bounce animation */
+@keyframes buttonBounce {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* Apply animation to carousel arrows */
+.carousel-wrapper .arrow {
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.carousel-wrapper .arrow.animated {
+  animation: buttonBounce 0.3s ease;
+}

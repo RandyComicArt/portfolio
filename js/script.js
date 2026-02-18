@@ -64,8 +64,24 @@ document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
         }
     });
 
-    if (leftBtn) leftBtn.addEventListener('click', () => { if (index > 0) { index--; update(); } });
-    if (rightBtn) rightBtn.addEventListener('click', () => { if (index < imgs.length - 1) { index++; update(); } });
+    // Inside the carousel initialization (script.js)
+    if (leftBtn) leftBtn.addEventListener('click', () => {
+        if (index > 0) {
+            leftBtn.classList.add('animated');
+            index--;
+            update();
+            setTimeout(() => leftBtn.classList.remove('animated'), 300); // Match animation duration
+        }
+    });
+
+    if (rightBtn) rightBtn.addEventListener('click', () => {
+        if (index < imgs.length - 1) {
+            rightBtn.classList.add('animated');
+            index++;
+            update();
+            setTimeout(() => rightBtn.classList.remove('animated'), 300); // Match animation duration
+        }
+    });
 
     wrapper.setAttribute('tabindex', '0');
     wrapper.addEventListener('keydown', (e) => {
