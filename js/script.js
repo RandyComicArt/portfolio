@@ -348,6 +348,15 @@ function handleMagnify(e) {
 
     lensCtx.clearRect(0, 0, lensDiameter, lensDiameter);
     lensCtx.imageSmoothingEnabled = true;
+
+    // Fallback "optical glass" backdrop shown when zoomed image goes past its own edges.
+    const bgLinear = lensCtx.createLinearGradient(0, 0, 0, lensDiameter);
+    bgLinear.addColorStop(0, 'rgba(132, 179, 232, 0.24)');
+    bgLinear.addColorStop(0.5, 'rgba(53, 88, 138, 0.2)');
+    bgLinear.addColorStop(1, 'rgba(17, 31, 56, 0.26)');
+    lensCtx.fillStyle = bgLinear;
+    lensCtx.fillRect(0, 0, lensDiameter, lensDiameter);
+
     lensCtx.drawImage(modalImg, drawX, drawY, drawW, drawH);
 }
 
