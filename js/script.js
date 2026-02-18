@@ -123,9 +123,16 @@ let currentSectionImages = [];
 let currentImageIndex = 0;
 const zoomFactor = 2.5;
 const lensRadius = 90;
+const BUTTON_BOUNCE_DURATION_MS = 300;
 
 function showLens() { magLens.style.opacity = 1; }
 function hideLens() { magLens.style.opacity = 0; }
+
+function triggerButtonBounce(button) {
+    if (!button) return;
+    button.classList.add('animated');
+    setTimeout(() => button.classList.remove('animated'), BUTTON_BOUNCE_DURATION_MS);
+}
 
 // Syncs the background carousel to the image selected in the modal
 function syncCarousel(filteredIndex, imgElement) {
@@ -220,6 +227,7 @@ function openModal(imgElement) {
 
 function showPrev() {
     if (currentImageIndex > 0) {
+        triggerButtonBounce(modalPrevBtn);
         currentImageIndex--;
         const img = currentSectionImages[currentImageIndex];
         updateModalContent(img, 'prev');
@@ -229,6 +237,7 @@ function showPrev() {
 
 function showNext() {
     if (currentImageIndex < currentSectionImages.length - 1) {
+        triggerButtonBounce(modalNextBtn);
         currentImageIndex++;
         const img = currentSectionImages[currentImageIndex];
         updateModalContent(img, 'next');

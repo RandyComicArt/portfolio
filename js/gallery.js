@@ -26,6 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentIndex = -1;
     let lastFocusedElement = null;
     let lazyObserver = null;
+    const BUTTON_BOUNCE_DURATION_MS = 300;
+
+    function triggerButtonBounce(button) {
+        if (!button) return;
+        button.classList.add('animated');
+        setTimeout(() => button.classList.remove('animated'), BUTTON_BOUNCE_DURATION_MS);
+    }
 
     function initLazyObserver() {
         if (!('IntersectionObserver' in window)) return;
@@ -272,6 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function showRelative(offset) {
         if (currentIndex === -1) return;
         const direction = offset > 0 ? 'next' : 'prev';
+        triggerButtonBounce(offset > 0 ? modalNext : modalPrev);
         currentIndex = (currentIndex + offset + filtered.length) % filtered.length;
 
         const it = filtered[currentIndex];
