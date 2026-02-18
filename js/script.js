@@ -123,15 +123,49 @@ let currentSectionImages = [];
 let currentImageIndex = 0;
 const zoomFactor = 2.5;
 const lensRadius = 90;
+const lensDiameter = lensRadius * 2;
 const BUTTON_BOUNCE_DURATION_MS = 300;
+const LENS_FADE_OUT_MS = 220;
+const EDGE_REVEAL_BUFFER_PX = 72;
+const EDGE_REVEAL_MIN_OPACITY = 0.18;
+let lensFadeTimer = null;
+let lensCanvas = null;
+let lensCtx = null;
+
+function ensureLensCanvas() {
+    if (!magLens || lensCanvas) return;
+    lensCanvas = document.createElement('canvas');
+    lensCanvas.className = 'mag-lens-canvas';
+    lensCanvas.width = lensDiameter;
+    lensCanvas.height = lensDiameter;
+    lensCtx = lensCanvas.getContext('2d', { alpha: true });
+    magLens.appendChild(lensCanvas);
+}
 
 function showLens() {
+    ensureLensCanvas();
+    if (lensFadeTimer) {
+        clearTimeout(lensFadeTimer);
+        lensFadeTimer = null;
+    }
+    magLens.classList.remove('exiting');
+    magLens.style.filter = 'none';
     magLens.style.opacity = 1;
     magLens.classList.add('active');
+    magContainer.classList.add('lens-active');
 }
 function hideLens() {
     magLens.style.opacity = 0;
-    magLens.classList.remove('active');
+    magLens.style.filter = 'blur(2.6px) saturate(85%)';
+    magLens.classList.add('exiting');
+
+    if (lensFadeTimer) clearTimeout(lensFadeTimer);
+    lensFadeTimer = setTimeout(() => {
+        magLens.classList.remove('active', 'exiting');
+        magLens.style.filter = 'none';
+        magContainer.classList.remove('lens-active');
+        lensFadeTimer = null;
+    }, LENS_FADE_OUT_MS);
 }
 
 function triggerButtonBounce(button) {
@@ -266,7 +300,11 @@ function updateMagnifierSize() {
 }
 
 function handleMagnify(e) {
+    ensureLensCanvas();
+    if (!lensCtx || !modalImg || !modalImg.naturalWidth || !modalImg.naturalHeight) return;
+
     const rect = magContainer.getBoundingClientRect();
+    const imageRect = modalImg.getBoundingClientRect();
     let x = e.clientX - rect.left;
     let y = e.clientY - rect.top;
 
@@ -275,16 +313,56 @@ function handleMagnify(e) {
     const py = Math.max(0, Math.min(100, (y / rect.height) * 100));
     magLens.style.setProperty('--pointer-x', `${px.toFixed(2)}%`);
     magLens.style.setProperty('--pointer-y', `${py.toFixed(2)}%`);
+    const imageX = e.clientX - imageRect.left;
+    const imageY = e.clientY - imageRect.top;
 
+    // Let the lens reveal slightly past image edges, then fade away.
+    const outsideLeft = Math.max(0, -imageX);
+    const outsideRight = Math.max(0, imageX - imageRect.width);
+    const outsideTop = Math.max(0, -imageY);
+    const outsideBottom = Math.max(0, imageY - imageRect.height);
+    const outsideDistance = Math.max(outsideLeft, outsideRight, outsideTop, outsideBottom);
+
+    if (outsideDistance >= EDGE_REVEAL_BUFFER_PX) {
+        magLens.style.opacity = 0;
+        return;
+    }
+
+    if (outsideDistance > 0) {
+        const t = outsideDistance / EDGE_REVEAL_BUFFER_PX; // 0..1
+        magLens.style.opacity = (1 - ((1 - EDGE_REVEAL_MIN_OPACITY) * t)).toFixed(3);
+    } else {
+        magLens.style.opacity = 1;
+    }
+
+    // Keep lens motion directly tied to cursor for stable behavior.
     magLens.style.left = `${x}px`;
     magLens.style.top = `${y}px`;
     magLens.style.transform = `translate(-${lensRadius}px, -${lensRadius}px)`;
-    magLens.style.backgroundPosition = `-${x * zoomFactor - lensRadius}px -${y * zoomFactor - lensRadius}px`;
+
+    // Render zoom via transform-based draw to avoid edge stretching artifacts.
+    const drawW = imageRect.width * zoomFactor;
+    const drawH = imageRect.height * zoomFactor;
+    const drawX = lensRadius - (imageX * zoomFactor);
+    const drawY = lensRadius - (imageY * zoomFactor);
+
+    lensCtx.clearRect(0, 0, lensDiameter, lensDiameter);
+    lensCtx.imageSmoothingEnabled = true;
+    lensCtx.drawImage(modalImg, drawX, drawY, drawW, drawH);
 }
 
 function closeLightbox() {
+    if (lensFadeTimer) {
+        clearTimeout(lensFadeTimer);
+        lensFadeTimer = null;
+    }
+
     modal.style.display = "none";
     document.body.style.overflow = "auto";
+    magLens.style.opacity = 0;
+    magLens.style.filter = 'none';
+    magLens.classList.remove('active', 'exiting');
+    magContainer.classList.remove('lens-active');
     magContainer.removeEventListener('mouseenter', showLens);
     magContainer.removeEventListener('mouseleave', hideLens);
     magContainer.removeEventListener('mousemove', handleMagnify);

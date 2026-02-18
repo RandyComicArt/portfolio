@@ -525,6 +525,7 @@ body {
 #magnifier-container .mag-image {
   display: block; width: 100%; height: auto; border-radius: 15px; max-height: 78vh; object-fit: contain; margin-bottom: 0;
   position: relative; left: 0; opacity: 1; transition: left 300ms ease-out, opacity 100ms;
+  z-index: 1;
 }
 .mag-lens {
   --pointer-x: 50%;
@@ -535,7 +536,7 @@ body {
   height: 180px;
   border-radius: 50%;
   border: 1px solid rgba(201, 230, 255, 0.78);
-  background-color: rgba(95, 158, 227, 0.09);
+  background-color: transparent;
   box-shadow:
     0 14px 28px rgba(0,0,0,0.45),
     inset 0 0 0 1px rgba(255,255,255,0.24),
@@ -545,8 +546,8 @@ body {
   top: 0;
   left: 0;
   pointer-events: none;
-  transition: opacity 0.16s ease, box-shadow 0.24s ease, border-color 0.24s ease;
-  z-index: 10;
+  transition: opacity 0.22s ease, filter 0.22s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+  z-index: 25;
   overflow: hidden;
 }
 .mag-lens::before,
@@ -566,6 +567,15 @@ body {
 .mag-lens::after {
   background: radial-gradient(circle at center, rgba(0,0,0,0) 56%, rgba(182, 221, 255, 0.2) 74%, rgba(76, 133, 192, 0.42) 88%, rgba(9, 20, 36, 0.62) 100%);
 }
+.mag-lens-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 50%;
+  pointer-events: none;
+}
 .mag-lens.active {
   border-color: rgba(225, 240, 255, 0.95);
   box-shadow:
@@ -574,7 +584,13 @@ body {
     inset 0 0 28px rgba(176, 220, 255, 0.28),
     0 0 24px rgba(142, 204, 255, 0.25);
 }
-
+.mag-lens.exiting {
+  border-color: rgba(182, 213, 244, 0.55);
+  box-shadow:
+    0 10px 20px rgba(0,0,0,0.35),
+    inset 0 0 0 1px rgba(255,255,255,0.18),
+    inset 0 0 16px rgba(176, 220, 255, 0.14);
+}
 /* ----------------------
    Responsive adjustments
    ---------------------- */
@@ -677,6 +693,11 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* Let lens render over image edges while actively magnifying */
+#magnifier-container.lens-active {
+  overflow: visible;
 }
 
 /* ----------------------
