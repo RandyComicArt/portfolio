@@ -272,6 +272,19 @@ body {
   pointer-events: none;
 }
 
+/* In-nav separator for splitting carousel section links from Gallery */
+.sidebar-separator-nav {
+  align-self: center;
+  width: 100%;
+  height: 1px;
+  background: rgba(255,255,255,0.25);
+  box-shadow: 0 0 8px rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 1px;
+  pointer-events: none;
+  margin: 2px 0;
+}
+
 /* Responsive: stack on small screens */
 @media (max-width: 860px) {
   .about-inner { grid-template-columns: 1fr; gap: 18px; }
@@ -468,6 +481,7 @@ body {
     flex-wrap:wrap;
   }
   .sidebar .meta { display:none; }
+  .sidebar-separator-nav { display: none; }
   .main { margin-left: 0; padding-top: 18px; }
 }
 
