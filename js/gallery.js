@@ -259,9 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Magnifier support
         if (typeof window.updateMagnifierSize === 'function') {
-            const magLens = document.getElementById('magnifier-lens');
             const magContainer = document.getElementById('magnifier-container');
-            if (magLens) magLens.style.backgroundImage = `url('${modalImg.src}')`;
 
             modalImg.onload = () => window.updateMagnifierSize();
 
@@ -305,9 +303,6 @@ document.addEventListener('DOMContentLoaded', () => {
             modalTitle.textContent = item.title;
             modalText.textContent = item.desc;
             modalMeta.textContent = item.date ? `Date: ${item.date}` : '';
-
-            const magLens = document.getElementById('magnifier-lens');
-            if (magLens) magLens.style.backgroundImage = `url('${modalImg.src}')`;
 
             // Slide In
             requestAnimationFrame(() => {
