@@ -1,5 +1,14 @@
 [
   {
+    "id": "batman-long-halloween",
+    "thumb": "images/fanart18.png",
+    "full": "images/fanart18.png",
+    "title": "Batman: The Long Halloween",
+    "desc": "A poster art I made of one of my favorite comics, featuring iconic characters such as two-face and Joker",
+    "date": "September 14th, 2026",
+    "collection": "completed"
+  },
+  {
     "id": "zagreus",
     "thumb": "images/fanart16.png",
     "full": "images/fanart16.png",
