@@ -1,4 +1,4 @@
-# Randy Mattoka Artist Portfolio
+# Randy Mattoka's Artist Portfolio
 
 Digital illustrator and concept artist portfolio site built with vanilla HTML, CSS, and JavaScript.
 
