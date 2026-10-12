@@ -1,485 +1,163 @@
-/* ==========================================================================
-   gallery.css
-   - Scoped to the gallery page only
-   - Designed to be loaded AFTER style.css so rules override where needed
-   ========================================================================== */
+/* Gallery — masonry browse, images first */
 
-/* -----------------------------
-   Layout / Controls
-   ----------------------------- */
-#gallery-main {
-    margin-left: var(--sidebar-pct); /* keeps main layout consistent with site */
-    padding-top: 22px;
-    min-height: 80vh;
-}
-@media (max-width: 1000px) { /* top-bar mode on narrow screens */
-    #gallery-main { margin-left: 0; }
+.gallery-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 8px 0 28px;
 }
 
-/* Controls container (filters + search) */
-#gallery-controls {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    position: relative;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
-}
-
-#gallery-controls::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 1px;
-    background: linear-gradient(
-        90deg,
-        rgba(176, 209, 244, 0) 0%,
-        rgba(176, 209, 244, 0.34) 16%,
-        rgba(176, 209, 244, 0.48) 50%,
-        rgba(176, 209, 244, 0.34) 84%,
-        rgba(176, 209, 244, 0) 100%
-    );
-}
-
-/* Filter buttons */
 .gallery-filters {
-    display: flex;
-    gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
+
 .gallery-filters button {
-    appearance: none;
-    -webkit-appearance: none;
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    background:
-        linear-gradient(160deg, rgba(176, 220, 255, 0.15) 0%, rgba(97, 150, 219, 0.10) 44%, rgba(20, 35, 62, 0.38) 100%),
-        rgba(14, 25, 44, 0.52);
-    color: rgba(238, 248, 255, 0.95);
-    border: 1px solid rgba(166, 212, 255, 0.34);
-    padding: 9px 14px;
-    border-radius: 11px;
-    font-weight: 700;
-    font-size: 0.95rem;
-    letter-spacing: 0.015em;
-    cursor: pointer;
-    transition: transform .16s ease, border-color .2s ease, box-shadow .2s ease, filter .2s ease;
-    box-shadow:
-        0 9px 20px rgba(0, 0, 0, 0.38),
-        inset 0 1px 0 rgba(255,255,255,0.25),
-        inset 0 -8px 14px rgba(7, 18, 34, 0.35);
+  appearance: none;
+  background: transparent;
+  color: var(--paper-dim);
+  border: 1px solid var(--line);
+  padding: 8px 14px;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
-.gallery-filters button::before {
-    content: "";
-    position: absolute;
-    inset: -35% -45%;
-    border-radius: inherit;
-    background: radial-gradient(
-        62% 72% at 50% 50%,
-        rgba(224, 243, 255, 0.34) 0%,
-        rgba(224, 243, 255, 0.12) 38%,
-        rgba(224, 243, 255, 0) 74%
-    );
-    transform: translateX(-72%) scale(1.06);
-    transition: transform 380ms cubic-bezier(.2,.8,.2,1);
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.5;
-}
-
-.gallery-filters button:hover {
-    transform: translateY(-2px);
-    border-color: rgba(192, 229, 255, 0.58);
-    box-shadow:
-        0 14px 28px rgba(0,0,0,0.46),
-        inset 0 1px 0 rgba(255,255,255,0.34),
-        inset 0 -10px 16px rgba(9, 26, 48, 0.4),
-        0 0 20px rgba(124, 186, 255, 0.2);
-    filter: saturate(110%);
-}
-
-.gallery-filters button:hover::before {
-    transform: translateX(72%) scale(1.06);
-}
-
-.gallery-filters button:active {
-    transform: translateY(0) scale(0.98);
-}
-
+.gallery-filters button:hover,
 .gallery-filters button.active {
-    border-color: rgba(205, 236, 255, 0.72);
-    background:
-        linear-gradient(160deg, rgba(193, 229, 255, 0.22) 0%, rgba(112, 172, 238, 0.18) 44%, rgba(24, 43, 72, 0.56) 100%),
-        rgba(13, 24, 42, 0.64);
-    box-shadow:
-        0 16px 32px rgba(0,0,0,0.5),
-        inset 0 1px 0 rgba(255,255,255,0.42),
-        inset 0 -12px 18px rgba(10, 24, 40, 0.42),
-        0 0 24px rgba(130, 191, 255, 0.24);
+  color: var(--ink);
+  background: var(--paper);
+  border-color: var(--paper);
 }
 
-/* Search input (aligned to right on large screens) */
-#gallery-search {
-    margin-left: auto;
-    min-width: 220px;
-    padding: 8px 12px;
-    border-radius: 10px;
-    border: 1px solid rgba(255,255,255,0.07);
-    background: rgba(0,0,0,0.12);
-    color: #fff;
-    font-size: 0.95rem;
-}
-#gallery-search::placeholder { color: rgba(255,255,255,0.5); }
-
-/* Stack on very small screens */
-@media (max-width: 520px) {
-    #gallery-controls { gap: 10px; }
-    .gallery-filters { order: 2; width: 100%; justify-content: center; }
-    #gallery-search { order: 1; width: 100%; margin-left: 0; }
+.gallery-masonry {
+  columns: 4;
+  column-gap: 16px;
 }
 
-/* -----------------------------
-   Gallery grid
-   ----------------------------- */
-#gallery-grid {
-    display: grid;
-    gap: 18px;
-    /* Change 'auto-fit' to '4' to force 4 columns */
-    /* Using 1fr ensures they all take up equal width */
-    grid-template-columns: repeat(4, 1fr);
-    align-items: start;
-    margin-top: 12px;
-    width: 100%;
-}
-
-/* Thumbnail card */
 .gallery-thumb {
-    position: relative;
-    isolation: isolate;
-    background:
-        linear-gradient(162deg, rgba(184, 227, 255, 0.16) 0%, rgba(99, 156, 226, 0.10) 48%, rgba(18, 33, 58, 0.36) 100%),
-        rgba(11, 21, 39, 0.48);
-    border: 1px solid rgba(168, 214, 255, 0.26);
-    border-radius: 12px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: transform .22s ease, box-shadow .24s ease, border-color .24s ease, filter .24s ease, opacity .12s ease;
-    box-shadow:
-        0 8px 18px rgba(0,0,0,0.30),
-        inset 0 1px 0 rgba(255,255,255,0.22),
-        inset 0 -8px 12px rgba(8, 18, 34, 0.28);
-    -webkit-tap-highlight-color: transparent;
+  break-inside: avoid;
+  margin: 0 0 16px;
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  text-align: left;
 }
 
-.gallery-thumb::before {
-    content: "";
-    position: absolute;
-    inset: -46% -54%;
-    border-radius: inherit;
-    background: radial-gradient(
-        64% 74% at 50% 50%,
-        rgba(222, 242, 255, 0.34) 0%,
-        rgba(222, 242, 255, 0.12) 38%,
-        rgba(222, 242, 255, 0) 74%
-    );
-    transform: translateX(-76%) scale(1.08);
-    transition: transform 460ms cubic-bezier(.2,.8,.2,1), opacity .24s ease;
-    opacity: 0.46;
-    pointer-events: none;
-    z-index: 0;
+.gallery-thumb img {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #050506;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 280ms ease, transform 280ms var(--ease, ease), filter 280ms ease;
 }
 
-.gallery-thumb::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: radial-gradient(circle at 50% 120%, rgba(104, 170, 241, 0.18) 0%, rgba(104, 170, 241, 0) 64%);
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.52;
+.gallery-thumb img.loaded,
+.gallery-thumb img:not(.lazy) {
+  opacity: 1;
+  transform: none;
 }
 
-.gallery-thumb:focus-within,
-.gallery-thumb:hover {
-    transform: translateY(-8px) scale(1.01);
-    border-color: rgba(202, 234, 255, 0.52);
-    box-shadow:
-        0 14px 30px rgba(0,0,0,0.38),
-        inset 0 1px 0 rgba(255,255,255,0.34),
-        inset 0 -10px 16px rgba(9, 22, 42, 0.34),
-        0 0 18px rgba(123, 188, 255, 0.16);
-    filter: saturate(110%);
+.gallery-thumb > div {
+  padding: 10px 2px 4px;
 }
 
-.gallery-thumb:focus-within::before,
-.gallery-thumb:hover::before {
-    transform: translateX(76%) scale(1.08);
-    opacity: 0.64;
+.gallery-thumb h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  letter-spacing: -0.02em;
+  font-weight: 700;
 }
 
-/* clickable area fills card */
-.gallery-thumb button.thumb-btn {
-    border: none;
-    background: transparent;
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-    display: block;
-    width: 100%;
-    text-align: left;
-    position: relative;
-    z-index: 1;
+.gallery-thumb time,
+.gallery-thumb .thumb-project {
+  display: block;
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-top: 2px;
 }
 
-/* maintain consistent aspect ratio for thumbs (3:2) */
-.gallery-thumb img.thumb-img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 3 / 2;
-    object-fit: cover;
-    display: block;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    transition: transform .18s ease, opacity .12s ease;
+.gallery-thumb .thumb-project {
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.65rem;
 }
 
-/* hover zoom on thumb */
-.gallery-thumb:hover img.thumb-img { transform: scale(1.03); }
-
-/* meta area below thumbnail */
-/* meta area below thumbnail */
-.thumb-meta {
-    position: relative;
-    z-index: 1;
-    padding: 12px;
-    display: flex;
-    flex-direction: column; /* Stacks Title on top of Date */
-    align-items: flex-start; /* Aligns both to the left */
-    gap: 4px; /* Creates consistent breathing room between them */
-    color: rgba(255, 255, 255, 0.95);
+@media (hover: hover) and (pointer: fine) {
+  .gallery-thumb img { filter: saturate(0.92); }
+  .gallery-thumb:hover img {
+    filter: saturate(1.05);
+    transform: translateY(-4px);
+  }
 }
 
-.thumb-meta h4 {
-    margin: 0;
-    font-weight: 700;
-    font-size: 0.96rem;
-    line-height: 1.2; /* Prevents long titles from having weird gaps */
+#load-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0 8px;
 }
 
-.thumb-meta time {
-    opacity: 0.6; /* Dims the date slightly so the title is the hero */
-    font-size: 0.8rem;
-    font-weight: 400;
-}
-
-/* small note for empty dates */
-.thumb-meta time:empty { display: none; }
-
-/* visually-hidden helper (reuse if needed) */
-.visually-hidden {
-    position: absolute !important;
-    height: 1px; width: 1px;
-    overflow: hidden; clip: rect(1px, 1px, 1px, 1px);
-    white-space: nowrap;
-}
-
-/* -----------------------------
-   Load more / Pagination
-   ----------------------------- */
-#load-more-wrap { display: flex; justify-content: center; margin-top: 18px; }
 #load-more {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    padding: 11px 20px;
-    border-radius: 12px;
-    border: 1px solid rgba(166, 212, 255, 0.35);
-    background:
-        linear-gradient(160deg, rgba(186, 227, 255, 0.18) 0%, rgba(107, 159, 221, 0.12) 48%, rgba(18, 33, 58, 0.46) 100%),
-        rgba(15, 26, 44, 0.58);
-    color: rgba(238, 248, 255, 0.96);
-    font-weight: 800;
-    letter-spacing: 0.02em;
-    cursor: pointer;
-    transition: transform .16s ease, opacity .16s ease, border-color .2s ease, box-shadow .2s ease;
-    box-shadow:
-        0 11px 24px rgba(0,0,0,0.44),
-        inset 0 1px 0 rgba(255,255,255,0.30),
-        inset 0 -9px 14px rgba(8, 20, 38, 0.4);
-}
-
-#load-more::before {
-    content: "";
-    position: absolute;
-    inset: -36% -42%;
-    border-radius: inherit;
-    background: radial-gradient(
-        62% 72% at 50% 50%,
-        rgba(224, 243, 255, 0.34) 0%,
-        rgba(224, 243, 255, 0.12) 38%,
-        rgba(224, 243, 255, 0) 74%
-    );
-    transform: translateX(-72%) scale(1.06);
-    transition: transform 380ms cubic-bezier(.2,.8,.2,1);
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.5;
+  appearance: none;
+  background: transparent;
+  color: var(--paper);
+  border: 1px solid var(--line-strong);
+  padding: 12px 22px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
 }
 
 #load-more:hover:not(:disabled) {
-    transform: translateY(-2px);
-    border-color: rgba(196, 231, 255, 0.62);
-    box-shadow:
-        0 15px 30px rgba(0,0,0,0.52),
-        inset 0 1px 0 rgba(255,255,255,0.34),
-        inset 0 -12px 18px rgba(10, 28, 50, 0.45),
-        0 0 22px rgba(123, 188, 255, 0.22);
-}
-
-#load-more:hover:not(:disabled)::before {
-    transform: translateX(72%) scale(1.06);
-}
-
-#load-more:active:not(:disabled) {
-    transform: translateY(0) scale(0.98);
+  background: var(--paper);
+  color: var(--ink);
 }
 
 #load-more:disabled {
-    opacity: 0.45;
-    cursor: default;
-    transform: none;
-    filter: saturate(82%);
+  opacity: 0.35;
+  cursor: default;
 }
 
-/* -----------------------------
-   Focus styles for keyboard users
-   ----------------------------- */
-button:focus { outline: none; }
-button:focus-visible, .gallery-thumb:focus-within {
-    box-shadow: 0 0 0 4px rgba(128,160,255,0.12), 0 8px 26px rgba(0,0,0,0.5);
-    border-color: rgba(140,170,255,0.22);
+.no-results {
+  columns: unset;
+  min-height: 30vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.2rem;
 }
 
-/* -----------------------------
-   Lightbox compatibility hints (we reuse your modal from style.css)
-   - Keep modal styles in style.css; these rules only make sure the
-     gallery's grid/modal interaction looks correct.
-   ----------------------------- */
-
-/* ensure modal sits above everything on gallery page */
-.modal-overlay { z-index: 1400; } /* already in style.css but safe here */
-
-/* make sure modal image max size plays nicely with grid */
-.modal-content .image-column { padding: 18px; }
-.modal-content .image-column .mag-image {
-    width: 100%;
-    height: auto;
-    max-height: 78vh;
-    object-fit: contain;
-    border-radius: 12px;
+@media (max-width: 1100px) {
+  .gallery-masonry { columns: 3; }
 }
 
-/* description column tweaks (if modal reused) */
-.description-column { padding: 22px; }
-
-/* -----------------------------
-   Responsive tweaks
-   ----------------------------- */
-@media (max-width: 860px) {
-    #gallery-grid { gap: 14px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
-    .gallery-thumb img.thumb-img { padding-bottom: 70%; } /* slightly taller on small screens */
+@media (max-width: 760px) {
+  .gallery-masonry { columns: 2; column-gap: 12px; }
 }
 
-@media (max-width: 520px) {
-    #gallery-grid { gap: 10px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
-    .gallery-thumb img.thumb-img { padding-bottom: 100%; } /* square thumbs on tiny phones */
-    .thumb-meta { padding: 8px; font-size: 0.86rem; }
-    #gallery-search { min-width: 0; width: 100%; }
+@media (max-width: 420px) {
+  .gallery-masonry { columns: 1; }
 }
 
-/* -----------------------------
-   Small micro-animations (subtle)
-   ----------------------------- */
-.gallery-thumb { will-change: transform, opacity; }
-.gallery-thumb .thumb-img { will-change: transform; transition-timing-function: cubic-bezier(.2,.9,.2,1); }
-
-.gallery-thumb img.thumb-img.lazy {
-    opacity: 0;
-}
-.gallery-thumb img.thumb-img.loaded {
+@media (prefers-reduced-motion: reduce) {
+  .gallery-thumb img {
     opacity: 1;
-    transition: opacity 240ms ease;
+    transform: none;
+  }
 }
-
-/* -------------------------------------
-    search bar override for gallery page
-    ------------------------------------ */
-#search-stats {
-    display: none !important;
-}
-
-/* This controls the overall width of the search area */
-.search-inner {
-    display: flex;
-    justify-content: flex-start; /* Keeps it aligned to the left */
-    width: 100%;
-    max-width: 1010px; /* Adjust this number to match the Home page width */
-}
-
-#site-search {
-    width: 100%;
-    /* Remove that extra padding we added earlier since the stats are gone */
-    padding-right: 15px !important;
-    box-sizing: border-box;
-}
-
-/* Crucial for the slide animation in the modal */
-#modal-image {
-    position: relative;
-    display: block;
-    margin: 0 auto;
-    max-width: 100%;
-    height: auto;
-    will-change: transform, opacity; /* Optimizes for the animation */
-    transform: translateX(0);
-}
-
-/* -------------------------------------
-    No results centering on gallery search
-    ------------------------------------ */
-
-/* Center the "No results" container across the entire grid width */
-.no-results-container {
-    grid-column: 1 / -1; /* Spans from the first column to the last */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 200px; /* Gives it some vertical breathing room */
-    width: 100%;
-}
-
-.no-results-msg {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 1.2rem;
-    font-weight: 500;
-    text-align: center;
-    background: rgba(255, 255, 255, 0.03);
-    padding: 20px 40px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-
-/* -----------------------------
-   Notes:
-   - Keep all heavy modal / magnifier CSS inside style.css (already present).
-   - Use small thumbnail files (300–600px wide) for .thumb-img sources; keep large "full"
-     images for the modal to avoid loading heavy files in the grid.
-   - This file is intentionally scoped; avoid adding global element selectors here.
-   ----------------------------- */

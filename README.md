@@ -1,76 +1,85 @@
-# Randy Mattoka's Artist Portfolio
+# Randy Mattoka — Studio Portfolio
 
-Digital illustrator and concept artist portfolio site built with vanilla HTML, CSS, and JavaScript.
+Digital illustrator and Computer Science student. Static site for [randycomicart.com](https://randycomicart.com), hosted on GitHub Pages.
 
-## What This Project Includes
+Vanilla HTML, CSS, and JavaScript. No build step.
 
-- A polished landing page with:
-  - section-based artwork carousels (`Completed`, `Nightwatch`, `Process`)
-  - live search that reorders and highlights matches
-  - modal viewer with image descriptions, dates, keyboard navigation, and magnifier lens
-- A dedicated `gallery.html` page with:
-  - category filters
-  - text search
-  - lazy-loaded thumbnails
-  - deep-link support via URL hash (example: `#zagreus`)
+## Pages
 
-## Quick Start (Local)
+- `index.html` — hero, completed-art exhibition, original works, process, about
+- `gallery.html` — searchable masonry archive with filters
+- `original.html` — original projects grouped by series (Nightwatch, then future worlds)
+- `software.html` — software portfolio (ready for project writeups)
 
-This project is static, but `gallery.html` fetches `gallery.json`, so run it from a local server (not `file://`).
+## Local preview
+
+`gallery.json` is fetched over HTTP, so open the site from a local server:
 
 ```bash
-cd /Users/randym/Documents/GitHub/portfolio
 python3 -m http.server 8080
 ```
 
-Then open:
+- http://localhost:8080/
+- http://localhost:8080/gallery.html
+- http://localhost:8080/original.html
+- http://localhost:8080/software.html
 
-- `http://localhost:8080/index.html`
-- `http://localhost:8080/gallery.html`
+## Adding artwork
 
-## Project Structure
+1. Put the image in `images/` (do not replace existing files unless you mean to).
+2. Add an object to `gallery.json`:
+
+```json
+{
+  "id": "unique-slug",
+  "thumb": "images/your-file.png",
+  "full": "images/your-file.png",
+  "title": "Title",
+  "desc": "Optional description. Leave empty if none.",
+  "date": "Month Day, Year",
+  "collection": "completed"
+}
+```
+
+`collection` must be one of:
+
+- `completed` — finished / fan art (homepage exhibition)
+- `original` — original worlds, games, characters
+- `process` — sketches and studies
+
+For original work that belongs to a named project, add:
+
+```json
+"project": "Nightwatch"
+```
+
+New original series only need a new `project` value. `original.html` groups them automatically.
+
+The homepage carousels, original works page, and gallery all read `gallery.json`. You do not need to duplicate `<img>` tags in HTML.
+
+## Adding a software project
+
+Duplicate the commented `<article class="project">` block in `software.html`. Fill name, description, stack, status, screenshot, GitHub, and demo links. Do not invent projects.
+
+## Structure
 
 ```text
 portfolio/
 ├── index.html
 ├── gallery.html
+├── original.html
+├── software.html
 ├── gallery.json
-├── css/
-│   ├── style.css
-│   ├── gallery.css
-│   ├── search.css
-│   └── hover.css
-├── js/
-│   ├── script.js
-│   ├── search.js
-│   ├── gallery.js
-│   └── hover.js
+├── CNAME
+├── css/style.css
+├── css/gallery.css
+├── js/site.js
+├── js/works.js
+├── js/lightbox.js
+├── js/carousel.js
+├── js/home.js
+├── js/gallery.js
+├── js/original.js
 ├── images/
 └── socials/
 ```
-
-## How To Add New Artwork
-
-1. Add the image file to `images/`.
-2. Update `gallery.json` with a new object:
-   - `id` (unique slug)
-   - `thumb` / `full`
-   - `title`
-   - `desc`
-   - `date`
-   - `collection` (`completed`, `nightwatch`, or `process`)
-3. If you want it in homepage carousels, also add a matching `<img>` entry in `index.html` under the correct section.
-4. Ensure `alt`, `data-desc`, and `data-date` are filled so search and modal info are meaningful.
-
-## Update Checklist
-
-- Confirm search works on both pages.
-- Confirm modal next/prev and keyboard arrows still work.
-- Confirm new items appear in the correct filter.
-- Confirm lazy-loading still works in `gallery.html`.
-
-## Contact
-
-- Email: `randy.mattoka@gmail.com`
-- Instagram: `https://www.instagram.com/randycomicart/`
-- ArtStation: `https://www.artstation.com/randycomicart`

@@ -168,7 +168,8 @@
     "title": "Nightwatch Concept Cover",
     "desc": "",
     "date": "October 31st, 2025",
-    "collection": "nightwatch"
+    "collection": "original",
+    "project": "Nightwatch"
   },
   {
     "id": "nightwatch2",
@@ -177,7 +178,8 @@
     "title": "Nightwatch Concept Conversation",
     "desc": "",
     "date": "October 9th, 2025",
-    "collection": "nightwatch"
+    "collection": "original",
+    "project": "Nightwatch"
   },
   {
     "id": "nightwatch3",
@@ -186,7 +188,8 @@
     "title": "Nightwatch Action Scene Concept",
     "desc": "",
     "date": "October 11th, 2025",
-    "collection": "nightwatch"
+    "collection": "original",
+    "project": "Nightwatch"
   },
   {
     "id": "nightwatch4",
@@ -195,7 +198,8 @@
     "title": "Nightwatch Biker Concept",
     "desc": "",
     "date": "August 28th, 2025",
-    "collection": "nightwatch"
+    "collection": "original",
+    "project": "Nightwatch"
   },
   {
     "id": "nightwatch5",
@@ -204,7 +208,8 @@
     "title": "Nightwatch Main Weapon Concept",
     "desc": "",
     "date": "August 15th, 2025",
-    "collection": "nightwatch"
+    "collection": "original",
+    "project": "Nightwatch"
   },
   {
     "id": "process1",

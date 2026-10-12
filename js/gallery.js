@@ -1,371 +1,172 @@
-// gallery.js
-document.addEventListener('DOMContentLoaded', () => {
-    const THUMBS_PER_PAGE = 24;
+import './site.js';
+import { loadWorks, searchBlob, escapeHtml } from './works.js';
+import { createLightbox } from './lightbox.js';
 
-    // UI elements
-    const grid = document.getElementById('gallery-grid');
-    const loadMoreBtn = document.getElementById('load-more');
-    const searchInput = document.getElementById('site-search');
-    const searchStats = document.getElementById('search-stats');
-    const filterButtons = Array.from(document.querySelectorAll('.gallery-filters button'));
+const PAGE = 24;
+const lightbox = createLightbox();
 
-    // Modal elements
-    const modal = document.getElementById('image-modal');
-    const modalImg = document.getElementById('modal-image');
-    const modalTitle = document.getElementById('description-title');
-    const modalText = document.getElementById('description-text');
-    const modalMeta = document.getElementById('description-meta');
-    const modalPrev = document.getElementById('modal-prev-btn');
-    const modalNext = document.getElementById('modal-next-btn');
-    const modalClose = document.getElementById('modal-close-btn');
+function debounce(fn, wait = 120) {
+  let t;
+  return (...args) => {
+    clearTimeout(t);
+    t = setTimeout(() => fn(...args), wait);
+  };
+}
 
-    // App state
-    let allItems = [];
-    let filtered = [];
-    let page = 0;
-    let currentIndex = -1;
-    let lastFocusedElement = null;
-    let lazyObserver = null;
-    const BUTTON_BOUNCE_DURATION_MS = 300;
+document.addEventListener('DOMContentLoaded', async () => {
+  const grid = document.getElementById('gallery-grid');
+  const loadMoreBtn = document.getElementById('load-more');
+  const searchInput = document.getElementById('site-search');
+  const searchStats = document.getElementById('search-stats');
+  const filterButtons = Array.from(document.querySelectorAll('.gallery-filters button'));
 
-    function triggerButtonBounce(button) {
-        if (!button) return;
-        button.classList.add('animated');
-        setTimeout(() => button.classList.remove('animated'), BUTTON_BOUNCE_DURATION_MS);
-    }
+  let allItems = [];
+  let filtered = [];
+  let page = 0;
+  let observer = null;
 
-    function initLazyObserver() {
-        if (!('IntersectionObserver' in window)) return;
-        lazyObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-                const img = entry.target;
-                if (!img.dataset || !img.dataset.src) {
-                    observer.unobserve(img);
-                    return;
-                }
-                img.src = img.dataset.src;
-                img.addEventListener('load', () => {
-                    img.classList.add('loaded');
-                    img.removeAttribute('loading');
-                }, { once: true });
-                observer.unobserve(img);
-            });
-        }, { rootMargin: '800px 0px', threshold: 0.01 });
-    }
+  try {
+    allItems = await loadWorks();
+  } catch (err) {
+    console.error(err);
+    grid.innerHTML = '<p class="no-results">Could not load gallery.json. Serve the site over HTTP.</p>';
+    return;
+  }
 
-    (async function init() {
-        try {
-            const resp = await fetch('gallery.json', { cache: 'no-store' });
-            if (resp && resp.ok) {
-                const data = await resp.json();
-                allItems = normalizeData(data);
-            } else {
-                allItems = normalizeData(scanCarouselImages());
-            }
-        } catch (err) {
-            allItems = normalizeData(scanCarouselImages());
+  if ('IntersectionObserver' in window) {
+    observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const img = entry.target;
+        if (img.dataset.src) {
+          img.src = img.dataset.src;
+          img.addEventListener('load', () => img.classList.add('loaded'), { once: true });
         }
+        observer.unobserve(img);
+      });
+    }, { rootMargin: '700px 0px' });
+  }
 
-        allItems = allItems.map((it, i) => ({
-            id: it.id || slugify(it.title || `art-${i+1}`),
-            ...it
-        }));
+  const params = new URLSearchParams(window.location.search);
+  const preset = params.get('filter');
+  if (preset && filterButtons.some((b) => b.dataset.filter === preset)) {
+    filterButtons.forEach((b) => {
+      const on = b.dataset.filter === preset;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
 
-        initLazyObserver();
-        filtered = allItems.slice();
-        renderPage(true);
-        bindControls();
-        handleInitialHash();
-    })();
-
-    function normalizeData(raw) {
-        return (raw || []).map(r => ({
-            thumb: r.thumb || r.thumbUrl || r.thumbSrc || r.src || '',
-            full: r.full || r.fullUrl || r.fullSrc || r.dataset?.full || r.src || '',
-            title: r.title?.trim() || r.name || r.alt || '',
-            desc: r.desc || r.description || r.dataset?.desc || '',
-            date: r.date || r.dataset?.date || '',
-            collection: (r.collection || r.dataset?.collection || 'all').toString(),
-            id: r.id || r.slug || ''
-        }));
+  function makeThumb(item) {
+    const btn = document.createElement('button');
+    btn.className = 'gallery-thumb';
+    btn.type = 'button';
+    btn.dataset.id = item.id;
+    btn.setAttribute('aria-label', `Open ${item.title || 'artwork'}`);
+    const title = escapeHtml(item.title || '');
+    const project = item.project ? `<span class="thumb-project">${escapeHtml(item.project)}</span>` : '';
+    const date = item.date ? `<time>${escapeHtml(item.date)}</time>` : '';
+    btn.innerHTML = `
+      <img class="lazy" alt="${title}" decoding="async" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='3' height='4'%3E%3C/svg%3E" data-src="${escapeHtml(item.thumb)}" />
+      <div>
+        ${project}
+        <h3>${title}</h3>
+        ${date}
+      </div>
+    `;
+    const img = btn.querySelector('img');
+    btn.addEventListener('click', () => {
+      const idx = filtered.findIndex((it) => it.id === item.id);
+      lightbox.open(filtered, Math.max(0, idx));
+    });
+    if (observer) observer.observe(img);
+    else {
+      img.src = item.thumb;
+      img.classList.add('loaded');
     }
+    return btn;
+  }
 
-    function scanCarouselImages() {
-        const imgs = Array.from(document.querySelectorAll('.carousel-track img'));
-        return imgs.map(img => ({
-            thumb: img.dataset.thumb || img.src,
-            full: img.dataset.full || img.src,
-            title: img.alt || img.getAttribute('title') || '',
-            desc: img.dataset.desc || img.getAttribute('data-desc') || '',
-            date: img.dataset.date || img.getAttribute('data-date') || '',
-            collection: (img.closest('.carousel-wrapper')?.dataset?.section) || (img.dataset.collection) || 'all',
-            id: img.dataset.id || img.id || ''
-        }));
+  function render(reset) {
+    if (reset) {
+      grid.innerHTML = '';
+      grid.classList.add('gallery-masonry');
+      page = 0;
     }
-
-    function slugify(text = '') {
-        return text.toString().toLowerCase()
-            .replace(/\s+/g, '-')
-            .replace(/[^\w-]+/g, '')
-            .replace(/-{2,}/g, '-')
-            .replace(/^-+/, '')
-            .replace(/-+$/, '') || `id-${Math.random().toString(36).slice(2,8)}`;
+    if (!filtered.length) {
+      grid.classList.remove('gallery-masonry');
+      grid.innerHTML = '<p class="no-results">No artworks found.</p>';
+      if (loadMoreBtn) {
+        loadMoreBtn.disabled = true;
+        loadMoreBtn.textContent = 'No more items';
+      }
+      return;
     }
-
-    function renderPage(reset = false) {
-        if (!grid) return;
-        if (reset) {
-            grid.innerHTML = '';
-            page = 0;
-        }
-        const start = page * THUMBS_PER_PAGE;
-        const slice = filtered.slice(start, start + THUMBS_PER_PAGE);
-        slice.forEach(item => grid.appendChild(makeThumb(item)));
-        page++;
-
-        if (loadMoreBtn) {
-            const hasMore = page * THUMBS_PER_PAGE < filtered.length;
-            loadMoreBtn.disabled = !hasMore;
-            loadMoreBtn.textContent = hasMore ? 'Load more' : 'No more items';
-        }
+    const slice = filtered.slice(page * PAGE, page * PAGE + PAGE);
+    slice.forEach((item) => grid.appendChild(makeThumb(item)));
+    page += 1;
+    const hasMore = page * PAGE < filtered.length;
+    if (loadMoreBtn) {
+      loadMoreBtn.disabled = !hasMore;
+      loadMoreBtn.textContent = hasMore ? 'Load more' : 'No more items';
     }
+  }
 
-    function makeThumb(item) {
-        const article = document.createElement('article');
-        article.className = 'gallery-thumb';
-        article.dataset.id = item.id;
-
-        const btn = document.createElement('button');
-        btn.className = 'thumb-btn';
-        btn.type = 'button';
-        btn.setAttribute('aria-label', `Open ${item.title}`);
-
-        const img = document.createElement('img');
-        img.className = 'thumb-img lazy';
-        img.decoding = 'async';
-        img.alt = item.title || '';
-        img.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D%22http%3A//www.w3.org/2000/svg%22 width%3D%223%22 height%3D%222%22%3E%3C/svg%3E';
-        img.dataset.src = item.thumb || item.full || '';
-        img.dataset.full = item.full || '';
-
-        btn.appendChild(img);
-        article.appendChild(btn);
-
-        const meta = document.createElement('div');
-        meta.className = 'thumb-meta';
-        const h = document.createElement('h4'); h.textContent = item.title;
-        const t = document.createElement('time'); t.textContent = item.date;
-        meta.appendChild(h);
-        meta.appendChild(t);
-        article.appendChild(meta);
-
-        btn.addEventListener('click', () => openModalForItem(item));
-
-        if (lazyObserver) lazyObserver.observe(img);
-        else img.src = img.dataset.src;
-
-        return article;
+  function applyFilters() {
+    const query = (searchInput?.value || '').trim().toLowerCase();
+    const active = filterButtons.find((b) => b.classList.contains('active'))?.dataset.filter || 'all';
+    const terms = query.split(/\s+/).filter(Boolean);
+    filtered = allItems.filter((it) => {
+      const okFilter = active === 'all' || it.collection === active;
+      const blob = searchBlob(it);
+      const okQuery = !terms.length || terms.every((t) => blob.includes(t));
+      return okFilter && okQuery;
+    });
+    if (searchStats) {
+      searchStats.textContent = query
+        ? (filtered.length ? `${filtered.length} result${filtered.length === 1 ? '' : 's'}` : 'No results')
+        : '';
     }
+    render(true);
+  }
 
-    function bindControls() {
-        filterButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterButtons.forEach(b => {
-                    b.classList.remove('active');
-                    b.setAttribute('aria-selected', 'false');
-                });
-                btn.classList.add('active');
-                btn.setAttribute('aria-selected', 'true');
-                applyFilters();
-            });
-        });
+  filterButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      filterButtons.forEach((b) => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+      const url = new URL(window.location.href);
+      if (btn.dataset.filter === 'all') url.searchParams.delete('filter');
+      else url.searchParams.set('filter', btn.dataset.filter);
+      history.replaceState(null, '', url);
+      applyFilters();
+    });
+  });
 
-        if (searchInput) {
-            searchInput.addEventListener('input', debounce(() => applyFilters(), 100));
-        }
-
-        if (loadMoreBtn) loadMoreBtn.addEventListener('click', () => renderPage(false));
-        if (modalClose) modalClose.addEventListener('click', closeModal);
-        if (modalPrev) modalPrev.addEventListener('click', () => showRelative(-1));
-        if (modalNext) modalNext.addEventListener('click', () => showRelative(1));
-
-        if (modal) {
-            modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (modal?.style.display === 'flex') {
-                if (e.key === 'Escape') closeModal();
-                if (e.key === 'ArrowRight') showRelative(1);
-                if (e.key === 'ArrowLeft') showRelative(-1);
-            }
-        });
+  searchInput?.addEventListener('input', debounce(applyFilters, 80));
+  searchInput?.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      searchInput.value = '';
+      applyFilters();
     }
+  });
+  loadMoreBtn?.addEventListener('click', () => render(false));
 
-    function applyFilters() {
-        const query = (searchInput?.value || '').trim().toLowerCase();
-        const activeBtn = filterButtons.find(b => b.classList.contains('active'));
-        const activeFilter = activeBtn?.dataset?.filter || 'all';
+  applyFilters();
 
-        filtered = allItems.filter(it => {
-            const matchesFilter = (activeFilter === 'all') || (it.collection === activeFilter);
-            const matchesQuery = !query ||
-                it.title.toLowerCase().includes(query) ||
-                it.desc.toLowerCase().includes(query) ||
-                it.date.toLowerCase().includes(query);
-            return matchesFilter && matchesQuery;
-        });
-
-        if (searchStats) {
-            searchStats.textContent = query === '' ? '' :
-                (filtered.length === 0 ? 'No results' : `${filtered.length} result${filtered.length !== 1 ? 's' : ''}`);
-        }
-
-        renderPage(true);
-
-        // Center "No results" message without breaking grid logic
-        if (grid) {
-            if (filtered.length === 0) {
-                grid.innerHTML = `<div class="no-results-container"><p class="no-results-msg">No artworks found.</p></div>`;
-            }
-        }
+  const hash = decodeURIComponent((location.hash || '').replace(/^#/, ''));
+  if (hash) {
+    const found = filtered.findIndex((it) => it.id === hash);
+    if (found !== -1) {
+      const needed = Math.floor(found / PAGE);
+      for (let i = 0; i < needed; i += 1) render(false);
+      setTimeout(() => {
+        document.querySelector(`[data-id="${CSS.escape(hash)}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        lightbox.open(filtered, found);
+      }, 120);
     }
-
-    function openModalForItem(item) {
-        currentIndex = filtered.findIndex(it => it.id === item.id);
-        showCurrent();
-    }
-
-    function showCurrent() {
-        if (currentIndex < 0 || currentIndex >= filtered.length) return;
-        const it = filtered[currentIndex];
-        lastFocusedElement = document.activeElement;
-
-        modal.style.display = 'flex';
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = "hidden";
-
-        // Reset positions for a clean opening
-        modalImg.style.transition = 'none';
-        modalImg.style.transform = 'translateX(0)';
-        modalImg.style.opacity = '1';
-
-        modalImg.src = it.full || it.thumb;
-        modalImg.alt = it.title;
-        modalTitle.textContent = it.title;
-        modalText.textContent = it.desc;
-        modalMeta.textContent = it.date ? `Date: ${it.date}` : '';
-
-        // Magnifier support
-        if (typeof window.updateMagnifierSize === 'function') {
-            const magContainer = document.getElementById('magnifier-container');
-
-            modalImg.onload = () => window.updateMagnifierSize();
-
-            if (magContainer) {
-                magContainer.addEventListener('mouseenter', window.showLens);
-                magContainer.addEventListener('mouseleave', window.hideLens);
-                magContainer.addEventListener('mousemove', window.handleMagnify);
-            }
-        }
-
-        updateNavButtons();
-        history.replaceState(null, '', `#${encodeURIComponent(it.id)}`);
-    }
-
-    function showRelative(offset) {
-        if (currentIndex === -1) return;
-        const direction = offset > 0 ? 'next' : 'prev';
-        triggerButtonBounce(offset > 0 ? modalNext : modalPrev);
-        currentIndex = (currentIndex + offset + filtered.length) % filtered.length;
-
-        const it = filtered[currentIndex];
-        performGalleryTransition(it, direction);
-    }
-
-    function performGalleryTransition(item, direction) {
-        const slideOut = direction === 'next' ? '-60px' : '60px';
-        const slideInStart = direction === 'next' ? '60px' : '-60px';
-
-        // Slide Out
-        modalImg.style.transition = 'transform 200ms ease-in, opacity 200ms';
-        modalImg.style.transform = `translateX(${slideOut})`;
-        modalImg.style.opacity = '0';
-
-        setTimeout(() => {
-            // Swap Content
-            modalImg.style.transition = 'none';
-            modalImg.style.transform = `translateX(${slideInStart})`;
-
-            modalImg.src = item.full || item.thumb;
-            modalImg.alt = item.title;
-            modalTitle.textContent = item.title;
-            modalText.textContent = item.desc;
-            modalMeta.textContent = item.date ? `Date: ${item.date}` : '';
-
-            // Slide In
-            requestAnimationFrame(() => {
-                modalImg.style.transition = 'transform 250ms cubic-bezier(0.17, 0.67, 0.83, 0.67), opacity 200ms';
-                modalImg.style.transform = 'translateX(0)';
-                modalImg.style.opacity = '1';
-
-                if (typeof window.updateMagnifierSize === 'function') {
-                    // Re-sync magnifier once image data is ready
-                    modalImg.onload = () => window.updateMagnifierSize();
-                }
-            });
-        }, 200);
-
-        updateNavButtons();
-        history.replaceState(null, '', `#${encodeURIComponent(item.id)}`);
-    }
-
-    function updateNavButtons() {
-        if (modalPrev) modalPrev.disabled = (currentIndex === 0);
-        if (modalNext) modalNext.disabled = (currentIndex === filtered.length - 1);
-    }
-
-    function closeModal() {
-        if (!modal) return;
-        modal.style.display = 'none';
-        modal.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = "auto";
-        modalImg.src = '';
-
-        const magContainer = document.getElementById('magnifier-container');
-        if (magContainer) {
-            magContainer.removeEventListener('mouseenter', window.showLens);
-            magContainer.removeEventListener('mouseleave', window.hideLens);
-            magContainer.removeEventListener('mousemove', window.handleMagnify);
-        }
-
-        if (lastFocusedElement) lastFocusedElement.focus({ preventScroll: true });
-        history.replaceState(null, '', window.location.pathname + window.location.search);
-        currentIndex = -1;
-    }
-
-    function debounce(fn, wait) {
-        let t;
-        return (...args) => {
-            clearTimeout(t);
-            t = setTimeout(() => fn.apply(this, args), wait);
-        };
-    }
-
-    function handleInitialHash() {
-        const hash = decodeURIComponent((location.hash || '').replace(/^#/, ''));
-        if (!hash) return;
-        const foundIndex = filtered.findIndex(it => it.id === hash);
-        if (foundIndex !== -1) {
-            currentIndex = foundIndex;
-            const neededPage = Math.floor(foundIndex / THUMBS_PER_PAGE);
-            for (let i = 0; i < neededPage; i++) renderPage(false);
-            setTimeout(() => {
-                const thumbEl = document.querySelector(`[data-id="${hash}"]`);
-                if (thumbEl) thumbEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 100);
-            showCurrent();
-        }
-    }
+  }
 });
