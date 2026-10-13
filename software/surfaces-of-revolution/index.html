@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Randy Mattoka — written for CSE 470 at ASU -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Surfaces of Revolution — Interactive Graphics — Randy Mattoka</title>
+  <meta name="description" content="A cylinder and a wavy vase turned from generating curves and lit with per-pixel Phong shading. Orbit, swap materials, move the light. A WebGL experiment by Randy Mattoka." />
+  <link rel="canonical" href="https://randycomicart.com/software/surfaces-of-revolution/" />
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+  <meta name="theme-color" content="#09090b" />
+  <meta property="og:title" content="Surfaces of Revolution — Interactive Graphics" />
+  <meta property="og:description" content="Parametric surfaces with exact normals and per-pixel Phong lighting. Orbit, swap materials, move the light." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://randycomicart.com/software/surfaces-of-revolution/" />
+  <meta property="og:image" content="https://randycomicart.com/images/software/surfaces-of-revolution-1.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://randycomicart.com/images/software/surfaces-of-revolution-1.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400;1,9..144,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="../../css/software.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-header" data-header>
+    <a class="brand" href="../../index.html">
+      <span class="brand-mark">Randy Mattoka</span>
+      <span class="brand-sub">Studio</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span></span><span></span><span></span>
+      <span class="visually-hidden">Menu</span>
+    </button>
+    <div class="nav-backdrop" data-nav-backdrop></div>
+    <nav id="site-nav" class="site-nav" data-nav aria-label="Primary">
+      <a href="../../index.html">Home</a>
+      <a href="../../gallery.html">Gallery</a>
+      <a href="../../original.html">Original Works</a>
+      <a href="../../software.html" aria-current="page">Software</a>
+      <a href="../../index.html#about">About</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <header class="demo-head page">
+      <p class="crumbs">
+        <a class="back" href="../../software.html">Software</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <span>Interactive Graphics</span>
+        <span class="sep" aria-hidden="true">/</span>
+        <span>Experiment 03</span>
+      </p>
+      <div class="demo-title-row">
+        <h1>Surfaces of Revolution</h1>
+        <p class="demo-lede">A cylinder and a wavy vase, each generated from a curve spun around an axis and lit per pixel with Phong shading. Orbit them, change the material, move the light, and push the shininess from matte to mirror.</p>
+      </div>
+    </header>
+
+    <section class="demo-workspace page" data-workspace aria-label="Surfaces of Revolution demo">
+      <div class="demo-stage">
+        <div class="canvas-frame is-draggable">
+          <canvas id="gl-canvas" width="640" height="640" data-touch-drag style="--native-w:640px;--ratio:1" role="img" aria-label="A lit 3D surface of revolution. Drag to orbit around it.">
+            Your browser does not support the HTML5 canvas element.
+          </canvas>
+        </div>
+        <div class="stage-bar">
+          <p class="stage-hint">Drag to orbit</p>
+          <button class="btn btn-sm" type="button" data-fullscreen aria-pressed="false"><span data-fs-label>Fullscreen</span></button>
+        </div>
+      </div>
+
+      <aside class="demo-panel" aria-label="Controls">
+        <h2 class="panel-title">Controls</h2>
+        <ul class="hint-list">
+          <li><b>Drag</b><span>Click and drag on the canvas to orbit around the surface.</span></li>
+        </ul>
+
+        <div class="ctl">
+          <label for="sorSelect">Surface</label>
+          <select id="sorSelect">
+            <option value="cylinder">Cylinder</option>
+            <option value="custom">Wavy Vase</option>
+          </select>
+        </div>
+
+        <div class="ctl">
+          <label for="materialSelect">Material</label>
+          <select id="materialSelect">
+            <option value="copper">Brushed Copper</option>
+            <option value="jade">Jade Ceramic</option>
+          </select>
+        </div>
+
+        <div class="ctl">
+          <div class="ctl-row">
+            <label for="shininessSlider">Shininess</label>
+            <output for="shininessSlider"><span id="shininessValue">120</span></output>
+          </div>
+          <input id="shininessSlider" type="range" min="1" max="1000" step="1" value="120" />
+          <p class="ctl-help">1 (broad highlight) to 1000 (tight, mirror-like).</p>
+        </div>
+
+        <div class="ctl">
+          <label for="lightModeSelect">Light</label>
+          <select id="lightModeSelect">
+            <option value="eye">At the camera</option>
+            <option value="orbit">Orbiting the surface</option>
+          </select>
+          <p class="ctl-help">Light position: <span id="lightPositionValue" class="ctl-value">(0.00, 0.00, 0.00)</span></p>
+        </div>
+
+        <div class="ctl">
+          <div class="ctl-row">
+            <label for="fovSlider">Field of view</label>
+            <output for="fovSlider"><span id="fovValue">60&deg;</span></output>
+          </div>
+          <input id="fovSlider" type="range" min="10" max="100" step="1" value="60" />
+        </div>
+
+        <div class="ctl">
+          <div class="ctl-check">
+            <label for="showNormalsCheckbox">Show surface normals</label>
+            <input id="showNormalsCheckbox" type="checkbox" />
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="demo-notes page" aria-label="About this experiment">
+      <div>
+        <h2>How it works</h2>
+        <p>Each surface starts as a 2D generating curve in the xy-plane. Sweeping that curve around the y-axis produces a grid of 3D points, and a triangle index list stitches the grid into a mesh.</p>
+        <ul class="notes-list">
+          <li><strong>Parametric geometry.</strong> The cylinder has a constant radius. The vase's radius is a sum of cosine and sine terms along its height. Both meshes are built from a 90 &times; 70 grid of samples by code in a separate geometry module.</li>
+          <li><strong>Exact normals.</strong> Normals come from the cross product of the surface's partial derivatives rather than being averaged from neighboring faces. Turn on <em>Show surface normals</em> to see them drawn as short lines.</li>
+          <li><strong>Indexed drawing.</strong> Positions and normals live in vertex buffers, and an index buffer drives <code>drawElements</code>.</li>
+          <li><strong>Phong shading per pixel.</strong> The fragment shader evaluates ambient, diffuse, and specular terms for every pixel, using each material's colors and the shininess exponent.</li>
+          <li><strong>Light and camera.</strong> The light either rides at the camera or circles the object. The camera orbits with yaw and pitch from mouse drags, and the near and far planes are derived from each mesh's bounding box. The field of view is adjustable from 10&deg; to 100&deg;.</li>
+        </ul>
+      </div>
+      <div class="notes-side">
+        <section>
+          <h3>Concepts</h3>
+          <ul class="stack">
+            <li>Parametric surfaces</li>
+            <li>Analytic normals</li>
+            <li>Indexed triangle meshes</li>
+            <li>Phong illumination</li>
+            <li>Per-fragment shading</li>
+            <li>Camera orbit</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Built with</h3>
+          <ul class="stack">
+            <li>WebGL</li>
+            <li>GLSL</li>
+            <li>JavaScript</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Background</h3>
+          <p>Written for CSE 470, Introduction to Computer Graphics, at Arizona State University. Uses the course-supplied <code>webgl-utils</code> and <code>MV.js</code> helper libraries.</p>
+        </section>
+      </div>
+    </section>
+
+    <nav class="demo-pager page" aria-label="Experiments">
+      <a class="pager-link" href="../cube-dance/"><small>Previous &middot; 02</small><span>&larr; Cube Dance</span></a>
+      <a class="pager-link pager-all" href="../../software.html#graphics"><small>Collection</small><span>All experiments</span></a>
+      <a class="pager-link pager-next" href="../dino-walk/"><small>Next &middot; 04</small><span>Dino Walk &rarr;</span></a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <span>&copy; <span data-year>2026</span> Randy Mattoka</span>
+    <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a>
+  </footer>
+
+<script id="main-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 vPosition;
+attribute vec3 vNormal;
+
+uniform mat4 uModelViewMatrix;
+uniform mat4 uProjectionMatrix;
+uniform mat3 uNormalMatrix;
+
+varying vec3 fPositionEye;
+varying vec3 fNormalEye;
+
+void main() {
+  vec4 pEye = uModelViewMatrix * vPosition;
+  fPositionEye = pEye.xyz;
+  fNormalEye = normalize(uNormalMatrix * vNormal);
+  gl_Position = uProjectionMatrix * pEye;
+}
+</script>
+
+<script id="main-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+varying vec3 fPositionEye;
+varying vec3 fNormalEye;
+
+uniform vec4 uLightPosition;
+uniform vec4 uAmbientProduct;
+uniform vec4 uDiffuseProduct;
+uniform vec4 uSpecularProduct;
+uniform float uShininess;
+
+void main() {
+  vec3 N = normalize(fNormalEye);
+  vec3 L;
+
+  if (uLightPosition.w == 0.0) {
+    L = normalize(uLightPosition.xyz);
+  } else {
+    L = normalize(uLightPosition.xyz - fPositionEye);
+  }
+
+  float kd = max(dot(N, L), 0.0);
+  vec3 V = normalize(-fPositionEye);
+  vec3 R = reflect(-L, N);
+
+  float ks = pow(max(dot(R, V), 0.0), uShininess);
+  vec4 ambient = uAmbientProduct;
+  vec4 diffuse = kd * uDiffuseProduct;
+  vec4 specular = ks * uSpecularProduct;
+
+  if (kd <= 0.0) {
+    specular = vec4(0.0, 0.0, 0.0, 1.0);
+  }
+
+  vec4 color = ambient + diffuse + specular;
+  color.a = 1.0;
+  gl_FragColor = vec4(clamp(color.rgb, 0.0, 1.0), 1.0);
+}
+</script>
+
+<script id="line-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 vLinePosition;
+uniform mat4 uModelViewMatrix;
+uniform mat4 uProjectionMatrix;
+
+void main() {
+  gl_Position = uProjectionMatrix * uModelViewMatrix * vLinePosition;
+}
+</script>
+
+<script id="line-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+uniform vec4 uLineColor;
+
+void main() {
+  gl_FragColor = uLineColor;
+}
+</script>
+
+  <script src="../lib/webgl-utils.js"></script>
+  <script src="../lib/initShaders.js"></script>
+  <script src="../lib/MV.js"></script>
+  <script src="surface-geometry.js"></script>
+  <script src="surface-viewer.js"></script>
+  <script src="../../js/demo.js" defer></script>
+  <script type="module" src="../../js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Randy Mattoka — written for CSE 470 at ASU -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dino Walk — Interactive Graphics — Randy Mattoka</title>
+  <meta name="description" content="A Yoshi-inspired dinosaur built from one cube, walking a looping path on a textured ground plane through a hierarchical model. A WebGL experiment by Randy Mattoka." />
+  <link rel="canonical" href="https://randycomicart.com/software/dino-walk/" />
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+  <meta name="theme-color" content="#09090b" />
+  <meta property="og:title" content="Dino Walk — Interactive Graphics" />
+  <meta property="og:description" content="A hierarchical, textured dinosaur built from a single cube, walking a looping path." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://randycomicart.com/software/dino-walk/" />
+  <meta property="og:image" content="https://randycomicart.com/images/software/dino-walk-1.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://randycomicart.com/images/software/dino-walk-1.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400;1,9..144,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="../../css/software.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-header" data-header>
+    <a class="brand" href="../../index.html">
+      <span class="brand-mark">Randy Mattoka</span>
+      <span class="brand-sub">Studio</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span></span><span></span><span></span>
+      <span class="visually-hidden">Menu</span>
+    </button>
+    <div class="nav-backdrop" data-nav-backdrop></div>
+    <nav id="site-nav" class="site-nav" data-nav aria-label="Primary">
+      <a href="../../index.html">Home</a>
+      <a href="../../gallery.html">Gallery</a>
+      <a href="../../original.html">Original Works</a>
+      <a href="../../software.html" aria-current="page">Software</a>
+      <a href="../../index.html#about">About</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <header class="demo-head page">
+      <p class="crumbs">
+        <a class="back" href="../../software.html">Software</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <span>Interactive Graphics</span>
+        <span class="sep" aria-hidden="true">/</span>
+        <span>Experiment 04</span>
+      </p>
+      <div class="demo-title-row">
+        <h1>Dino Walk</h1>
+        <p class="demo-lede">A Yoshi-inspired dinosaur assembled entirely from scaled copies of one cube, walking a looping path across a textured ground plane. Every limb, the head, and the tail move through a hierarchical model.</p>
+      </div>
+    </header>
+
+    <section class="demo-workspace page" data-workspace aria-label="Dino Walk demo">
+      <div class="demo-stage">
+        <div class="canvas-frame">
+          <canvas id="gl-canvas" width="820" height="620" style="--native-w:820px;--ratio:1.3226" role="img" aria-label="A cube-built green dinosaur walking in a loop on a grassy ground plane">
+            Your browser does not support the HTML5 canvas element.
+          </canvas>
+          <div class="canvas-loading" data-loading>Loading textures&hellip;</div>
+        </div>
+        <div class="stage-bar">
+          <p class="stage-hint">Walks automatically &middot; fixed camera</p>
+          <button class="btn btn-sm" type="button" data-fullscreen aria-pressed="false"><span data-fs-label>Fullscreen</span></button>
+        </div>
+      </div>
+
+      <aside class="demo-panel" aria-label="Controls">
+        <h2 class="panel-title">Controls</h2>
+        <p class="panel-intro">The dinosaur walks its loop on its own. There are no mouse or keyboard controls on the canvas, only the two buttons below.</p>
+
+        <div class="ctl">
+          <button class="btn btn-sm" id="toggle-animation" type="button">Pause Animation</button>
+          <p class="ctl-help">Freeze the walk mid-stride, then resume.</p>
+        </div>
+
+        <div class="ctl">
+          <button class="btn btn-sm" id="reset-scene" type="button">Reset Avatar Pose</button>
+          <p class="ctl-help">Return the dinosaur to the start of its path.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="demo-notes page" aria-label="About this experiment">
+      <div>
+        <h2>How it works</h2>
+        <p>The dinosaur is a tree of parts. Each part has a local transform and a draw routine, and the scene walks the tree with a matrix stack so every child inherits the movement of its parent.</p>
+        <ul class="notes-list">
+          <li><strong>One prototype.</strong> The torso, head, snout, arms, legs, feet, tail, red shell, and the ground plane are all instances of the same 36-vertex unit cube, scaled and positioned per part.</li>
+          <li><strong>Hierarchical model.</strong> Eleven nodes are linked by child and sibling references. Rotating a leg also carries its foot; rotating the head carries the snout.</li>
+          <li><strong>Procedural motion.</strong> Joint angles come from sine waves: arms and legs swing in opposite phase, the feet lift, the head bobs, and the tail wags, while the shell rides along on the torso.</li>
+          <li><strong>A looping path.</strong> The dinosaur's position follows a closed parametric curve, and its heading is taken from the curve's direction of travel, so it always faces where it is going.</li>
+          <li><strong>Textures.</strong> The dinosaur's skin texture is generated in code at startup and applied as a decal over the lit color. The ground uses a grass image, modulated by the lighting. Both use mipmaps and repeat wrapping.</li>
+          <li><strong>Lighting.</strong> A Blinn-Phong lighting model runs in the vertex shader, with a normal matrix keeping normals correct under each part's non-uniform scale.</li>
+        </ul>
+      </div>
+      <div class="notes-side">
+        <section>
+          <h3>Concepts</h3>
+          <ul class="stack">
+            <li>Hierarchical modeling</li>
+            <li>Matrix stack</li>
+            <li>Texture mapping</li>
+            <li>Procedural textures</li>
+            <li>Blinn-Phong lighting</li>
+            <li>Path animation</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Built with</h3>
+          <ul class="stack">
+            <li>WebGL</li>
+            <li>GLSL</li>
+            <li>JavaScript</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Model hierarchy</h3>
+          <ul class="tree">
+            <li class="root">Torso
+              <ul>
+                <li>Head
+                  <ul><li>Snout</li></ul>
+                </li>
+                <li>Left arm</li>
+                <li>Right arm</li>
+                <li>Shell</li>
+                <li>Left leg
+                  <ul><li>Left foot</li></ul>
+                </li>
+                <li>Right leg
+                  <ul><li>Right foot</li></ul>
+                </li>
+                <li>Tail</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h3>Background</h3>
+          <p>Written for CSE 470, Introduction to Computer Graphics, at Arizona State University, building on the course&rsquo;s figure, lighting, and texture example programs. Uses the course-supplied <code>webgl-utils</code> and <code>MV.js</code> helper libraries. The grass ground texture was supplied with the course materials.</p>
+        </section>
+      </div>
+    </section>
+
+    <nav class="demo-pager page" aria-label="Experiments">
+      <a class="pager-link" href="../surfaces-of-revolution/"><small>Previous &middot; 03</small><span>&larr; Surfaces of Revolution</span></a>
+      <a class="pager-link pager-all" href="../../software.html#graphics"><small>Collection</small><span>All experiments</span></a>
+      <span></span>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <span>&copy; <span data-year>2026</span> Randy Mattoka</span>
+    <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a>
+  </footer>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+attribute vec4 vPosition;
+attribute vec3 vNormal;
+attribute vec2 vTexCoord;
+
+varying vec4 fColor;
+varying vec2 fTexCoord;
+
+uniform vec4 ambientProduct;
+uniform vec4 diffuseProduct;
+uniform vec4 specularProduct;
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+uniform mat3 normalMatrix;
+uniform vec4 lightPosition;
+uniform float shininess;
+uniform vec4 baseColor;
+
+void main()
+{
+    vec4 pos4D = vPosition;
+    vec3 pos = (modelViewMatrix * pos4D).xyz;
+    vec3 light = lightPosition.xyz;
+    vec3 L = normalize(light - pos);
+    vec3 E = normalize(-pos);
+    vec3 H = normalize(L + E);
+    vec3 N = normalize(normalMatrix * vNormal);
+
+    vec4 ambient = ambientProduct * baseColor;
+    float Kd = max(dot(L, N), 0.0);
+    vec4 diffuse = Kd * diffuseProduct * baseColor;
+
+    float Ks = pow(max(dot(N, H), 0.0), shininess);
+    vec4 specular = Ks * specularProduct;
+
+    if (dot(L, N) < 0.0) {
+        specular = vec4(0.0, 0.0, 0.0, 1.0);
+    }
+
+    fColor = ambient + diffuse + specular;
+    fColor.a = baseColor.a;
+    fTexCoord = vTexCoord;
+
+    gl_Position = projectionMatrix * modelViewMatrix * pos4D;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+varying vec4 fColor;
+varying vec2 fTexCoord;
+
+uniform sampler2D textureSampler;
+uniform bool useTexture;
+uniform int textureMode;
+
+void main()
+{
+    vec4 litColor = fColor;
+
+    if (!useTexture) {
+        gl_FragColor = litColor;
+        return;
+    }
+
+    vec4 texColor = texture2D(textureSampler, fTexCoord);
+
+    if (textureMode == 0) {
+        gl_FragColor = litColor * texColor;
+    } else {
+        gl_FragColor = vec4(mix(litColor.rgb, texColor.rgb, texColor.a), litColor.a);
+    }
+}
+</script>
+
+  <script src="../lib/webgl-utils.js"></script>
+  <script src="../lib/initShaders.js"></script>
+  <script src="../lib/MV.js"></script>
+  <script src="grass-texture.js"></script>
+  <script src="dino-walk.js"></script>
+  <script src="../../js/demo.js" defer></script>
+  <script type="module" src="../../js/site.js"></script>
+</body>
+</html>

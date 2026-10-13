@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Randy Mattoka — written for CSE 470 at ASU -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cube Dance — Interactive Graphics — Randy Mattoka</title>
+  <meta name="description" content="One cube model drawn as a ring of spinning instances. Click a cube to make the center cube copy its rotation. A WebGL experiment by Randy Mattoka." />
+  <link rel="canonical" href="https://randycomicart.com/software/cube-dance/" />
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+  <meta name="theme-color" content="#09090b" />
+  <meta property="og:title" content="Cube Dance — Interactive Graphics" />
+  <meta property="og:description" content="One cube model drawn as a ring of spinning instances. Click a cube to make the center cube copy its rotation." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://randycomicart.com/software/cube-dance/" />
+  <meta property="og:image" content="https://randycomicart.com/images/software/cube-dance-1.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://randycomicart.com/images/software/cube-dance-1.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400;1,9..144,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="../../css/software.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-header" data-header>
+    <a class="brand" href="../../index.html">
+      <span class="brand-mark">Randy Mattoka</span>
+      <span class="brand-sub">Studio</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span></span><span></span><span></span>
+      <span class="visually-hidden">Menu</span>
+    </button>
+    <div class="nav-backdrop" data-nav-backdrop></div>
+    <nav id="site-nav" class="site-nav" data-nav aria-label="Primary">
+      <a href="../../index.html">Home</a>
+      <a href="../../gallery.html">Gallery</a>
+      <a href="../../original.html">Original Works</a>
+      <a href="../../software.html" aria-current="page">Software</a>
+      <a href="../../index.html#about">About</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <header class="demo-head page">
+      <p class="crumbs">
+        <a class="back" href="../../software.html">Software</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <span>Interactive Graphics</span>
+        <span class="sep" aria-hidden="true">/</span>
+        <span>Experiment 02</span>
+      </p>
+      <div class="demo-title-row">
+        <h1>Cube Dance</h1>
+        <p class="demo-lede">A ring of cubes spins around a center cube that is waiting for a cue. Click an outer cube and the center cube picks up its rotation. Scale, speed, cube count, and colors are all live.</p>
+      </div>
+    </header>
+
+    <section class="demo-workspace page" data-workspace aria-label="Cube Dance demo">
+      <div class="demo-stage">
+        <div class="canvas-frame is-clickable">
+          <canvas id="gl-canvas" width="640" height="520" style="--native-w:640px;--ratio:1.2308" role="img" aria-label="A ring of rotating cubes around a center cube. Click an outer cube to select it.">
+            Your browser does not support the HTML5 canvas element.
+          </canvas>
+        </div>
+        <div class="stage-bar">
+          <p class="stage-hint">Click an outer cube</p>
+          <button class="btn btn-sm" type="button" data-fullscreen aria-pressed="false"><span data-fs-label>Fullscreen</span></button>
+        </div>
+      </div>
+
+      <aside class="demo-panel" aria-label="Controls">
+        <h2 class="panel-title">Controls</h2>
+        <ul class="hint-list">
+          <li><b>Click</b><span>Click an outer cube and the center cube starts rotating about the same axis.</span></li>
+        </ul>
+
+        <div class="ctl">
+          <button class="btn btn-sm" id="resetCenterBtn" type="button">Reset center cube</button>
+        </div>
+
+        <div class="ctl">
+          <div class="ctl-row">
+            <label for="scaleSlider">Cube scale</label>
+            <output for="scaleSlider"><span id="scaleValue">20%</span></output>
+          </div>
+          <input id="scaleSlider" type="range" min="10" max="100" step="1" value="20" />
+        </div>
+
+        <div class="ctl">
+          <div class="ctl-row">
+            <label for="speedSlider">Rotation speed</label>
+            <output for="speedSlider"><span id="speedValue">0.03</span></output>
+          </div>
+          <input id="speedSlider" type="range" min="0" max="2" step="0.01" value="0.03" />
+          <p class="ctl-help">Radians per frame, 0 to 2.</p>
+        </div>
+
+        <div class="ctl">
+          <div class="ctl-row">
+            <span class="ctl-label">Outer cubes</span>
+            <output><span id="cubeCountValue">8</span></output>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-sm" id="decreaseCubesBtn" type="button" aria-label="Remove one outer cube">&minus; Cube</button>
+            <button class="btn btn-sm" id="increaseCubesBtn" type="button" aria-label="Add one outer cube">+ Cube</button>
+          </div>
+        </div>
+
+        <div class="ctl">
+          <button class="btn btn-sm" id="randomizeColorsBtn" type="button">Randomize colors</button>
+        </div>
+      </aside>
+    </section>
+
+    <section class="demo-notes page" aria-label="About this experiment">
+      <div>
+        <h2>How it works</h2>
+        <p>There is exactly one cube model: eight vertices arranged into 36 triangle vertices with a different color on each face. Every cube on screen is an instance of that model, drawn with its own transformation matrix.</p>
+        <ul class="notes-list">
+          <li><strong>Instancing.</strong> Each frame, JavaScript builds a model-view matrix per cube (translate, rotate about an arbitrary axis, scale) and uploads it as a uniform before drawing the shared mesh.</li>
+          <li><strong>The ring.</strong> Outer cubes sit evenly on a circle of radius 0.75. Each one rotates about the line from the origin through its own center.</li>
+          <li><strong>Picking by ray.</strong> A click is converted to normalized device coordinates, unprojected through the inverse view-projection matrix into a ray, and intersected with the plane the cubes live on. The nearest cube within range is selected.</li>
+          <li><strong>Depth and perspective.</strong> A perspective camera looks at the scene with the depth buffer enabled, so faces of overlapping cubes are resolved correctly.</li>
+          <li><strong>Extras.</strong> The outer ring can grow from 4 to 20 cubes, and the face colors can be re-rolled with random hues.</li>
+        </ul>
+      </div>
+      <div class="notes-side">
+        <section>
+          <h3>Concepts</h3>
+          <ul class="stack">
+            <li>Model instancing</li>
+            <li>Model-view matrices</li>
+            <li>Rotation about an axis</li>
+            <li>Depth buffering</li>
+            <li>Ray picking</li>
+            <li>Perspective projection</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Built with</h3>
+          <ul class="stack">
+            <li>WebGL</li>
+            <li>GLSL</li>
+            <li>JavaScript</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Background</h3>
+          <p>Written for CSE 470, Introduction to Computer Graphics, at Arizona State University. Uses the course-supplied <code>webgl-utils</code> and <code>MV.js</code> helper libraries and unit-cube vertex data.</p>
+        </section>
+      </div>
+    </section>
+
+    <nav class="demo-pager page" aria-label="Experiments">
+      <a class="pager-link" href="../petal-burst/"><small>Previous &middot; 01</small><span>&larr; Petal Burst</span></a>
+      <a class="pager-link pager-all" href="../../software.html#graphics"><small>Collection</small><span>All experiments</span></a>
+      <a class="pager-link pager-next" href="../surfaces-of-revolution/"><small>Next &middot; 03</small><span>Surfaces of Revolution &rarr;</span></a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <span>&copy; <span data-year>2026</span> Randy Mattoka</span>
+    <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a>
+  </footer>
+
+  <script id="vertex-shader" type="x-shader/x-vertex">
+attribute vec4 vPosition;
+attribute vec4 vColor;
+
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+
+varying vec4 fColor;
+
+void main() {
+    gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+    fColor = vColor;
+}
+  </script>
+
+  <script id="fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+varying vec4 fColor;
+
+void main() {
+    gl_FragColor = fColor;
+}
+  </script>
+
+  <script src="../lib/webgl-utils.js"></script>
+  <script src="../lib/initShaders.js"></script>
+  <script src="../lib/MV.js"></script>
+  <script src="cube-geometry.js"></script>
+  <script src="cube-dance.js"></script>
+  <script src="../../js/demo.js" defer></script>
+  <script type="module" src="../../js/site.js"></script>
+</body>
+</html>

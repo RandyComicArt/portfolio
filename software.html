@@ -4,21 +4,22 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Software — Randy Mattoka</title>
-  <meta name="description" content="Software, games, and interactive work by Randy Mattoka, Computer Science student at Arizona State University." />
+  <meta name="description" content="Software and interactive graphics by Randy Mattoka, Computer Science student at Arizona State University. Four WebGL experiments you can run in the browser." />
   <link rel="canonical" href="https://randycomicart.com/software.html" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <meta name="theme-color" content="#09090b" />
   <meta property="og:title" content="Software — Randy Mattoka" />
-  <meta property="og:description" content="Tools, games, and interactive experiences — a software studio inside an art practice." />
+  <meta property="og:description" content="Interactive WebGL graphics experiments, running live in the browser — a software studio inside an art practice." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://randycomicart.com/software.html" />
-  <meta property="og:image" content="https://randycomicart.com/images/nightwatch1.png" />
+  <meta property="og:image" content="https://randycomicart.com/images/software/dino-walk-1.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://randycomicart.com/images/nightwatch1.png" />
+  <meta name="twitter:image" content="https://randycomicart.com/images/software/dino-walk-1.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400;1,9..144,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/software.css" />
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -44,52 +45,155 @@
   </header>
 
   <main id="main">
-    <header class="page-hero page">
+    <header class="page-hero page software-hero">
       <p class="kicker">Code</p>
       <h1>Software</h1>
-      <p>I am a Computer Science student at Arizona State University. I build software, interactive experiences, tools, and games — often in conversation with the same worlds I draw. Detailed project showcases are being added here.</p>
+      <p>I am a Computer Science student at Arizona State University. I build software, interactive experiences, tools, and games — often in conversation with the same worlds I draw. The graphics work below runs live in your browser, and larger projects will be added alongside it.</p>
     </header>
 
-    <section class="project-list" aria-label="Projects">
-      <article class="project is-pending">
-        <div class="project-visual">
-          <img src="images/nightwatch1.png" alt="" />
-        </div>
-        <div>
-          <p class="project-status">In progress</p>
-          <h2>Project showcases</h2>
-          <p>Case studies will live in this layout: name, short description, stack, status, and links to GitHub or a live demo. Until those writeups are ready, current code is on GitHub.</p>
-          <p class="project-note">This page is structured for future entries — nothing here is a placeholder project with invented credits.</p>
-          <div class="project-links">
-            <a class="btn btn-solid" href="https://github.com/RandyComicArt" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a class="btn" href="original.html">Original worlds</a>
+    <!--
+      FEATURED PROJECTS
+      Larger projects (applications, systems work, capstones) belong in a "Featured" collection
+      ABOVE the graphics collection. Copy the <section class="collection"> block below, change
+      the heading, and reuse the same <article class="experiment"> markup for each project:
+      big visual on one side, copy on the other, status + stack + links.
+    -->
+
+    <section id="graphics" class="collection" aria-labelledby="graphics-heading">
+      <div class="page">
+        <div class="collection-head">
+          <div>
+            <p class="kicker">Interactive Graphics</p>
+            <h2 id="graphics-heading">Graphics Experiments</h2>
+          </div>
+          <div>
+            <p>Four WebGL programs written in plain JavaScript and GLSL, with no engine or framework. They began as coursework for CSE 470, Computer Graphics at Arizona State University. Pick one and launch it: each runs live in the page.</p>
+            <p class="collection-meta">4 experiments &middot; WebGL &middot; Academic projects</p>
           </div>
         </div>
-      </article>
+
+        <div class="experiments">
+
+          <article class="experiment">
+            <a class="experiment-visual" href="software/petal-burst/" aria-label="Launch Petal Burst">
+              <img src="images/software/petal-burst-1.png" alt="Petal Burst: a flower of colored triangle petals around a red core on a white background" width="1016" height="1016" loading="lazy" />
+              <img class="is-alt" src="images/software/petal-burst-2.png" alt="" width="1016" height="1016" loading="lazy" />
+              <span class="experiment-launch">Launch demo</span>
+            </a>
+            <div class="experiment-copy">
+              <p class="experiment-number" aria-hidden="true">01</p>
+              <h3>Petal Burst</h3>
+              <p>A flower made of 32 solid-colored triangles that bursts apart and fades to white while its core holds still. The motion and the color change are both computed in the vertex shader.</p>
+              <dl class="experiment-meta">
+                <div><dt>Interaction</dt><dd>Plays automatically and loops</dd></div>
+                <div><dt>Concepts</dt><dd>Vertex shader animation, uniforms, color interpolation</dd></div>
+              </dl>
+              <ul class="stack">
+                <li>WebGL</li>
+                <li>GLSL</li>
+                <li>JavaScript</li>
+              </ul>
+              <div class="project-links">
+                <a class="btn btn-solid" href="software/petal-burst/">Launch demo</a>
+                <a class="btn" href="https://github.com/RandyComicArt/portfolio/tree/main/software/petal-burst" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="experiment">
+            <a class="experiment-visual" href="software/cube-dance/" aria-label="Launch Cube Dance">
+              <img src="images/software/cube-dance-1.png" alt="Cube Dance: a ring of multicolored cubes surrounding a center cube" width="1272" height="1032" loading="lazy" />
+              <img class="is-alt" src="images/software/cube-dance-2.png" alt="" width="1272" height="1032" loading="lazy" />
+              <span class="experiment-launch">Launch demo</span>
+            </a>
+            <div class="experiment-copy">
+              <p class="experiment-number" aria-hidden="true">02</p>
+              <h3>Cube Dance</h3>
+              <p>One cube model drawn as a ring of spinning instances around a center cube. Click an outer cube and the center cube picks up its rotation axis, then tune scale, speed, cube count, and color.</p>
+              <dl class="experiment-meta">
+                <div><dt>Interaction</dt><dd>Click cubes, sliders, and buttons</dd></div>
+                <div><dt>Concepts</dt><dd>Instancing, model-view matrices, ray picking</dd></div>
+              </dl>
+              <ul class="stack">
+                <li>WebGL</li>
+                <li>GLSL</li>
+                <li>JavaScript</li>
+              </ul>
+              <div class="project-links">
+                <a class="btn btn-solid" href="software/cube-dance/">Launch demo</a>
+                <a class="btn" href="https://github.com/RandyComicArt/portfolio/tree/main/software/cube-dance" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="experiment">
+            <a class="experiment-visual" href="software/surfaces-of-revolution/" aria-label="Launch Surfaces of Revolution">
+              <img src="images/software/surfaces-of-revolution-1.png" alt="Surfaces of Revolution: a copper-colored cylinder lit with a bright specular highlight" width="1272" height="1272" loading="lazy" />
+              <img class="is-alt" src="images/software/surfaces-of-revolution-2.png" alt="" width="1272" height="1272" loading="lazy" />
+              <span class="experiment-launch">Launch demo</span>
+            </a>
+            <div class="experiment-copy">
+              <p class="experiment-number" aria-hidden="true">03</p>
+              <h3>Surfaces of Revolution</h3>
+              <p>A cylinder and a wavy vase generated from curves, with exact normals and per-pixel Phong lighting. Orbit them, swap materials, move the light, and push the shininess from matte to mirror.</p>
+              <dl class="experiment-meta">
+                <div><dt>Interaction</dt><dd>Drag to orbit, plus material, light, shininess, and field-of-view controls</dd></div>
+                <div><dt>Concepts</dt><dd>Parametric surfaces, indexed meshes, Phong shading</dd></div>
+              </dl>
+              <ul class="stack">
+                <li>WebGL</li>
+                <li>GLSL</li>
+                <li>JavaScript</li>
+              </ul>
+              <div class="project-links">
+                <a class="btn btn-solid" href="software/surfaces-of-revolution/">Launch demo</a>
+                <a class="btn" href="https://github.com/RandyComicArt/portfolio/tree/main/software/surfaces-of-revolution" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="experiment">
+            <a class="experiment-visual" href="software/dino-walk/" aria-label="Launch Dino Walk">
+              <img src="images/software/dino-walk-1.jpg" alt="Dino Walk: a green cube-built dinosaur on a grassy ground plane" width="1632" height="1232" loading="lazy" />
+              <img class="is-alt" src="images/software/dino-walk-2.jpg" alt="" width="1632" height="1232" loading="lazy" />
+              <span class="experiment-launch">Launch demo</span>
+            </a>
+            <div class="experiment-copy">
+              <p class="experiment-number" aria-hidden="true">04</p>
+              <h3>Dino Walk</h3>
+              <p>A Yoshi-inspired dinosaur built from copies of a single cube and animated through a hierarchical model, walking a looping path across a textured ground plane.</p>
+              <dl class="experiment-meta">
+                <div><dt>Interaction</dt><dd>Walks automatically; pause and reset buttons</dd></div>
+                <div><dt>Concepts</dt><dd>Hierarchical modeling, texture mapping, Blinn-Phong lighting</dd></div>
+              </dl>
+              <ul class="stack">
+                <li>WebGL</li>
+                <li>GLSL</li>
+                <li>JavaScript</li>
+              </ul>
+              <div class="project-links">
+                <a class="btn btn-solid" href="software/dino-walk/">Launch demo</a>
+                <a class="btn" href="https://github.com/RandyComicArt/portfolio/tree/main/software/dino-walk" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
     </section>
 
-    <!--
-      Duplicate this article to add a project:
-
-      <article class="project">
-        <div class="project-visual">
-          <img src="images/your-screenshot.png" alt="Screenshot of Project Name" />
-        </div>
+    <section class="software-end" aria-label="More software">
+      <div class="page">
         <div>
-          <p class="project-status">Shipped | In progress | Prototype</p>
-          <h2>Project name</h2>
-          <p>What it is and why it exists.</p>
-          <ul class="stack">
-            <li>JavaScript</li>
-            <li>Python</li>
-          </ul>
-          <div class="project-links">
-            <a class="btn btn-solid" href="https://github.com/RandyComicArt/repo" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a class="btn" href="#">Live demo</a>
-          </div>
+          <p class="kicker">More to come</p>
+          <p>Larger application and systems projects will be added to this page as they are ready. Current code lives on GitHub.</p>
         </div>
-      </article>
-    -->
+        <div class="btn-row">
+          <a class="btn btn-solid" href="https://github.com/RandyComicArt" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a class="btn" href="software.html">Back to Top</a>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">

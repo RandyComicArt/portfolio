@@ -1,0 +1,6 @@
+# Local-only archive of the original CSE 470 submissions (assignment PDFs, zips,
+# class sample programs). Kept out of the published site on purpose.
+.classroom-archive/
+
+.DS_Store
+.Rhistory

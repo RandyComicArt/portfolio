@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Petal Burst — Interactive Graphics — Randy Mattoka</title>
+  <meta name="description" content="A flower built from 32 triangles that bursts apart and fades to white, animated entirely in the vertex shader. A WebGL experiment by Randy Mattoka." />
+  <link rel="canonical" href="https://randycomicart.com/software/petal-burst/" />
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+  <meta name="theme-color" content="#09090b" />
+  <meta property="og:title" content="Petal Burst — Interactive Graphics" />
+  <meta property="og:description" content="A flower that bursts apart and fades to white, animated entirely in the vertex shader." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://randycomicart.com/software/petal-burst/" />
+  <meta property="og:image" content="https://randycomicart.com/images/software/petal-burst-1.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://randycomicart.com/images/software/petal-burst-1.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400;1,9..144,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="../../css/software.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-header" data-header>
+    <a class="brand" href="../../index.html">
+      <span class="brand-mark">Randy Mattoka</span>
+      <span class="brand-sub">Studio</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span></span><span></span><span></span>
+      <span class="visually-hidden">Menu</span>
+    </button>
+    <div class="nav-backdrop" data-nav-backdrop></div>
+    <nav id="site-nav" class="site-nav" data-nav aria-label="Primary">
+      <a href="../../index.html">Home</a>
+      <a href="../../gallery.html">Gallery</a>
+      <a href="../../original.html">Original Works</a>
+      <a href="../../software.html" aria-current="page">Software</a>
+      <a href="../../index.html#about">About</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <header class="demo-head page">
+      <p class="crumbs">
+        <a class="back" href="../../software.html">Software</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <span>Interactive Graphics</span>
+        <span class="sep" aria-hidden="true">/</span>
+        <span>Experiment 01</span>
+      </p>
+      <div class="demo-title-row">
+        <h1>Petal Burst</h1>
+        <p class="demo-lede">A flower made of 32 solid-colored triangles. The petals burst outward and drain to white while the core holds still, and the entire effect is computed in the vertex shader.</p>
+      </div>
+    </header>
+
+    <section class="demo-workspace page" data-workspace aria-label="Petal Burst demo">
+      <div class="demo-stage">
+        <div class="canvas-frame">
+          <canvas id="gl-canvas" width="512" height="512" style="--native-w:512px;--ratio:1" role="img" aria-label="An animated flower whose petals burst outward and fade to white">
+            Your browser does not support the HTML5 canvas element.
+          </canvas>
+        </div>
+        <div class="stage-bar">
+          <p class="stage-hint">Plays automatically &middot; loops</p>
+          <button class="btn btn-sm" type="button" data-fullscreen aria-pressed="false"><span data-fs-label>Fullscreen</span></button>
+        </div>
+      </div>
+
+      <aside class="demo-panel" aria-label="Controls">
+        <h2 class="panel-title">Controls</h2>
+        <p class="panel-intro">There is nothing to adjust here: the animation runs on its own and loops continuously. Watch how the petals lose their color on the way out while the red core never changes.</p>
+        <ul class="hint-list">
+          <li><b>Watch</b><span>Eight petals in four colors burst away from the core, then return.</span></li>
+          <li><b>View</b><span>Use Fullscreen for a larger canvas.</span></li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="demo-notes page" aria-label="About this experiment">
+      <div>
+        <h2>How it works</h2>
+        <p>The flower is a flat triangle list: an eight-segment core and eight petals of three triangles each. Every vertex carries a position, a color, and a flag that says whether it belongs to the core or to a petal.</p>
+        <ul class="notes-list">
+          <li><strong>One animated number.</strong> JavaScript sends a single uniform, <code>explodeFactor</code>, each frame. It follows a sine wave between 0 (assembled) and 1 (fully burst).</li>
+          <li><strong>Displacement on the GPU.</strong> In the vertex shader, petal vertices slide away from the center along their own direction by <code>explodeFactor &times; maxShift</code>. Core vertices pass straight through.</li>
+          <li><strong>Color from the same number.</strong> Petal colors are blended toward white with GLSL <code>mix()</code> using the same factor, so they dissolve into the white background as they travel outward.</li>
+          <li><strong>One draw call.</strong> Core and petals share a single <code>drawArrays</code> call; the shader decides which vertices move.</li>
+        </ul>
+      </div>
+      <div class="notes-side">
+        <section>
+          <h3>Concepts</h3>
+          <ul class="stack">
+            <li>Vertex shader displacement</li>
+            <li>Per-vertex attributes</li>
+            <li>Animated uniforms</li>
+            <li>Color interpolation</li>
+            <li>Triangle geometry</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Built with</h3>
+          <ul class="stack">
+            <li>WebGL</li>
+            <li>GLSL</li>
+            <li>JavaScript</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Background</h3>
+          <p>Written for CSE 470, Introduction to Computer Graphics, at Arizona State University. Uses the course-supplied <code>webgl-utils</code> and <code>MV.js</code> helper libraries.</p>
+        </section>
+      </div>
+    </section>
+
+    <nav class="demo-pager page" aria-label="Experiments">
+      <span></span>
+      <a class="pager-link pager-all" href="../../software.html#graphics"><small>Collection</small><span>All experiments</span></a>
+      <a class="pager-link pager-next" href="../cube-dance/"><small>Next &middot; 02</small><span>Cube Dance &rarr;</span></a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <span>&copy; <span data-year>2026</span> Randy Mattoka</span>
+    <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a>
+  </footer>
+
+  <!-- Vertex Shader -->
+  <script id="vertex-shader" type="x-shader/x-vertex">
+// This is GLSL code (not HTML5)
+
+attribute vec4 vPosition;
+
+uniform float explodeFactor; // 0.0 means no explosion, 1.0 means full
+uniform float maxShift;      // how far the outer vertices move
+
+attribute float aIsCore;     // 1.0 for core vertices, 0.0 for petals
+
+// incoming color attribute and varying for fragment shader
+attribute vec3 vColor;
+varying vec4 color;
+
+void
+main()
+{
+    vec2 pos = vPosition.xy;
+
+    if (aIsCore > 0.5) {
+        // core stays fixed
+        gl_Position = vec4(pos, 0.0, 1.0);
+    } else {
+        // move outer parts outward, away from the center
+        vec2 dir = normalize(pos);
+        vec2 explodedPos = pos + dir * explodeFactor * maxShift;
+        gl_Position = vec4(explodedPos, 0.0, 1.0);
+    }
+
+    if (aIsCore > 0.5) {
+        // core color stays the same
+        color = vec4(vColor, 1.0);
+    } else {
+        // outer parts fade to white as they explode
+        vec3 fadedColor = mix(vColor, vec3(1.0), explodeFactor);
+        color = vec4(fadedColor, 1.0);
+    }
+}
+  </script>
+
+  <!-- Fragment Shader -->
+  <script id="fragment-shader" type="x-shader/x-fragment">
+// This is GLSL code (not HTML5)
+
+precision mediump float;
+
+// Color coming in
+varying vec4 color;
+
+void
+main()
+{
+    // pass color through
+    gl_FragColor = color;
+}
+  </script>
+
+  <script src="../lib/webgl-utils.js"></script>
+  <script src="../lib/initShaders.js"></script>
+  <script src="../lib/MV.js"></script>
+  <script src="petal-burst.js"></script>
+  <script src="../../js/demo.js" defer></script>
+  <script type="module" src="../../js/site.js"></script>
+</body>
+</html>
