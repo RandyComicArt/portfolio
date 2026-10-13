@@ -4,12 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Software — Randy Mattoka</title>
-  <meta name="description" content="Software by Randy Mattoka: a live Video Game Sales Explorer and four WebGL experiments you can run in the browser." />
+  <meta name="description" content="Software by Randy Mattoka: S3QUENCE, a live Video Game Sales Explorer, and four WebGL experiments you can run in the browser." />
   <link rel="canonical" href="https://randycomicart.com/software.html" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <meta name="theme-color" content="#09090b" />
   <meta property="og:title" content="Software — Randy Mattoka" />
-  <meta property="og:description" content="A live Video Game Sales Explorer and interactive WebGL graphics experiments — a software studio inside an art practice." />
+  <meta property="og:description" content="S3QUENCE, a live Video Game Sales Explorer, and interactive WebGL graphics experiments — a software studio inside an art practice." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://randycomicart.com/software.html" />
   <meta property="og:image" content="https://randycomicart.com/images/software/dino-walk-1.jpg" />
@@ -18,10 +18,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400;1,9..144,600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/software.css" />
+  <link rel="stylesheet" href="css/style.css?v=overlay-nav" />
+  <link rel="stylesheet" href="css/software.css?v=overlay-nav" />
 </head>
-<body>
+<body id="top">
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="grain" aria-hidden="true"></div>
 
@@ -48,8 +48,69 @@
     <header class="page-hero page software-hero">
       <p class="kicker">Code</p>
       <h1>Software</h1>
-      <p>I am a Computer Science student at Arizona State University. I build software, interactive experiences, tools, and games — often in conversation with the same worlds I draw. Featured applications sit at the top; the graphics experiments below run live in your browser.</p>
+      <p>I am a Computer Science student at Arizona State University. I build software, interactive experiences, tools, and games — often in conversation with the same worlds I draw. S3QUENCE is the original game below. Featured applications and the graphics experiments follow it.</p>
     </header>
+
+    <section id="s3quence" class="s3quence-block" aria-labelledby="s3quence-heading">
+      <article class="s3quence" data-cinematic>
+        <div class="s3quence-media" aria-hidden="true">
+          <video
+            class="s3quence-video"
+            data-cinematic-video
+            src="images/software/s3quence-gameplay.mp4"
+            muted="muted"
+            autoplay="autoplay"
+            loop="loop"
+            playsinline
+            webkit-playsinline
+            preload="auto"
+            disablepictureinpicture
+            disableRemotePlayback
+            controlslist="nodownload nofullscreen noremoteplayback"
+            tabindex="-1"
+          ></video>
+          <canvas class="s3quence-stage" data-cinematic-stage></canvas>
+          <div class="s3quence-poster"></div>
+          <div class="s3quence-shade"></div>
+        </div>
+        <script>
+          (function () {
+            var video = document.querySelector('[data-cinematic-video]');
+            if (!video) return;
+            video.muted = true;
+            video.defaultMuted = true;
+            video.volume = 0;
+            video.loop = true;
+            video.autoplay = true;
+            video.playsInline = true;
+            video.controls = false;
+            var play = function () { video.play().catch(function () {}); };
+            play();
+            video.addEventListener('loadeddata', play);
+            video.addEventListener('canplay', play);
+            video.addEventListener('playing', function () {
+              var host = video.closest('[data-cinematic]');
+              if (host) host.classList.add('is-playing');
+            });
+          })();
+        </script>
+        <div class="s3quence-copy">
+          <p class="project-status">Original game</p>
+          <h2 id="s3quence-heading">S3QUENCE</h2>
+          <p>A 2D arcade-combat game built around timed directional sequences, dungeon rooms, and run upgrades.</p>
+          <ul class="stack">
+            <li>Java</li>
+            <li>Swing</li>
+            <li>Java2D</li>
+            <li>SDL</li>
+          </ul>
+          <div class="project-links">
+            <a class="btn btn-solid" href="software/s3quence/">Learn more</a>
+            <a class="btn" href="https://www.youtube.com/watch?v=UdAWYnPbytE" target="_blank" rel="noopener noreferrer">Watch Prototype</a>
+          </div>
+        </div>
+      </article>
+    </section>
 
     <section id="featured" class="collection" aria-labelledby="featured-heading">
       <div class="page">
@@ -60,7 +121,7 @@
           </div>
           <div>
             <p>Standalone applications and systems work. Each one is a complete project you can explore and learn about.</p>
-            <p class="collection-meta">Projects &middot; Live applications &middot; Games</p>
+            <p class="collection-meta">1 project &middot; Live application</p>
           </div>
         </div>
 
@@ -99,7 +160,7 @@
             Fill in title, description, metadata, stack, and the live / source links.
             Put preview images at images/software/<slug>-1.png (and optional -2 for hover).
             If there is no real screenshot yet, omit both <img> tags — do not use placeholder imagery.
-            Future entries (S3QUENCE, the MCAO capstone, systems work) use this same pattern.
+            Future entries (the MCAO capstone, systems work) can reuse this same featured-card pattern.
           -->
 
         </div>
@@ -237,7 +298,7 @@
         </div>
         <div class="btn-row">
           <a class="btn btn-solid" href="https://github.com/RandyComicArt" target="_blank" rel="noopener noreferrer">GitHub</a>
-          <a class="btn" href="software.html">Back to Top</a>
+          <a class="btn" href="#top">Back to Top</a>
         </div>
       </div>
     </section>
@@ -249,5 +310,6 @@
   </footer>
 
   <script type="module" src="js/site.js"></script>
+  <script src="js/software.js"></script>
 </body>
 </html>

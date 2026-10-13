@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>S3QUENCE — Randy Mattoka</title>
+  <meta name="description" content="S3QUENCE is an original 2D arcade-combat game built around timed directional-input sequences, dungeon rooms, and run upgrades. A Java game by Randy Mattoka." />
+  <link rel="canonical" href="https://randycomicart.com/software/s3quence/" />
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+  <meta name="theme-color" content="#09090b" />
+  <meta property="og:title" content="S3QUENCE — Randy Mattoka" />
+  <meta property="og:description" content="An original 2D arcade-combat game built around timed directional-input sequences." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://randycomicart.com/software/s3quence/" />
+  <meta property="og:image" content="https://randycomicart.com/images/software/sequence_thumbnail.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://randycomicart.com/images/software/sequence_thumbnail.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400;1,9..144,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/style.css?v=overlay-nav" />
+  <link rel="stylesheet" href="../../css/software.css?v=overlay-nav" />
+</head>
+<body class="s3quence-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-header" data-header>
+    <a class="brand" href="../../index.html">
+      <span class="brand-mark">Randy Mattoka</span>
+      <span class="brand-sub">Studio</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span></span><span></span><span></span>
+      <span class="visually-hidden">Menu</span>
+    </button>
+    <div class="nav-backdrop" data-nav-backdrop></div>
+    <nav id="site-nav" class="site-nav" data-nav aria-label="Primary">
+      <a href="../../index.html">Home</a>
+      <a href="../../gallery.html">Gallery</a>
+      <a href="../../original.html">Original Works</a>
+      <a href="../../software.html" aria-current="page">Software</a>
+      <a href="../../index.html#about">About</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="s3quence-story" data-cinematic aria-label="S3QUENCE">
+      <div class="s3quence-sticky" aria-hidden="true">
+        <div class="s3quence-media">
+          <video
+            class="s3quence-video"
+            data-cinematic-video
+            src="../../images/software/s3quence-gameplay.mp4"
+            muted="muted"
+            autoplay="autoplay"
+            loop="loop"
+            playsinline
+            webkit-playsinline
+            preload="auto"
+            disablepictureinpicture
+            disableRemotePlayback
+            controlslist="nodownload nofullscreen noremoteplayback"
+            tabindex="-1"
+          ></video>
+          <canvas class="s3quence-stage" data-cinematic-stage></canvas>
+          <div class="s3quence-poster"></div>
+          <div class="s3quence-shade s3quence-shade-story"></div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          var video = document.querySelector('[data-cinematic-video]');
+          if (!video) return;
+          video.muted = true;
+          video.defaultMuted = true;
+          video.volume = 0;
+          video.loop = true;
+          video.autoplay = true;
+          video.playsInline = true;
+          video.controls = false;
+          var play = function () { video.play().catch(function () {}); };
+          play();
+          video.addEventListener('loadeddata', play);
+          video.addEventListener('canplay', play);
+          video.addEventListener('playing', function () {
+            var host = video.closest('[data-cinematic]');
+            if (host) host.classList.add('is-playing');
+          });
+        })();
+      </script>
+
+      <div class="s3quence-story-copy page">
+        <header class="demo-head">
+          <p class="crumbs">
+            <a class="back" href="../../software.html">Software</a>
+            <span class="sep" aria-hidden="true">/</span>
+            <span>Original game</span>
+          </p>
+          <div class="demo-title-row">
+            <h1>S3QUENCE</h1>
+            <p class="demo-lede">An original 2D arcade-combat game built around timed directional-input sequences, dungeon-room traversal, encounter-based progression, and run upgrades. The whole presentation is drawn through a custom CRT-style display layer.</p>
+          </div>
+        </header>
+
+        <div class="s3quence-story-intro">
+          <p class="s3quence-kicker">About</p>
+          <p>A desktop Java prototype with no engine. Combat is a timed chain of directions. Rooms, a shop, and enemy rules sit around that loop.</p>
+          <div class="project-links">
+            <a class="btn btn-solid" href="https://www.youtube.com/watch?v=UdAWYnPbytE" target="_blank" rel="noopener noreferrer">Watch Prototype</a>
+            <a class="btn" href="https://github.com/RandyComicArt/S3QUENCE" target="_blank" rel="noopener noreferrer">Source</a>
+          </div>
+        </div>
+
+        <div class="demo-notes">
+          <div>
+            <h2>How it works</h2>
+            <p>S3QUENCE is a desktop Java game with no engine. A single <code>GamePanel</code> owns the loop, rendering, and state. Each frame it updates the current screen, polls keyboard and controller input, then draws the scene through a CRT compositor that can curve the image, overlay scanlines, and bleed color.</p>
+            <ul class="notes-list">
+              <li><strong>Screen states.</strong> Opening, menu, settings, dungeon, shop, level-up, encounter, and lost are discrete states. The panel switches among them instead of stacking separate scenes.</li>
+              <li><strong>Dungeon rooms.</strong> You walk a generated room on a walkable path. Reaching an encounter node starts combat. Room transitions and intros are animated before the next space is live.</li>
+              <li><strong>Sequences.</strong> An encounter builds a directional chain (4–8 inputs, depending on the enemy). Each correct key adds damage scaled by how fast you entered it, restores a little time, and eases health drain. A miss flashes and costs a quarter heart; a timeout costs half.</li>
+              <li><strong>Enemy rules.</strong> Drone is the standard pattern. Berserker hits harder and never refills the timer. Echo flashes the sequence, then hides it. Reveal starts with two visible steps and unfolds the rest as you play.</li>
+              <li><strong>Shop and items.</strong> Between rooms you can buy a heart patch, a one-hit mistake guard, or extra time for the next fight. Poison and Initial Surge are run items that build up during sequences and change how damage lands.</li>
+              <li><strong>Audio and haptics.</strong> Menu, dungeon, shop, and combat layers fade independently. Controllers rumble through the SDL path when a fight resolves.</li>
+            </ul>
+          </div>
+          <div class="notes-side">
+            <section>
+              <h3>Controls</h3>
+              <ul class="notes-list">
+                <li><strong>Move.</strong> WASD or arrows in dungeon rooms. D-pad or left stick on a controller.</li>
+                <li><strong>Sequence.</strong> Arrow keys enter the encounter chain. The same directions come from the stick or D-pad.</li>
+                <li><strong>Confirm.</strong> Enter, or A / X / Start.</li>
+                <li><strong>Back.</strong> Escape, or B / Y / Back.</li>
+              </ul>
+            </section>
+            <section>
+              <h3>Concepts</h3>
+              <ul class="stack">
+                <li>Custom game loop</li>
+                <li>Screen-state machine</li>
+                <li>Timed input combat</li>
+                <li>CRT post-process</li>
+                <li>Controller I/O</li>
+                <li>Layered audio</li>
+                <li>Run upgrades</li>
+              </ul>
+            </section>
+            <section>
+              <h3>Built with</h3>
+              <ul class="stack">
+                <li>Java</li>
+                <li>Swing</li>
+                <li>Java2D</li>
+                <li>SDL</li>
+                <li>Jamepad</li>
+              </ul>
+            </section>
+            <section>
+              <h3>Background</h3>
+              <p>An original game, not coursework. Written in Java with Swing and Java2D, with SDL natives for controller support. Source lives in its own repository.</p>
+            </section>
+          </div>
+        </div>
+
+        <nav class="demo-pager" aria-label="Software">
+          <a class="pager-link" href="../../software.html#s3quence"><small>Back</small><span>&larr; Software</span></a>
+          <span></span>
+          <span></span>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>&copy; <span data-year>2026</span> Randy Mattoka</span>
+    <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a>
+  </footer>
+
+  <script type="module" src="../../js/site.js"></script>
+  <script src="../../js/software.js"></script>
+</body>
+</html>

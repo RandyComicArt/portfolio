@@ -93,6 +93,276 @@
   max-width: 54ch;
 }
 
+/* ---------- S3QUENCE: full-bleed original game ---------- */
+.s3quence-block {
+  background: #000;
+  width: 100%;
+}
+
+.s3quence {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-items: center;
+  width: 100%;
+  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
+  background: #000;
+}
+
+.s3quence-media,
+.s3quence-poster,
+.s3quence-shade,
+.s3quence-stage {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.s3quence-media {
+  z-index: 0;
+  background: #000;
+}
+
+.s3quence-video,
+.s3quence-inline-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  background: #000;
+  pointer-events: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.s3quence-stage {
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
+.s3quence-video::-webkit-media-controls,
+.s3quence-inline-video::-webkit-media-controls,
+.s3quence-video::-webkit-media-controls-enclosure,
+.s3quence-inline-video::-webkit-media-controls-enclosure,
+.s3quence-video::-webkit-media-controls-panel,
+.s3quence-inline-video::-webkit-media-controls-panel,
+.s3quence-video::-webkit-media-controls-start-playback-button,
+.s3quence-inline-video::-webkit-media-controls-start-playback-button,
+.s3quence-video::-webkit-media-controls-overlay-play-button,
+.s3quence-inline-video::-webkit-media-controls-overlay-play-button {
+  display: none !important;
+  -webkit-appearance: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.s3quence-poster {
+  z-index: 2;
+  background:
+    #000
+    url("../images/software/sequence_thumbnail.png")
+    center / contain no-repeat;
+  transition: opacity 240ms var(--ease);
+}
+
+.s3quence.is-playing .s3quence-poster,
+.s3quence-story.is-playing .s3quence-poster { opacity: 0; }
+
+.s3quence-shade {
+  z-index: 3;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.78) 0%,
+      rgba(0, 0, 0, 0.42) 28%,
+      rgba(0, 0, 0, 0.08) 52%,
+      transparent 72%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.12) 0%,
+      transparent 22%,
+      transparent 82%,
+      rgba(0, 0, 0, 0.22) 100%
+    );
+}
+
+.s3quence-copy {
+  position: relative;
+  z-index: 4;
+  max-width: 28rem;
+  padding: 56px 48px;
+  text-shadow: 0 2px 22px rgba(0, 0, 0, 0.55);
+}
+
+.s3quence-copy .project-status { margin-bottom: 10px; }
+
+.s3quence-copy h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 800;
+  line-height: 0.88;
+  letter-spacing: -0.045em;
+  margin: 0 0 16px;
+}
+
+.s3quence-copy > p {
+  color: var(--paper);
+  margin: 0 0 16px;
+  max-width: 38ch;
+  font-size: 1.04rem;
+}
+
+.s3quence-copy .stack li {
+  background: rgba(9, 9, 11, 0.35);
+  border-color: rgba(244, 239, 230, 0.28);
+  color: var(--paper);
+}
+
+.s3quence-copy .btn {
+  backdrop-filter: blur(8px);
+}
+
+.s3quence.is-static .s3quence-video,
+.s3quence.is-static .s3quence-inline-video,
+.s3quence.is-static .s3quence-stage { display: none; }
+
+body.s3quence-page {
+  background: #000;
+}
+
+.s3quence-story {
+  position: relative;
+  isolation: isolate;
+  background: #000;
+}
+
+.s3quence-sticky {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background: #000;
+}
+
+.s3quence-sticky.is-pinned {
+  position: fixed;
+  top: 0;
+  bottom: auto;
+}
+
+.s3quence-sticky.is-ended {
+  position: absolute;
+  top: auto;
+  bottom: 0;
+}
+
+.s3quence-shade-story {
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 0.42) 0%,
+      rgba(0, 0, 0, 0.72) 70%,
+      rgba(0, 0, 0, 0.86) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0.28) 18%,
+      rgba(0, 0, 0, 0.28) 82%,
+      rgba(0, 0, 0, 0.7) 100%
+    );
+}
+
+.s3quence-story-copy {
+  position: relative;
+  z-index: 4;
+  min-height: 220dvh;
+  padding-top: calc(var(--header-h) + 28px);
+  padding-bottom: clamp(96px, 22vh, 180px);
+  text-shadow: 0 2px 22px rgba(0, 0, 0, 0.7);
+}
+
+.s3quence-story-copy .demo-head {
+  padding: 12px 0 48px;
+}
+
+.s3quence-story-copy .demo-lede {
+  color: var(--paper);
+}
+
+.s3quence-kicker {
+  margin: 0 0 12px;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.s3quence-story-intro {
+  max-width: 46ch;
+  margin-bottom: 56px;
+}
+
+.s3quence-story-intro > p:not(.s3quence-kicker) {
+  color: var(--paper);
+  margin: 0 0 20px;
+  font-size: 1.08rem;
+}
+
+.s3quence-story-copy .demo-notes {
+  border-top-color: rgba(244, 239, 230, 0.16);
+}
+
+.s3quence-story-copy .demo-notes p,
+.s3quence-story-copy .notes-list li,
+.s3quence-story-copy .notes-side p {
+  color: var(--paper);
+}
+
+.s3quence-story-copy .notes-list {
+  border-top-color: rgba(244, 239, 230, 0.16);
+}
+
+.s3quence-story-copy .notes-list li {
+  border-bottom-color: rgba(244, 239, 230, 0.16);
+}
+
+.s3quence-story-copy .stack li {
+  background: rgba(0, 0, 0, 0.35);
+  border-color: rgba(244, 239, 230, 0.28);
+  color: var(--paper);
+}
+
+.s3quence-story-copy .btn {
+  backdrop-filter: blur(8px);
+}
+
+.s3quence-story.is-static .s3quence-video,
+.s3quence-story.is-static .s3quence-stage { display: none; }
+
+.demo-panel .project-links {
+  margin: 16px 0 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s3quence-video,
+  .s3quence-inline-video,
+  .s3quence-stage { display: none; }
+}
+
 /* ---------- Experiment exhibits ---------- */
 .experiments {
   display: grid;
@@ -661,6 +931,20 @@ body.demo-immersive-lock { overflow: hidden; }
   .software-end { padding: 36px 16px 72px; }
   .experiment { padding: 40px 0; }
   .featured { padding: 36px 0; }
+  .s3quence {
+    height: auto;
+    min-height: 100dvh;
+    align-items: end;
+  }
+  .s3quence-shade {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.28) 40%, rgba(0, 0, 0, 0.88) 100%);
+  }
+  .s3quence-copy {
+    padding: 28px 20px 32px;
+    max-width: none;
+  }
+  .s3quence-copy h2 { font-size: clamp(2.4rem, 14vw, 3.4rem); }
+  .s3quence-copy .project-links .btn { min-height: 44px; }
   .experiment-meta > div { grid-template-columns: 6.5em 1fr; gap: 12px; }
   .demo-pager { grid-template-columns: 1fr 1fr; }
   .pager-all { grid-column: 1 / -1; grid-row: 2; justify-self: center; }
