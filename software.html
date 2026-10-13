@@ -4,12 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Software — Randy Mattoka</title>
-  <meta name="description" content="Software and interactive graphics by Randy Mattoka, Computer Science student at Arizona State University. Four WebGL experiments you can run in the browser." />
+  <meta name="description" content="Software by Randy Mattoka: a live Video Game Sales Explorer and four WebGL experiments you can run in the browser." />
   <link rel="canonical" href="https://randycomicart.com/software.html" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <meta name="theme-color" content="#09090b" />
   <meta property="og:title" content="Software — Randy Mattoka" />
-  <meta property="og:description" content="Interactive WebGL graphics experiments, running live in the browser — a software studio inside an art practice." />
+  <meta property="og:description" content="A live Video Game Sales Explorer and interactive WebGL graphics experiments — a software studio inside an art practice." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://randycomicart.com/software.html" />
   <meta property="og:image" content="https://randycomicart.com/images/software/dino-walk-1.jpg" />
@@ -48,16 +48,63 @@
     <header class="page-hero page software-hero">
       <p class="kicker">Code</p>
       <h1>Software</h1>
-      <p>I am a Computer Science student at Arizona State University. I build software, interactive experiences, tools, and games — often in conversation with the same worlds I draw. The graphics work below runs live in your browser, and larger projects will be added alongside it.</p>
+      <p>I am a Computer Science student at Arizona State University. I build software, interactive experiences, tools, and games — often in conversation with the same worlds I draw. Featured applications sit at the top; the graphics experiments below run live in your browser.</p>
     </header>
 
-    <!--
-      FEATURED PROJECTS
-      Larger projects (applications, systems work, capstones) belong in a "Featured" collection
-      ABOVE the graphics collection. Copy the <section class="collection"> block below, change
-      the heading, and reuse the same <article class="experiment"> markup for each project:
-      big visual on one side, copy on the other, status + stack + links.
-    -->
+    <section id="featured" class="collection" aria-labelledby="featured-heading">
+      <div class="page">
+        <div class="collection-head">
+          <div>
+            <p class="kicker">Applications</p>
+            <h2 id="featured-heading">Featured Projects</h2>
+          </div>
+          <div>
+            <p>Standalone applications and systems work. Each one is a complete project you can explore and learn about.</p>
+            <p class="collection-meta">Projects &middot; Live applications &middot; Games</p>
+          </div>
+        </div>
+
+        <div class="featured-projects">
+
+          <article class="featured">
+            <a class="experiment-visual featured-visual" href="https://randymattoka.shinyapps.io/gameanalysis/" target="_blank" rel="noopener noreferrer" aria-label="Launch Video Game Sales Explorer">
+              <img src="images/software/video-game-sales-explorer-1.png" alt="Video Game Sales Explorer: a Shiny dashboard with year filters, KPI cards, a sales-over-time chart, and a score-versus-sales plot" width="3746" height="2160" />
+              <img class="is-alt" src="images/software/video-game-sales-explorer-2.png" alt="" width="3746" height="2160" />
+              <span class="experiment-launch">Launch live app</span>
+            </a>
+            <div class="featured-copy">
+              <p class="project-status">Interactive dashboard</p>
+              <h3>Video Game Sales Explorer</h3>
+              <p>An R/Shiny dashboard for more than 64,000 video game sales records from 1971 to 2024. Filter the set, search by title, rank the results, and export a CSV. KPI cards, sales trends, platform and genre breakdowns, and a critic-score-versus-sales plot all update from the same filters.</p>
+              <dl class="experiment-meta">
+                <div><dt>Interaction</dt><dd>Year slider, platform, genre, publisher, and developer filters, plus title search, sortable rankings, and CSV export</dd></div>
+                <div><dt>Analysis</dt><dd>KPI summaries, sales over time, top genres and platforms, score versus sales</dd></div>
+                <div><dt>Dataset</dt><dd>64,016 records &middot; 39,798 titles &middot; 81 platforms</dd></div>
+              </dl>
+              <ul class="stack">
+                <li>R</li>
+                <li>Shiny</li>
+                <li>dplyr</li>
+                <li>ggplot2</li>
+              </ul>
+              <div class="project-links">
+                <a class="btn btn-solid" href="https://randymattoka.shinyapps.io/gameanalysis/" target="_blank" rel="noopener noreferrer">Launch Live App</a>
+                <a class="btn" href="https://github.com/RandyComicArt/portfolio/tree/main/software/GameAnalysis" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
+            </div>
+          </article>
+
+          <!--
+            Add the next featured project by duplicating the <article class="featured"> above.
+            Fill in title, description, metadata, stack, and the live / source links.
+            Put preview images at images/software/<slug>-1.png (and optional -2 for hover).
+            If there is no real screenshot yet, omit both <img> tags — do not use placeholder imagery.
+            Future entries (S3QUENCE, the MCAO capstone, systems work) use this same pattern.
+          -->
+
+        </div>
+      </div>
+    </section>
 
     <section id="graphics" class="collection" aria-labelledby="graphics-heading">
       <div class="page">
@@ -186,7 +233,7 @@
       <div class="page">
         <div>
           <p class="kicker">More to come</p>
-          <p>Larger application and systems projects will be added to this page as they are ready. Current code lives on GitHub.</p>
+          <p>More application and systems work will join Featured Projects as it is ready. Current code lives on GitHub.</p>
         </div>
         <div class="btn-row">
           <a class="btn btn-solid" href="https://github.com/RandyComicArt" target="_blank" rel="noopener noreferrer">GitHub</a>
