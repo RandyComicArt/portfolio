@@ -59,7 +59,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function makeThumb(item) {
     const btn = document.createElement('button');
-    btn.className = 'gallery-thumb';
+    btn.className = [
+      'gallery-thumb',
+      item.pixel ? 'is-pixel' : '',
+      item.clear ? 'is-clear' : ''
+    ].filter(Boolean).join(' ');
     btn.type = 'button';
     btn.dataset.id = item.id;
     btn.setAttribute('aria-label', `Open ${item.title || 'artwork'}`);

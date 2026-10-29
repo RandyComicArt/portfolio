@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400;1,9..144,600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=overlay-nav" />
+  <link rel="stylesheet" href="css/style.css?v=seq-arrows-13" />
 </head>
 <body class="home-page">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -28,8 +28,8 @@
 
   <header class="site-header" data-header>
     <a class="brand" href="index.html">
-      <span class="brand-mark">Randy Comic Art</span>
-      <span class="brand-sub">Artist</span>
+      <span class="brand-mark">Randy Mattoka</span>
+      <span class="brand-sub">Home</span>
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
       <span></span><span></span><span></span>
@@ -52,18 +52,18 @@
       </div>
       <div class="hero-shade" aria-hidden="true"></div>
       <div class="hero-copy">
-        <p class="kicker">randycomicart.com</p>
+        <p class="kicker">randycomicart</p>
         <h1>Randy<br />Mattoka</h1>
         <p class="hero-role">Digital Artist <span class="slash" aria-hidden="true">/</span> Software Developer</p>
-        <p class="hero-lede">Poster-scale illustration, original worlds, and the software that puts them in motion.</p>
+        <p class="hero-lede">Original, poster-scale illustration, and software that puts art in motion.</p>
         <div class="btn-row">
-          <a class="btn btn-solid" href="#exhibition">View the work</a>
-          <a class="btn" href="gallery.html">Open gallery</a>
+          <a class="btn btn-solid" href="gallery.html">Open Gallery</a>
+          <a class="btn" href="software.html">See Software</a>
         </div>
         <ul class="hero-meta">
-          <li>Illustration</li>
-          <li>Original worlds</li>
-          <li>Software</li>
+          <li>Art</li>
+          <li>Comics</li>
+          <li>Games</li>
         </ul>
       </div>
       <div class="hero-stage">
@@ -85,7 +85,7 @@
         <div class="section-head">
           <div>
             <p class="kicker">Exhibition</p>
-            <h2 id="exhibition-heading">Completed artwork</h2>
+            <h2 id="exhibition-heading">Completed Artwork</h2>
           </div>
           <div class="search-field" role="search">
             <label class="visually-hidden" for="site-search">Search artwork</label>
@@ -93,31 +93,39 @@
             <div id="search-stats" class="search-stats" aria-live="polite"></div>
           </div>
         </div>
-        <p class="section-lede">Fan work and finished pieces. Click any image for a closer look.</p>
+        <p class="section-lede">A selection of finished pieces and fan art. Click any image to learn more and get a better look.</p>
       </div>
       <div id="exhibit-completed" class="exhibit" data-collection="completed"></div>
     </section>
 
-    <section id="original" class="band band-alt" aria-labelledby="original-heading">
-      <div class="page">
-        <div class="project-intro">
-          <div>
-            <p class="kicker">Worlds of my own</p>
-            <h2 id="original-heading">Original Works</h2>
-          </div>
-          <p>Characters, covers, and concepts from games and stories I am building. <em>Nightwatch</em> is the first project in this room — more original series can be added without changing the structure of the site.</p>
+    <section id="original" class="band band-alt band-flush original-band" aria-labelledby="original-heading">
+      <div class="original-banner">
+        <div class="original-banner-bg" aria-hidden="true">
+          <img src="images/s3quence/sq1.png" alt="" width="2900" height="1200" />
         </div>
-        <div id="original-spread" class="original-spread"></div>
-        <p class="band-cta"><a class="section-link" href="original.html">Enter original works</a></p>
+        <div class="original-banner-shade" aria-hidden="true"></div>
+        <div class="page">
+          <div class="project-intro">
+            <div>
+              <p class="kicker">Worlds of my own</p>
+              <h2 id="original-heading">Original Works</h2>
+            </div>
+            <div class="original-banner-copy">
+              <p>A selection of characters, covers, and concepts from games and stories I am building.</p>
+              <a class="section-link" href="original.html">All original works</a>
+            </div>
+          </div>
+        </div>
       </div>
+      <div id="exhibit-original" class="exhibit" data-collection="original"></div>
     </section>
 
     <section id="process" class="band" aria-labelledby="process-heading">
       <div class="page">
         <div class="section-head">
           <div>
-            <p class="kicker">Studies</p>
-            <h2 id="process-heading">Process / Sketches</h2>
+            <p class="kicker">How it comes together</p>
+            <h2 id="process-heading">Process & Sketches</h2>
           </div>
           <a class="section-link" href="gallery.html?filter=process">All sketches</a>
         </div>
@@ -128,12 +136,37 @@
     <section id="software" class="band band-alt" aria-labelledby="software-heading">
       <div class="page software-teaser">
         <div class="software-visual">
-          <img src="images/fanart3.png" alt="Dante Sparda, digital illustration by Randy Mattoka" width="800" height="1000" />
+          <div class="pixel-stage" data-frame="1">
+            <div class="pixel-arrows" aria-hidden="true">
+              <span class="pixel-arrow" data-dir="up">
+                <img src="images/s3quence/arrow_up.png" alt="" width="16" height="16" />
+                <img src="images/s3quence/arrow_up_blue.png" alt="" width="16" height="16" />
+              </span>
+              <span class="pixel-arrow" data-dir="down">
+                <img src="images/s3quence/arrow_down.png" alt="" width="16" height="16" />
+                <img src="images/s3quence/arrow_down_blue.png" alt="" width="16" height="16" />
+              </span>
+              <span class="pixel-arrow" data-dir="left">
+                <img src="images/s3quence/arrow_left.png" alt="" width="16" height="16" />
+                <img src="images/s3quence/arrow_left_blue.png" alt="" width="16" height="16" />
+              </span>
+              <span class="pixel-arrow" data-dir="right">
+                <img src="images/s3quence/arrow_right.png" alt="" width="16" height="16" />
+                <img src="images/s3quence/arrow_right_blue.png" alt="" width="16" height="16" />
+              </span>
+            </div>
+            <div class="pixel-loop pixel-loop-lg" data-reflect aria-hidden="true">
+              <img class="is-on" src="images/s3quence/sq_animation1.png" alt="" width="44" height="35" />
+              <img src="images/s3quence/sq_animation2.png" alt="" width="44" height="35" />
+              <img src="images/s3quence/sq_animation3.png" alt="" width="44" height="35" />
+              <img src="images/s3quence/sq_animation4.png" alt="" width="44" height="35" />
+            </div>
+          </div>
         </div>
         <div>
-          <p class="kicker">Build</p>
+          <p class="kicker">Code</p>
           <h2 id="software-heading" class="display-title">Software</h2>
-          <p>I study Computer Science at Arizona State University and build interactive work alongside the drawings — tools, games, and experiments that start on the page and end in code.</p>
+          <p>I study Computer Science at Arizona State University and build interactive work alongside my hobby of drawing. They range from classwork, tools, and experiments, to video games and intuitive applications.</p>
           <p class="band-cta"><a class="btn" href="software.html">Software portfolio</a></p>
         </div>
       </div>
@@ -145,7 +178,7 @@
           <p class="kicker">About</p>
           <h2 id="about-heading">Drawn first.<br />Engineered after.</h2>
           <p class="lede">I am Randy Mattoka, a digital illustrator and Computer Science student at ASU.</p>
-          <p>The pictures come from comics: hard shapes, lighting, and atmosphere. The software side is the same instinct aimed at systems — how a world holds together, how a player moves through it, how an image becomes an experience. These are not separate careers parked on one domain. They are the same studio.</p>
+          <p>My artwork is heavily inspired by my love for comic books, utilizing bold lines, harsh lighting, vibrant colors, and dramatic atmospheres. The software side is the same instinct aimed at systems: how a world holds together, how a player moves through it, how an image becomes an experience. Being able to live in a time where I can combine my love for art, software, and writing is truly a blessing, and I aim to share my creations with the world.</p>
           <img class="signature" src="images/signature.png" alt="Signature of Randy Mattoka" width="280" height="120" />
         </div>
         <div>
@@ -164,7 +197,7 @@
 
   <footer class="site-footer">
     <span>&copy; <span data-year>2026</span> Randy Mattoka</span>
-    <span>Tempe · ASU · randycomicart.com</span>
+    <span>Arizona, USA</span>
   </footer>
 
   <div id="image-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="description-title" hidden>
@@ -189,6 +222,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/home.js"></script>
+  <script type="module" src="js/home.js?v=click"></script>
 </body>
 </html>

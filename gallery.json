@@ -212,6 +212,61 @@
     "project": "Nightwatch"
   },
   {
+    "id": "s3quence-sq1",
+    "thumb": "images/s3quence/sq1.png",
+    "full": "images/s3quence/sq1.png",
+    "title": "S3QUENCE Strike",
+    "desc": "",
+    "date": "May 2nd, 2026",
+    "collection": "original",
+    "project": "S3QUENCE",
+    "transparent": true
+  },
+  {
+    "id": "s3quence-sq2",
+    "thumb": "images/s3quence/sq2.png",
+    "full": "images/s3quence/sq2.png",
+    "title": "S3QUENCE Start",
+    "desc": "",
+    "date": "March 29th, 2026",
+    "collection": "original",
+    "project": "S3QUENCE",
+    "pixel": true
+  },
+  {
+    "id": "s3quence-sq3",
+    "thumb": "images/s3quence/sq3.png",
+    "full": "images/s3quence/sq3.png",
+    "title": "S3QUENCE Syringe",
+    "desc": "",
+    "date": "March 29th, 2026",
+    "collection": "original",
+    "project": "S3QUENCE",
+    "pixel": true
+  },
+  {
+    "id": "s3quence-sq4",
+    "thumb": "images/s3quence/sq4.png",
+    "full": "images/s3quence/sq4.png",
+    "title": "S3QUENCE Block",
+    "desc": "",
+    "date": "March 29th, 2026",
+    "collection": "original",
+    "project": "S3QUENCE",
+    "pixel": true
+  },
+  {
+    "id": "s3quence-sq5",
+    "thumb": "images/s3quence/sq5.png",
+    "full": "images/s3quence/sq5.png",
+    "title": "S3QUENCE HUD",
+    "desc": "",
+    "date": "May 19th, 2026",
+    "collection": "original",
+    "project": "S3QUENCE",
+    "pixel": true
+  },
+  {
     "id": "process1",
     "thumb": "images/process1.png",
     "full": "images/process1.png",

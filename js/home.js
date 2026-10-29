@@ -1,7 +1,8 @@
 import './site.js';
 import { loadWorks, searchBlob } from './works.js';
 import { createLightbox } from './lightbox.js';
-import { mountExhibition, mountProcessRail, mountOriginalSpread } from './carousel.js';
+import { mountExhibition, mountProcessRail } from './carousel.js?v=click';
+import './sprite-loop.js?v=arrows';
 
 const lightbox = createLightbox();
 
@@ -29,11 +30,24 @@ async function init() {
   }
 
   const completed = works.filter((w) => w.collection === 'completed');
-  const original = works.filter((w) => w.collection === 'original');
+  const featuredOriginalIds = [
+    'nightwatch4',
+    'nightwatch5',
+    'nightwatch3',
+    's3quence-sq1',
+    's3quence-sq3',
+    's3quence-sq5'
+  ];
+  const original = featuredOriginalIds
+    .map((id) => works.find((w) => w.id === id))
+    .filter(Boolean);
   const process = works.filter((w) => w.collection === 'process');
 
   const completedEx = mountExhibition(document.getElementById('exhibit-completed'), completed, { lightbox });
-  mountOriginalSpread(document.getElementById('original-spread'), original, { lightbox });
+  const originalEx = mountExhibition(document.getElementById('exhibit-original'), original, {
+    lightbox,
+    label: 'Original works'
+  });
   mountProcessRail(document.getElementById('process-rail'), process, { lightbox });
 
   document.querySelectorAll('[data-work]').forEach((el) => {
@@ -46,7 +60,7 @@ async function init() {
     });
   });
 
-  document.querySelectorAll('#exhibit-completed [data-id], #original-spread [data-id], #process-rail [data-id]').forEach((el) => {
+  document.querySelectorAll('#exhibit-completed [data-id], #exhibit-original [data-id], #process-rail [data-id]').forEach((el) => {
     const item = works.find((w) => w.id === el.dataset.id);
     if (item) el.dataset.search = searchBlob(item);
   });
@@ -57,9 +71,10 @@ async function init() {
   const runSearch = () => {
     const q = input?.value || '';
     const a = applyQuery(document.getElementById('exhibit-completed'), q);
-    const b = applyQuery(document.getElementById('original-spread'), q);
+    const b = applyQuery(document.getElementById('exhibit-original'), q);
     const c = applyQuery(document.getElementById('process-rail'), q);
     completedEx.refresh();
+    originalEx.refresh();
     const matches = a.matches + b.matches + c.matches;
     if (stats) {
       stats.textContent = q.trim()

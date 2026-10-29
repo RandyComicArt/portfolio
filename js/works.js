@@ -18,7 +18,9 @@ export async function loadWorks() {
     desc: (item.desc || '').trim(),
     date: (item.date || '').trim(),
     collection: item.collection || 'completed',
-    project: (item.project || '').trim()
+    project: (item.project || '').trim(),
+    pixel: Boolean(item.pixel),
+    clear: Boolean(item.pixel || item.transparent)
   }));
 }
 

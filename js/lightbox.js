@@ -102,7 +102,7 @@ export function createLightbox() {
     const drawW = imageRect.width * ZOOM;
     const drawH = imageRect.height * ZOOM;
     lensCtx.clearRect(0, 0, LENS_D, LENS_D);
-    lensCtx.imageSmoothingEnabled = true;
+    lensCtx.imageSmoothingEnabled = !items[index]?.pixel;
     lensCtx.fillStyle = '#111114';
     lensCtx.fillRect(0, 0, LENS_D, LENS_D);
     lensCtx.drawImage(
@@ -118,6 +118,9 @@ export function createLightbox() {
     const apply = () => {
       modalImg.src = item.full || item.thumb;
       modalImg.alt = item.title || '';
+      modalImg.classList.toggle('is-pixel', Boolean(item.pixel));
+      modalImg.classList.toggle('is-clear', Boolean(item.clear));
+      magContainer?.classList.toggle('is-clear', Boolean(item.clear));
       titleEl.textContent = item.title || '';
       textEl.textContent = item.desc || '';
       metaEl.textContent = item.date ? item.date : '';

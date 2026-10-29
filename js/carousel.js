@@ -6,11 +6,11 @@ function pad(n) {
   return String(n).padStart(2, '0');
 }
 
-export function mountExhibition(root, items, { lightbox } = {}) {
+export function mountExhibition(root, items, { lightbox, label = 'Artwork exhibition' } = {}) {
   if (!root) return { refresh() {}, setIndex() {} };
 
   root.innerHTML = `
-    <div class="exhibit-viewport" tabindex="0" aria-roledescription="carousel" aria-label="Artwork exhibition">
+    <div class="exhibit-viewport" tabindex="0" aria-roledescription="carousel" aria-label="${escapeHtml(label)}">
       <div class="exhibit-track"></div>
     </div>
     <div class="exhibit-controls">
@@ -30,7 +30,11 @@ export function mountExhibition(root, items, { lightbox } = {}) {
 
   items.forEach((item, i) => {
     const slide = document.createElement('article');
-    slide.className = 'exhibit-slide';
+    slide.className = [
+      'exhibit-slide',
+      item.pixel ? 'is-pixel' : '',
+      item.clear ? 'is-clear' : ''
+    ].filter(Boolean).join(' ');
     slide.dataset.id = item.id;
     const title = escapeHtml(item.title || '');
     const project = item.project
@@ -148,27 +152,30 @@ export function mountExhibition(root, items, { lightbox } = {}) {
     dragging = true;
     suppressClick = false;
     startX = lastX = e.clientX;
-    viewport.setPointerCapture?.(e.pointerId);
   });
   viewport.addEventListener('pointermove', (e) => {
     if (!dragging) return;
     lastX = e.clientX;
     if (Math.abs(lastX - startX) > 12) {
+      if (viewport.setPointerCapture && !viewport.hasPointerCapture?.(e.pointerId)) {
+        viewport.setPointerCapture(e.pointerId);
+      }
       viewport.classList.add('is-dragging');
       suppressClick = true;
     }
   });
-  viewport.addEventListener('pointerup', () => {
+  const endDrag = (e) => {
     if (!dragging) return;
     dragging = false;
     viewport.classList.remove('is-dragging');
+    if (e && viewport.hasPointerCapture?.(e.pointerId)) {
+      viewport.releasePointerCapture(e.pointerId);
+    }
     const dx = lastX - startX;
     if (Math.abs(dx) > 50) move(dx > 0 ? -1 : 1);
-  });
-  viewport.addEventListener('pointercancel', () => {
-    dragging = false;
-    viewport.classList.remove('is-dragging');
-  });
+  };
+  viewport.addEventListener('pointerup', endDrag);
+  viewport.addEventListener('pointercancel', endDrag);
 
   window.addEventListener('resize', () => setIndex(index));
 

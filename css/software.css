@@ -288,9 +288,8 @@ body.s3quence-page {
 .s3quence-story-copy {
   position: relative;
   z-index: 4;
-  min-height: 220dvh;
   padding-top: calc(var(--header-h) + 28px);
-  padding-bottom: clamp(96px, 22vh, 180px);
+  padding-bottom: clamp(48px, 10vh, 96px);
   text-shadow: 0 2px 22px rgba(0, 0, 0, 0.7);
 }
 

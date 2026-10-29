@@ -67,6 +67,17 @@
   transform: none;
 }
 
+.gallery-thumb.is-clear img {
+  background: transparent;
+}
+
+.gallery-thumb.is-pixel img {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  min-height: 180px;
+  object-fit: contain;
+}
+
 .gallery-thumb > div {
   padding: 10px 2px 4px;
 }
