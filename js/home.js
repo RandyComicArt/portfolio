@@ -29,7 +29,7 @@ async function init() {
     return;
   }
 
-  const completed = works.filter((w) => w.collection === 'completed');
+  const completed = works.filter((w) => w.collection === 'completed').slice(0, 10);
   const featuredOriginalIds = [
     'nightwatch4',
     'nightwatch5',
