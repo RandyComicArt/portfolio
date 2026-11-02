@@ -2,5 +2,13 @@
 # class sample programs). Kept out of the published site on purpose.
 .classroom-archive/
 
+# OS / editor
 .DS_Store
+Thumbs.db
+*~
+.idea/
+
+# R session / deploy leftovers from the Game Analysis project
 .Rhistory
+*.RData
+rsconnect/

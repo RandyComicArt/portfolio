@@ -9,7 +9,7 @@ Vanilla HTML, CSS, and JavaScript. No build step.
 - `index.html` — hero, completed-art exhibition, original works, process, about
 - `gallery.html` — searchable masonry archive with filters
 - `original.html` — original projects grouped by series (Nightwatch, then future worlds)
-- `software.html` — software showcase (Featured, then Interactive Graphics experiments)
+- `software.html` — S3QUENCE, then other projects (Sales Explorer), then Graphics Experiments
 - `software/<slug>/` — one self-contained page per software demo, runnable in the browser
 
 ## Local preview
@@ -25,6 +25,7 @@ python3 -m http.server 8080
 - http://localhost:8080/original.html
 - http://localhost:8080/software.html
 - http://localhost:8080/software/petal-burst/ (and `cube-dance`, `surfaces-of-revolution`, `dino-walk`)
+- http://localhost:8080/software/s3quence/
 
 ## Adding artwork
 
@@ -66,13 +67,15 @@ The homepage carousels, original works page, and gallery all read `gallery.json`
 Software lives in `software/<kebab-case-slug>/`, with an `index.html` so the URL is `/software/<slug>/`.
 
 1. **Demo page.** Copy an existing demo folder (for example `software/cube-dance/`) as a starting point. It uses the shared header, `css/software.css`, and `js/demo.js` (fullscreen and touch support). Keep paths relative: `../lib/` for the shared WebGL helpers, `../../css/`, `../../js/`.
-2. **Card on the Software page.** Duplicate an `<article class="experiment">` in `software.html`, or use the commented template for the Featured collection above it. Fill in the title, description, stack, status, and links. Do not invent features; describe what the code does.
+2. **Card on the Software page.** Duplicate an `<article class="featured">` in the projects section of `software.html` (between S3QUENCE and Graphics Experiments). Fill in the title, description, stack, and links. Do not invent features; describe what the code does.
 3. **Preview images.** Add `images/software/<slug>-1.png` (and an optional `-2`).
-4. **Larger projects** (applications, systems work) do not need to be WebGL demos. Give them their own `software/<slug>/` page, or link out to a repository, and list them in the Featured collection.
+4. **Graphics experiments** still use `<article class="experiment">` under Graphics Experiments, plus a `software/<slug>/` demo page.
 
 ## Local-only files
 
 `.classroom-archive/` is gitignored. It holds the original coursework folders (assignment PDFs, submission zips, class sample programs) and the console-check harness used while building the demos. It is not published and is safe to delete.
+
+Contact links on the home About section are text, not image logos.
 
 ## Structure
 
@@ -84,23 +87,15 @@ portfolio/
 ├── software.html
 ├── software/
 │   ├── lib/                      # shared WebGL helper libraries
+│   ├── s3quence/
+│   ├── GameAnalysis/             # R/Shiny source for Sales Explorer
 │   ├── petal-burst/
 │   ├── cube-dance/
 │   ├── surfaces-of-revolution/
 │   └── dino-walk/
 ├── gallery.json
 ├── CNAME
-├── css/style.css
-├── css/gallery.css
-├── css/software.css
-├── js/site.js
-├── js/works.js
-├── js/lightbox.js
-├── js/carousel.js
-├── js/demo.js
-├── js/home.js
-├── js/gallery.js
-├── js/original.js
-├── images/
-└── socials/
+├── css/
+├── js/
+└── images/
 ```
