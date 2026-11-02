@@ -20,7 +20,9 @@ export async function loadWorks() {
     collection: item.collection || 'completed',
     project: (item.project || '').trim(),
     pixel: Boolean(item.pixel),
-    clear: Boolean(item.pixel || item.transparent)
+    clear: Boolean(item.pixel || item.transparent),
+    width: Number(item.width) || 0,
+    height: Number(item.height) || 0
   }));
 }
 

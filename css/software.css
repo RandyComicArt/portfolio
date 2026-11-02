@@ -49,9 +49,17 @@
 }
 
 /* ---------- Featured projects (standalone applications) ---------- */
+.collection-projects {
+  padding-top: 28px;
+}
+
 .featured-projects {
   display: grid;
-  margin-top: 36px;
+  margin-top: 0;
+}
+
+.featured:first-child {
+  border-top: 0;
 }
 
 .featured {
@@ -144,6 +152,30 @@
   width: 100%;
   height: 100%;
   background: #000;
+  opacity: 0;
+}
+
+.s3quence.is-playing:not(.is-fallback) .s3quence-stage,
+.s3quence-story.is-playing:not(.is-fallback) .s3quence-stage {
+  opacity: 1;
+}
+
+.s3quence-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.s3quence.is-fallback .s3quence-fallback,
+.s3quence-story.is-fallback .s3quence-fallback {
+  opacity: 1;
 }
 
 .s3quence-video::-webkit-media-controls,
@@ -174,7 +206,9 @@
 }
 
 .s3quence.is-playing .s3quence-poster,
-.s3quence-story.is-playing .s3quence-poster { opacity: 0; }
+.s3quence-story.is-playing .s3quence-poster,
+.s3quence.is-fallback .s3quence-poster,
+.s3quence-story.is-fallback .s3quence-poster { opacity: 0; }
 
 .s3quence-shade {
   z-index: 3;
@@ -233,7 +267,8 @@
 
 .s3quence.is-static .s3quence-video,
 .s3quence.is-static .s3quence-inline-video,
-.s3quence.is-static .s3quence-stage { display: none; }
+.s3quence.is-static .s3quence-stage,
+.s3quence.is-static .s3quence-fallback { display: none; }
 
 body.s3quence-page {
   background: #000;
@@ -350,7 +385,8 @@ body.s3quence-page {
 }
 
 .s3quence-story.is-static .s3quence-video,
-.s3quence-story.is-static .s3quence-stage { display: none; }
+.s3quence-story.is-static .s3quence-stage,
+.s3quence-story.is-static .s3quence-fallback { display: none; }
 
 .demo-panel .project-links {
   margin: 16px 0 8px;
@@ -359,7 +395,8 @@ body.s3quence-page {
 @media (prefers-reduced-motion: reduce) {
   .s3quence-video,
   .s3quence-inline-video,
-  .s3quence-stage { display: none; }
+  .s3quence-stage,
+  .s3quence-fallback { display: none; }
 }
 
 /* ---------- Experiment exhibits ---------- */

@@ -6,8 +6,8 @@ import { mountExhibition } from './carousel.js?v=click';
 const lightbox = createLightbox();
 
 const PROJECT_COPY = {
-  Nightwatch: 'Covers, conversations, weapons, and action studies from Nightwatch — the first original project living in this room.',
-  S3QUENCE: 'An original 2D arcade-combat game built around timed directional sequences, dungeon rooms, and run upgrades.'
+  Nightwatch: 'Concept art, comic panels, designs, and action studies from Nightwatch, a story driven game in early development.',
+  S3QUENCE: 'An original fast-paced arcade combat game that blends dungeon exploration with rhythm-inspired combat. Navigate, battle, grow strong, and uncover the truth in this unique world.'
 };
 
 async function init() {

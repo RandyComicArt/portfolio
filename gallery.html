@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400;1,9..144,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css?v=punch-loop" />
-  <link rel="stylesheet" href="css/gallery.css?v=original-carousel" />
+  <link rel="stylesheet" href="css/gallery.css?v=hover-lift" />
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -48,7 +48,7 @@
     <header class="page-hero page-hero-flush">
       <p class="kicker">Archive</p>
       <h1>Gallery</h1>
-      <p>Everything in one room. Filter by collection, search by title or date, open any piece.</p>
+      <p>Everything in one room. Filter by collection and search by title or date; click any piece to learn more and get a better look!</p>
     </header>
 
     <div class="gallery-toolbar">
@@ -65,7 +65,7 @@
       </div>
     </div>
 
-    <section id="gallery-grid" class="gallery-masonry" aria-live="polite" aria-label="Artwork grid"></section>
+    <section id="gallery-grid" class="gallery-grid" aria-live="polite" aria-label="Artwork grid"></section>
     <div id="load-more-wrap">
       <button id="load-more" type="button">Load more</button>
     </div>
@@ -73,7 +73,7 @@
 
   <footer class="site-footer">
     <span>&copy; <span data-year>2026</span> Randy Mattoka</span>
-    <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a>
+    <span>Arizona, USA</span>
   </footer>
 
   <div id="image-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="description-title" hidden>
@@ -98,6 +98,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/gallery.js"></script>
+  <script type="module" src="js/gallery.js?v=masonry-pack"></script>
 </body>
 </html>

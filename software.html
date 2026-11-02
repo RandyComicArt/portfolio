@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400;1,9..144,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css?v=overlay-nav" />
-  <link rel="stylesheet" href="css/software.css?v=overlay-nav" />
+  <link rel="stylesheet" href="css/software.css?v=no-featured" />
 </head>
 <body id="top">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -46,9 +46,9 @@
 
   <main id="main">
     <header class="page-hero page software-hero">
-      <p class="kicker">Interactive Experiences</p>
+      <p class="kicker">Interactive Work</p>
       <h1>Software</h1>
-      <p>I am a Computer Science student at Arizona State University. I build software, interactive experiences, tools, and games — often in conversation with the same worlds I draw. S3QUENCE is the original game below. Featured applications and the graphics experiments follow it.</p>
+      <p>I am a Computer Science student at Arizona State University. I enjoy building software, tools, and games. Below you can explore my various creations!</p>
     </header>
 
     <section id="s3quence" class="s3quence-block" aria-labelledby="s3quence-heading">
@@ -70,6 +70,7 @@
             tabindex="-1"
           ></video>
           <canvas class="s3quence-stage" data-cinematic-stage></canvas>
+          <img class="s3quence-fallback" data-cinematic-fallback data-src="images/software/s3quence-gameplay.webp" alt="" />
           <div class="s3quence-poster"></div>
           <div class="s3quence-shade"></div>
         </div>
@@ -112,22 +113,11 @@
       </article>
     </section>
 
-    <section id="featured" class="collection" aria-labelledby="featured-heading">
+    <section id="projects" class="collection collection-projects" aria-label="Projects">
       <div class="page">
-        <div class="collection-head">
-          <div>
-            <p class="kicker">Applications</p>
-            <h2 id="featured-heading">Featured Projects</h2>
-          </div>
-          <div>
-            <p>Standalone applications and systems work. Each one is a complete project you can explore and learn about.</p>
-            <p class="collection-meta">1 project &middot; Live application</p>
-          </div>
-        </div>
-
         <div class="featured-projects">
 
-          <article class="featured">
+          <article class="featured" id="sales-explorer">
             <a class="experiment-visual featured-visual" href="https://randymattoka.shinyapps.io/gameanalysis/" target="_blank" rel="noopener noreferrer" aria-label="Launch Video Game Sales Explorer">
               <img src="images/software/video-game-sales-explorer-1.png" alt="Video Game Sales Explorer: a Shiny dashboard with year filters, KPI cards, a sales-over-time chart, and a score-versus-sales plot" width="3746" height="2160" />
               <img class="is-alt" src="images/software/video-game-sales-explorer-2.png" alt="" width="3746" height="2160" />
@@ -156,11 +146,8 @@
           </article>
 
           <!--
-            Add the next featured project by duplicating the <article class="featured"> above.
-            Fill in title, description, metadata, stack, and the live / source links.
-            Put preview images at images/software/<slug>-1.png (and optional -2 for hover).
-            If there is no real screenshot yet, omit both <img> tags — do not use placeholder imagery.
-            Future entries (the MCAO capstone, systems work) can reuse this same featured-card pattern.
+            Add the next project by duplicating the <article class="featured"> above.
+            New projects go here, between S3QUENCE and Graphics Experiments.
           -->
 
         </div>
@@ -175,7 +162,7 @@
             <h2 id="graphics-heading">Graphics Experiments</h2>
           </div>
           <div>
-            <p>Four WebGL programs written in plain JavaScript and GLSL, with no engine or framework. They began as coursework for CSE 470, Computer Graphics at Arizona State University. Pick one and launch it: each runs live in the page.</p>
+            <p>Four WebGL programs written in plain JavaScript and GLSL, with no engine or framework. They began as coursework for CSE 470 - Computer Graphics at Arizona State University. Pick one and launch it: each runs live in the page.</p>
             <p class="collection-meta">4 experiments &middot; WebGL &middot; Academic projects</p>
           </div>
         </div>
@@ -294,7 +281,7 @@
       <div class="page">
         <div>
           <p class="kicker">More to come</p>
-          <p>More application and systems work will join Featured Projects as it is ready. Current code lives on GitHub.</p>
+          <p>More projects will land here as soon as they are ready! Current code lives on GitHub.</p>
         </div>
         <div class="btn-row">
           <a class="btn btn-solid" href="https://github.com/RandyComicArt" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -306,10 +293,10 @@
 
   <footer class="site-footer">
     <span>&copy; <span data-year>2026</span> Randy Mattoka</span>
-    <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a>
+    <span>Arizona, USA</span>
   </footer>
 
   <script type="module" src="js/site.js"></script>
-  <script src="js/software.js"></script>
+  <script src="js/software.js?v=play-fallback"></script>
 </body>
 </html>

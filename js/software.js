@@ -17,21 +17,17 @@
     if ('disableRemotePlayback' in video) video.disableRemotePlayback = true;
   }
 
-  function playSafe(video) {
-    armVideo(video);
-    const play = video.play();
-    if (play && typeof play.catch === 'function') play.catch(() => {});
-  }
-
   function setupHost(host) {
     const video = host.querySelector('[data-cinematic-video]');
     const canvas = host.querySelector('[data-cinematic-stage]');
+    const fallback = host.querySelector('[data-cinematic-fallback]');
     if (!video) return;
 
     const ctx = canvas ? canvas.getContext('2d', { alpha: false }) : null;
     let drawing = false;
     let hold = false;
     let raf = 0;
+    let fallbackArmed = false;
 
     const resize = () => {
       if (!canvas) return;
@@ -74,10 +70,34 @@
       raf = 0;
     };
 
-    const markPlaying = () => {
-      if (video.paused || reduceMotion.matches) return;
+    const showFallback = () => {
+      if (reduceMotion.matches || !fallback) return;
+      if (!fallbackArmed) {
+        fallbackArmed = true;
+        if (fallback.dataset.src && fallback.src !== fallback.dataset.src) {
+          fallback.src = fallback.dataset.src;
+        }
+      }
+      host.classList.add('is-fallback', 'is-playing');
+      stopDraw();
+    };
+
+    const showVideo = () => {
+      if (reduceMotion.matches || video.paused) return;
+      host.classList.remove('is-fallback');
       host.classList.add('is-playing');
       startDraw();
+    };
+
+    const playSafe = () => {
+      if (reduceMotion.matches) return Promise.resolve();
+      armVideo(video);
+      const attempt = video.play();
+      if (!attempt || typeof attempt.then !== 'function') {
+        showVideo();
+        return Promise.resolve();
+      }
+      return attempt.then(showVideo).catch(showFallback);
     };
 
     const applyMotionPreference = () => {
@@ -85,14 +105,13 @@
         hold = true;
         video.pause();
         stopDraw();
-        host.classList.remove('is-playing');
+        host.classList.remove('is-playing', 'is-fallback');
         host.classList.add('is-static');
         return;
       }
       hold = false;
       host.classList.remove('is-static');
-      playSafe(video);
-      markPlaying();
+      playSafe();
     };
 
     armVideo(video);
@@ -102,20 +121,28 @@
     ['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough', 'playing'].forEach((eventName) => {
       video.addEventListener(eventName, () => {
         if (reduceMotion.matches) return;
-        playSafe(video);
-        markPlaying();
+        playSafe();
       });
     });
 
     video.addEventListener('ended', () => {
       if (hold || reduceMotion.matches) return;
       video.currentTime = 0;
-      playSafe(video);
+      playSafe();
     });
 
     video.addEventListener('pause', () => {
       if (hold || reduceMotion.matches || document.hidden) return;
-      playSafe(video);
+      playSafe();
+    });
+
+    window.setTimeout(() => {
+      if (!reduceMotion.matches && video.paused) showFallback();
+    }, 900);
+    [400, 1200, 2400, 4800].forEach((ms) => {
+      window.setTimeout(() => {
+        if (!reduceMotion.matches && video.paused) playSafe();
+      }, ms);
     });
 
     if (canvas && typeof ResizeObserver === 'function') {
@@ -125,8 +152,7 @@
 
     const unlock = () => {
       if (reduceMotion.matches) return;
-      playSafe(video);
-      markPlaying();
+      playSafe();
     };
     document.addEventListener('pointerdown', unlock, { passive: true });
     document.addEventListener('keydown', unlock);

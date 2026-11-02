@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400;1,9..144,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../../css/style.css?v=overlay-nav" />
-  <link rel="stylesheet" href="../../css/software.css?v=tight-end" />
+  <link rel="stylesheet" href="../../css/software.css?v=play-fallback" />
 </head>
 <body class="s3quence-page">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -64,6 +64,7 @@
             tabindex="-1"
           ></video>
           <canvas class="s3quence-stage" data-cinematic-stage></canvas>
+          <img class="s3quence-fallback" data-cinematic-fallback data-src="../../images/software/s3quence-gameplay.webp" alt="" />
           <div class="s3quence-poster"></div>
           <div class="s3quence-shade s3quence-shade-story"></div>
         </div>
@@ -95,17 +96,17 @@
           <p class="crumbs">
             <a class="back" href="../../software.html">Software</a>
             <span class="sep" aria-hidden="true">/</span>
-            <span>Original game</span>
+            <span>S3QUENCE</span>
           </p>
           <div class="demo-title-row">
             <h1>S3QUENCE</h1>
-            <p class="demo-lede">An original 2D arcade-combat game built around timed directional-input sequences, dungeon-room traversal, encounter-based progression, and run upgrades. The whole presentation is drawn through a custom CRT-style display layer.</p>
+            <p class="s3quence-kicker">S3QUENCE is currently under development</p>
           </div>
         </header>
 
         <div class="s3quence-story-intro">
           <p class="s3quence-kicker">About</p>
-          <p>A desktop Java prototype with no engine. Combat is a timed chain of directions. Rooms, a shop, and enemy rules sit around that loop.</p>
+          <p class="demo-lede">An original 2D arcade-combat game built around a chain of timed directional-input sequences, dungeon-room traversal, encounter-based progression, and run upgrades. The whole presentation is drawn through a custom CRT-style display layer.</p>
           <div class="project-links">
             <a class="btn btn-solid" href="https://www.youtube.com/watch?v=UdAWYnPbytE" target="_blank" rel="noopener noreferrer">Watch Prototype</a>
             <a class="btn" href="https://github.com/RandyComicArt/S3QUENCE" target="_blank" rel="noopener noreferrer">Source</a>
@@ -117,17 +118,17 @@
             <h2>How it works</h2>
             <p>S3QUENCE is a desktop Java game with no engine. A single <code>GamePanel</code> owns the loop, rendering, and state. Each frame it updates the current screen, polls keyboard and controller input, then draws the scene through a CRT compositor that can curve the image, overlay scanlines, and bleed color.</p>
             <ul class="notes-list">
-              <li><strong>Screen states.</strong> Opening, menu, settings, dungeon, shop, level-up, encounter, and lost are discrete states. The panel switches among them instead of stacking separate scenes.</li>
-              <li><strong>Dungeon rooms.</strong> You walk a generated room on a walkable path. Reaching an encounter node starts combat. Room transitions and intros are animated before the next space is live.</li>
-              <li><strong>Sequences.</strong> An encounter builds a directional chain (4–8 inputs, depending on the enemy). Each correct key adds damage scaled by how fast you entered it, restores a little time, and eases health drain. A miss flashes and costs a quarter heart; a timeout costs half.</li>
-              <li><strong>Enemy rules.</strong> Drone is the standard pattern. Berserker hits harder and never refills the timer. Echo flashes the sequence, then hides it. Reveal starts with two visible steps and unfolds the rest as you play.</li>
-              <li><strong>Shop and items.</strong> Between rooms you can buy a heart patch, a one-hit mistake guard, or extra time for the next fight. Poison and Initial Surge are run items that build up during sequences and change how damage lands.</li>
-              <li><strong>Audio and haptics.</strong> Menu, dungeon, shop, and combat layers fade independently. Controllers rumble through the SDL path when a fight resolves.</li>
+              <li><strong>Screen States:</strong> Menu, settings, dungeon, shop, level-up, and combat encounters, are discrete states. The panel switches among them instead of stacking separate scenes.</li>
+              <li><strong>Dungeon Rooms:</strong> You walk a generated room on a walkable path. Colliding with an enemy starts the combat sequence. Room transitions and intros are animated before the next space is live.</li>
+              <li><strong>Sequences:</strong> An encounter builds a directional chain of varying length and style depending on the enemy. Each correct key adds damage scaled by how fast you entered it, restores a little time, and eases health drain. Be quick or suffer the consequences.</li>
+              <li><strong>Enemy Rules:</strong> Enemy types keep gameplay varied and unexpected, forcing players to adapt their tactics and make split-second decisions that could mean life or death.</li>
+              <li><strong>Progression:</strong> Player progression lives on an XP system where level-ups grant skill points; skill points are then used to purchase in-run items and upgrades to make yourself stronger than ever before and take on harder fights.</li>
+              <li><strong>Audio & Haptics:</strong> Dynamic music, sound effects, and controller feedback reinforce every movement, attack, mistake, and victory, making each encounter feel responsive and impactful.</li>
             </ul>
           </div>
           <div class="notes-side">
             <section>
-              <h3>Controls</h3>
+              <h3>Simple Controls</h3>
               <ul class="notes-list">
                 <li><strong>Move.</strong> WASD or arrows in dungeon rooms. D-pad or left stick on a controller.</li>
                 <li><strong>Sequence.</strong> Arrow keys enter the encounter chain. The same directions come from the stick or D-pad.</li>
@@ -175,10 +176,10 @@
 
   <footer class="site-footer">
     <span>&copy; <span data-year>2026</span> Randy Mattoka</span>
-    <a href="mailto:randy.mattoka@gmail.com">randy.mattoka@gmail.com</a>
+    <span>Arizona, USA</span>
   </footer>
 
   <script type="module" src="../../js/site.js"></script>
-  <script src="../../js/software.js"></script>
+  <script src="../../js/software.js?v=play-fallback"></script>
 </body>
 </html>

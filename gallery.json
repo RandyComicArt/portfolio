@@ -6,7 +6,9 @@
     "title": "Batman: The Long Halloween",
     "desc": "A poster art I made of one of my favorite comics, featuring iconic characters such as two-face and Joker",
     "date": "September 14th, 2026",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 2000,
+    "height": 2500
   },
   {
     "id": "zagreus",
@@ -15,7 +17,9 @@
     "title": "Zagreus",
     "desc": "This is a drawing of Zagreus, Prince of the Underworld from the critically acclaimed video game \"Hades\"",
     "date": "December 13th, 2025",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 1080,
+    "height": 1080
   },
   {
     "id": "batman-dark-victory",
@@ -24,7 +28,9 @@
     "title": "Batman: Dark Victory",
     "desc": "",
     "date": "November 26th, 2025",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 800,
+    "height": 1200
   },
   {
     "id": "sandman-x-metallica",
@@ -33,7 +39,9 @@
     "title": "Sandman X Metallica",
     "desc": "This is a piece I made of the comic book character Dream, otherwise know as The Sandman. He is depicted shredding on an electric guitar, giving a nod to Metallica's timeless hit \"Enter Sandman.\"",
     "date": "October 2nd, 2025",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 2000,
+    "height": 2500
   },
   {
     "id": "spiderman",
@@ -42,7 +50,9 @@
     "title": "Spiderman",
     "desc": "A drawing of Spiderman that utilizes bold colors and shadows, emphasizing the dynamic between him and his spidey senses on the foreground.",
     "date": "September 26th, 2025",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 2000,
+    "height": 3000
   },
   {
     "id": "dante-sparda",
@@ -51,7 +61,9 @@
     "title": "Dante Sparda",
     "desc": "Dante has always been one of my favorite video game characters. This drawing depicts a younger Dante, particularly from Devil May Cry 3: Dante's Awakening. This piece was stylized as a more poster-like aesthetic.",
     "date": "April 12th, 2025",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 2000,
+    "height": 2391
   },
   {
     "id": "super-buu",
@@ -60,7 +72,9 @@
     "title": "Super Buu",
     "desc": "Buu is an iconic villain from the acclaimed anime series Dragon Ball Z. This drawing utilizes multiple shades of pink to portray the lighting on Buu's skin, with his magical power orbs in his hands being the main light source of this piece.",
     "date": "August 21st, 2024",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 1500,
+    "height": 2000
   },
   {
     "id": "deadpool",
@@ -69,7 +83,9 @@
     "title": "Deadpool",
     "desc": "This drawing of the comic book character Deadpool uses black and whites as well as screentones for shading. This allows for the green portions to really pop and draw the audience's attention to these critical parts, which allows the viewer's eye to follow the piece in a natural, streamlined manner.",
     "date": "June 16th, 2024",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 1500,
+    "height": 1650
   },
   {
     "id": "wolverine",
@@ -78,7 +94,9 @@
     "title": "Wolverine",
     "desc": "A drawing of the iconic X-Men character, Wolverine. Apart from black and white, this piece utilizes 4 colors, one of which is the blood on wolverine's claws. Although a more violent piece, it is able to captivate the audience by drawing their eye to the critical portions, his claws, muscles, and eventually his cowl.",
     "date": "September 14th, 2025",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 2000,
+    "height": 3000
   },
   {
     "id": "godrick-the-grafted",
@@ -87,7 +105,9 @@
     "title": "Godrick the Grafted",
     "desc": "This is a digital piece of a popular antagonist from the video game Elden Ring, produced by Fromsoftware.",
     "date": "March 15th, 2024",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 3200,
+    "height": 2160
   },
   {
     "id": "sekiro-the-great-serpent",
@@ -96,7 +116,9 @@
     "title": "Sekiro - the Great Serpent",
     "desc": "Sekiro is another popular video game created by Fromsoftware. The game features a mythical, feudal Japanese setting with monstrous characters and enemies. This piece highlights the great serpent that is present throughout the game in the mountains, with the protagonist, Sekiro, in the foreground",
     "date": "June 3rd, 2024",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 1500,
+    "height": 1500
   },
   {
     "id": "batman-beyond",
@@ -105,7 +127,9 @@
     "title": "Batman Beyond",
     "desc": "",
     "date": "August 7th, 2025",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 1500,
+    "height": 1500
   },
   {
     "id": "lothric-and-lorian",
@@ -114,7 +138,9 @@
     "title": "Lothric & Lorian",
     "desc": "",
     "date": "July 28th, 2024",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 2600,
+    "height": 1900
   },
   {
     "id": "naruto",
@@ -123,7 +149,9 @@
     "title": "Naruto",
     "desc": "",
     "date": "June 1st, 2024",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 1500,
+    "height": 1390
   },
   {
     "id": "chainsaw-man",
@@ -132,7 +160,9 @@
     "title": "Chainsaw Man",
     "desc": "",
     "date": "May 11th, 2024",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 1500,
+    "height": 1500
   },
   {
     "id": "grenadier",
@@ -141,7 +171,9 @@
     "title": "Grenadier - Gears of War",
     "desc": "",
     "date": "May 26th, 2024",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 1500,
+    "height": 1500
   },
   {
     "id": "goku",
@@ -150,7 +182,9 @@
     "title": "Goku",
     "desc": "",
     "date": "June 16th, 2025",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 1280,
+    "height": 1280
   },
   {
     "id": "dnd-original-character",
@@ -159,7 +193,9 @@
     "title": "D&D Original Character",
     "desc": "",
     "date": "May 5th, 2024",
-    "collection": "completed"
+    "collection": "completed",
+    "width": 1500,
+    "height": 1500
   },
   {
     "id": "nightwatch1",
@@ -169,7 +205,9 @@
     "desc": "",
     "date": "October 31st, 2025",
     "collection": "original",
-    "project": "Nightwatch"
+    "project": "Nightwatch",
+    "width": 993,
+    "height": 1538
   },
   {
     "id": "nightwatch2",
@@ -179,7 +217,9 @@
     "desc": "",
     "date": "October 9th, 2025",
     "collection": "original",
-    "project": "Nightwatch"
+    "project": "Nightwatch",
+    "width": 1980,
+    "height": 1080
   },
   {
     "id": "nightwatch3",
@@ -189,7 +229,9 @@
     "desc": "",
     "date": "October 11th, 2025",
     "collection": "original",
-    "project": "Nightwatch"
+    "project": "Nightwatch",
+    "width": 1980,
+    "height": 1080
   },
   {
     "id": "nightwatch4",
@@ -199,7 +241,9 @@
     "desc": "",
     "date": "August 28th, 2025",
     "collection": "original",
-    "project": "Nightwatch"
+    "project": "Nightwatch",
+    "width": 1450,
+    "height": 1500
   },
   {
     "id": "nightwatch5",
@@ -209,7 +253,9 @@
     "desc": "",
     "date": "August 15th, 2025",
     "collection": "original",
-    "project": "Nightwatch"
+    "project": "Nightwatch",
+    "width": 1920,
+    "height": 1080
   },
   {
     "id": "s3quence-sq1",
@@ -220,7 +266,9 @@
     "date": "May 2nd, 2026",
     "collection": "original",
     "project": "S3QUENCE",
-    "transparent": true
+    "transparent": true,
+    "width": 2900,
+    "height": 1200
   },
   {
     "id": "s3quence-sq2",
@@ -231,7 +279,9 @@
     "date": "March 29th, 2026",
     "collection": "original",
     "project": "S3QUENCE",
-    "pixel": true
+    "pixel": true,
+    "width": 84,
+    "height": 16
   },
   {
     "id": "s3quence-sq3",
@@ -242,7 +292,9 @@
     "date": "March 29th, 2026",
     "collection": "original",
     "project": "S3QUENCE",
-    "pixel": true
+    "pixel": true,
+    "width": 16,
+    "height": 16
   },
   {
     "id": "s3quence-sq4",
@@ -253,7 +305,9 @@
     "date": "March 29th, 2026",
     "collection": "original",
     "project": "S3QUENCE",
-    "pixel": true
+    "pixel": true,
+    "width": 16,
+    "height": 16
   },
   {
     "id": "s3quence-sq5",
@@ -264,7 +318,9 @@
     "date": "May 19th, 2026",
     "collection": "original",
     "project": "S3QUENCE",
-    "pixel": true
+    "pixel": true,
+    "width": 240,
+    "height": 180
   },
   {
     "id": "process1",
@@ -273,7 +329,9 @@
     "title": "Process 1: Original Character",
     "desc": "",
     "date": "January 13th, 2025",
-    "collection": "process"
+    "collection": "process",
+    "width": 2064,
+    "height": 2700
   },
   {
     "id": "process2",
@@ -282,7 +340,9 @@
     "title": "Process 2: Panelling",
     "desc": "",
     "date": "January 27th, 2025",
-    "collection": "process"
+    "collection": "process",
+    "width": 2064,
+    "height": 2500
   },
   {
     "id": "process3",
@@ -291,7 +351,9 @@
     "title": "Process 3: Falling Woman",
     "desc": "",
     "date": "May 3rd, 2024",
-    "collection": "process"
+    "collection": "process",
+    "width": 1700,
+    "height": 1500
   },
   {
     "id": "process4",
@@ -300,7 +362,9 @@
     "title": "Process 4: Wolverine",
     "desc": "",
     "date": "October 18th, 2024",
-    "collection": "process"
+    "collection": "process",
+    "width": 2064,
+    "height": 3132
   },
   {
     "id": "process5",
@@ -309,7 +373,9 @@
     "title": "Process 5: Punching Pose",
     "desc": "",
     "date": "May 28th, 2024",
-    "collection": "process"
+    "collection": "process",
+    "width": 1500,
+    "height": 1500
   },
   {
     "id": "process6",
@@ -318,7 +384,9 @@
     "title": "Process 6: Goku",
     "desc": "",
     "date": "June 13th, 2025",
-    "collection": "process"
+    "collection": "process",
+    "width": 1280,
+    "height": 1280
   },
   {
     "id": "process7",
@@ -327,7 +395,9 @@
     "title": "Process 7: Necromorph",
     "desc": "",
     "date": "May 24th, 2024",
-    "collection": "process"
+    "collection": "process",
+    "width": 1500,
+    "height": 1500
   },
   {
     "id": "process8",
@@ -336,7 +406,9 @@
     "title": "Process 8: Spiderman",
     "desc": "",
     "date": "September 15th, 2025",
-    "collection": "process"
+    "collection": "process",
+    "width": 2000,
+    "height": 3000
   },
   {
     "id": "process9",
@@ -345,7 +417,9 @@
     "title": "Process 9: Wolverine",
     "desc": "",
     "date": "September 13th, 2025",
-    "collection": "process"
+    "collection": "process",
+    "width": 2000,
+    "height": 3000
   },
   {
     "id": "process10",
@@ -354,7 +428,9 @@
     "title": "Process 10: Dante",
     "desc": "",
     "date": "February 22nd, 2025",
-    "collection": "process"
+    "collection": "process",
+    "width": 2000,
+    "height": 2391
   },
   {
     "id": "process11",
@@ -363,6 +439,8 @@
     "title": "Process 11: Original D&D Character",
     "desc": "",
     "date": "August 7th, 2025",
-    "collection": "process"
+    "collection": "process",
+    "width": 1300,
+    "height": 1500
   }
 ]
