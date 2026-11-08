@@ -40,6 +40,10 @@
   color: var(--paper-dim);
 }
 
+.collection-head .kicker {
+  color: var(--accent);
+}
+
 .collection-head .collection-meta {
   margin-top: 12px;
   font-size: 0.72rem;
@@ -90,7 +94,10 @@
   object-position: center top;
 }
 
-.featured-copy .project-status { margin-bottom: 8px; }
+.featured-copy .project-status {
+  margin-bottom: 8px;
+  color: var(--accent);
+}
 
 .featured-copy h3 {
   font-family: var(--font-display);
@@ -243,7 +250,10 @@
   text-shadow: 0 2px 22px rgba(0, 0, 0, 0.55);
 }
 
-.s3quence-copy .project-status { margin-bottom: 10px; }
+.s3quence-copy .project-status {
+  margin-bottom: 10px;
+  color: var(--accent);
+}
 
 .s3quence-copy h2 {
   font-family: var(--font-display);
