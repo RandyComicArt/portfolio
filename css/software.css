@@ -71,6 +71,12 @@
   border-top: 1px solid var(--line);
 }
 
+.featured:nth-child(odd) {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+}
+
+.featured:nth-child(odd) .featured-visual { order: 2; }
+
 .featured-visual {
   aspect-ratio: 4 / 3;
   background: #f3f5f8;
@@ -955,6 +961,7 @@ body.demo-immersive-lock { overflow: hidden; }
   .demo-notes,
   .experiment { grid-template-columns: 1fr; }
   .experiment:nth-child(even) .experiment-visual { order: 0; }
+  .featured:nth-child(odd) .featured-visual { order: 0; }
   .collection-head,
   .demo-title-row { gap: 18px; }
   .demo-workspace { grid-template-columns: 1fr; }
