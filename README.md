@@ -1,4 +1,4 @@
-# Randy Mattoka — Studio Portfolio
+# Randy Mattoka — Artist Portfolio
 
 Digital illustrator and Computer Science student. Static site for [randycomicart.com](https://randycomicart.com), hosted on GitHub Pages.
 
@@ -8,9 +8,9 @@ Vanilla HTML, CSS, and JavaScript. No build step.
 
 - `index.html` — hero, completed-art exhibition, original works, process, about
 - `gallery.html` — searchable masonry archive with filters
-- `original.html` — original projects grouped by series (Nightwatch, then future worlds)
-- `software.html` — S3QUENCE, then other projects (Sales Explorer), then Graphics Experiments
-- `software/<slug>/` — one self-contained page per software demo, runnable in the browser
+- `original.html` — original projects grouped by series
+- `software.html` — includes projects like S3QUENCE, Sales Explorer, & Graphics Experiments
+- `software/<slug>/` — one self-contained page per software
 
 ## Local preview
 
@@ -29,7 +29,7 @@ python3 -m http.server 8080
 
 ## Adding artwork
 
-1. Put the image in `images/` (do not replace existing files unless you mean to).
+1. Put the image in `images/` (follow naming conventions).
 2. Add an object to `gallery.json`:
 
 ```json
@@ -47,7 +47,7 @@ python3 -m http.server 8080
 `collection` must be one of:
 
 - `completed` — finished / fan art (homepage exhibition)
-- `original` — original worlds, games, characters
+- `original` — original work, games, characters
 - `process` — sketches and studies
 
 For original work that belongs to a named project, add:
@@ -70,12 +70,6 @@ Software lives in `software/<kebab-case-slug>/`, with an `index.html` so the URL
 2. **Card on the Software page.** Duplicate an `<article class="featured">` in the projects section of `software.html` (between S3QUENCE and Graphics Experiments). Fill in the title, description, stack, and links. Do not invent features; describe what the code does.
 3. **Preview images.** Add `images/software/<slug>-1.png` (and an optional `-2`).
 4. **Graphics experiments** still use `<article class="experiment">` under Graphics Experiments, plus a `software/<slug>/` demo page.
-
-## Local-only files
-
-`.classroom-archive/` is gitignored. It holds the original coursework folders (assignment PDFs, submission zips, class sample programs) and the console-check harness used while building the demos. It is not published and is safe to delete.
-
-Contact links on the home About section are text, not image logos.
 
 ## Structure
 
